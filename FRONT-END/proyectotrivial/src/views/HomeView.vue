@@ -20,8 +20,12 @@ export default {
 </script>
 
 <style scoped>
+button {
+  font-family: 'Courier New', Courier, monospace;
+}
+
 .blinking-button {
-  margin-left: -390px;
+  margin-left: -430px;
   padding-top: 15px;
   padding-left: 100px;
   padding-right: 100px;
@@ -30,6 +34,7 @@ export default {
   animation: colorBlink 1s infinite alternate, flash 2s infinite;
   color: white;
   background-color: red;
+  border: 5px solid white;
 }
 
 @keyframes colorBlink {
@@ -182,7 +187,6 @@ body {
 
 .home {
   width: 100%;
-  height: 100%;
   background-color: #231f20;
 }
 
@@ -283,14 +287,15 @@ button.dropbtn:nth-child(2) {
 .botonInicioSesion {
   float: right;
   width: 10%;
-  margin-right: 4%;
+  margin-right: 2%;
   padding-top: 10px;
   padding-bottom: 10px;
   /* padding-left: 10px; */
   /* padding-right: 10px; */
-  margin-top: 20px;
+  margin-top: -70px;
   color: white;
   border: 5px solid white;
+  border-radius: 9999px;
   background-color: #231f20;
 }
 
@@ -302,41 +307,45 @@ button.dropbtn:nth-child(2) {
   padding-bottom: 10px;
   /* padding-left: 10px; */
   /* padding-right: 10px; */
-  margin-top: 20px;
+  margin-top: -70px;
   transition: 0.5s;
   cursor: pointer;
   color: #231f20;
   border: 5px solid #231f20;
+  border-radius: 9999px;
   background-color: white;
 }
 
 .botonRegistro {
   float: right;
-  width: 20%;
+  width: 12%;
   /* margin-right: 100px; */
   padding-top: 10px;
   padding-bottom: 10px;
   /* padding-left: 10px; */
   /* padding-right: 10px; */
-  margin-top: 1%;
+  margin-top: -70px;
   color: white;
   border: 5px solid white;
+  border-radius: 9999px;
   background-color: #231f20;
 }
 
 .botonRegistro:hover {
   float: right;
-  width: 20%;
+  width: 12%;
   /* margin-right: 100px; */
   padding-top: 10px;
   padding-bottom: 10px;
   /* padding-left: 10px; */
   /* padding-right: 10px; */
-  margin-top: 1%;
-  color: white;
-  border: 5px solid white;
-  background-color: #231f20;
+  margin-top: -70px;
+  transition: 0.5s;
   cursor: pointer;
+  color: #231f20;
+  border: 5px solid #231f20;
+  border-radius: 9999px;
+  background-color: white;
 }
 
 table {
