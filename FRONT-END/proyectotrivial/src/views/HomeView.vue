@@ -3,7 +3,7 @@
     <input type="button" class="botonInicioSesion" value="Iniciar Sesión">
     <input type="button" class="botonRegistro" value="Crear cuenta">
     <img alt="Vue logo" src="../assets/logoTrivWorld.png" class="imagenLogo">
-    <button class="blinking-button">¡Haz clic aquí!</button>
+    <router-link to="/seleccion-dificultad" class="blinking-button">¡Haz clic aquí!</router-link>
   </div>
 </template>
 
@@ -25,6 +25,7 @@ button {
 }
 
 .blinking-button {
+  font-family: 'Courier New', Courier, monospace;
   margin-left: -430px;
   padding-top: 15px;
   padding-left: 100px;
@@ -35,6 +36,10 @@ button {
   color: white;
   background-color: red;
   border: 5px solid white;
+}
+
+.blinking-button:hover {
+  text-decoration: none;
 }
 
 @keyframes colorBlink {
@@ -81,7 +86,7 @@ button {
   }
 }
 
-.blinking-button::after {
+/* .blinking-button::after {
   content: '';
   position: absolute;
   top: 0;
@@ -95,7 +100,7 @@ button {
   padding-bottom: 15px;
   animation: flash 2s infinite;
   color: white;
-}
+} */
 
 label {
   margin-left: 2%;
