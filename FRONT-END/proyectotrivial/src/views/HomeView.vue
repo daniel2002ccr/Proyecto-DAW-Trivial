@@ -3,7 +3,7 @@
     <input type="button" class="botonInicioSesion" value="Iniciar Sesión">
     <input type="button" class="botonRegistro" value="Crear cuenta">
     <img alt="Vue logo" src="../assets/logoTrivWorld.png" class="imagenLogo">
-    <router-link to="/seleccion-dificultad" class="blinking-button">¡Haz clic aquí!</router-link>
+    <router-link to="/seleccion-dificultad" class="blinking-button">Iniciar partida</router-link>
   </div>
 </template>
 

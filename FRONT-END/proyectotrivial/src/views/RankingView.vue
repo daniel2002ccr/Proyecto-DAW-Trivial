@@ -7,6 +7,7 @@
           <th>Posición</th>
           <th>Nombre</th>
           <th>Puntuación</th>
+          <th>Partidas</th>
         </tr>
       </thead>
       <tbody>
@@ -14,21 +15,25 @@
           <td>1</td>
           <td>nombre1</td>
           <td>puntuacion1</td>
+          <td>partidas1</td>
         </tr>
         <tr>
           <td>2</td>
           <td>nombre2</td>
           <td>puntuacion2</td>
+          <td>partidas2</td>
         </tr>
         <tr>
           <td>3</td>
           <td>nombre3</td>
           <td>puntuacion3</td>
+          <td>partidas3</td>
         </tr>
         <tr>
           <td>4</td>
           <td>nombre4</td>
           <td>puntuacion4</td>
+          <td>partidas4</td>
         </tr>
       </tbody>
     </table>

@@ -57,6 +57,8 @@ li {
     transition: background-color 0.3s, color 0.3s;
     padding: 10px;
     cursor: pointer;
+    margin-left: 546px;
+    margin-right: 546px;
 }
 
 li:hover {
