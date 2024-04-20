@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+/* import axios from 'axios'
 
 export default {
 
@@ -90,7 +90,7 @@ app.get('/trivial/v1/users', (req, res) => {
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
     console.log(`Servidor escuchando en el puerto ${PORT}`);
-});
+}); */
 
 </script>
 

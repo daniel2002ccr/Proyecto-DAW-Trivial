@@ -2,9 +2,9 @@
     <div class="seleccion-dificultad">
         <h1>Seleccione la dificultad:</h1>
         <ul>
-            <li><router-link to="/facil" class="link">Fácil</router-link></li>
-            <li><router-link to="/medio" class="link">Medio</router-link></li>
-            <li><router-link to="/dificil" class="link">Difícil</router-link></li>
+            <li><router-link to="/easy" class="link">Fácil</router-link></li>
+            <li><router-link to="/medium" class="link">Medio</router-link></li>
+            <li><router-link to="/difficult" class="link">Difícil</router-link></li>
         </ul>
     </div>
 </template>
