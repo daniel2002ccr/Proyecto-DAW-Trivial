@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.4",
-    "@fortawesome/vue-fontawesome": "^3.0.6"
+    "@fortawesome/vue-fontawesome": "^3.0.6",
+    "cors": "^2.8.5"
   }
 }

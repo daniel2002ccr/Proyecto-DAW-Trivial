@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import RankingView from '../views/RankingView.vue'
 import CuentaView from '../views/CuentaView.vue'
+import AdminView from '../views/AdminView.vue'
 import SeleccionDificultad from '../components/SeleccionDificultad.vue';
 
 const routes = [
@@ -19,6 +20,11 @@ const routes = [
     path: '/cuenta',
     name: 'cuenta',
     component: CuentaView
+  },
+  {
+    path: '/admin',
+    name: 'admin',
+    component: AdminView
   },
   {
     path: '/seleccion-dificultad',
