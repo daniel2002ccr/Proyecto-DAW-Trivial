@@ -2,16 +2,24 @@
     <div class="seleccion-dificultad">
         <h1>Seleccione la dificultad:</h1>
         <ul>
-            <li><router-link to="/easy" class="link">Fácil</router-link></li>
-            <li><router-link to="/medium" class="link">Medio</router-link></li>
-            <li><router-link to="/difficult" class="link">Difícil</router-link></li>
+            <li><router-link :to="{ path: '/preguntas', query: { difficulty: 'easy' } }"
+                    class="link">Fácil</router-link></li>
+            <li><router-link :to="{ path: '/preguntas', query: { difficulty: 'medium' } }"
+                    class="link">Medio</router-link></li>
+            <li><router-link :to="{ path: '/preguntas', query: { difficulty: 'hard' } }"
+                    class="link">Difícil</router-link></li>
         </ul>
     </div>
 </template>
 
 <script>
 export default {
-    name: 'SeleccionDificultad'
+    name: 'SeleccionDificultad',
+    methods: {
+        selectDifficulty(difficulty) {
+            this.$emit('select-difficulty', difficulty);
+        }
+    }
 };
 </script>
 
