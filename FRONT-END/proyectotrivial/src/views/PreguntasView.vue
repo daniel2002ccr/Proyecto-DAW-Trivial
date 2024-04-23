@@ -1,5 +1,4 @@
 <template>
-    <SeleccionDificultad @select-difficulty="fetchQuestions" />
     <main class="bg-white container shadow-lg rounded-lg px-12 py-6">
         <div v-if="loading">
             Cargando...
@@ -7,7 +6,7 @@
         <div v-else>
             <div v-if="questions && questions.length > 0">
                 <div v-for="(question, index) in questions" :key="index"
-                    class="rounded-lg bg-gray-100 p-2 neumorph-1 text-center font-bold text-gray-800">
+                    class="rounded-lg bg-gray-200 p-2 neumorph-1 text-center font-bold text-gray-800">
                     <h2>Pregunta nº {{ index + 1 }}</h2>
                     <p>Type: {{ question.type }}</p>
                     <p>Dificultad: {{ question.difficulty }}</p>
@@ -17,15 +16,15 @@
                     <ul class="neumorph-1 bg-gray-100 p-2 rounded-lg mb-3">
                         <!-- Respuestas -->
                         <li v-for="(answer, index) in shuffledAnswers(question)" :key="index" :class="[
-        'rounded-lg',
-        'font-bold',
-        'flex',
-        'p-2',
-        isSelectedAnswer(question, answer) ? 'bg-green-700 text-white margin-bottom-1' : '',
-        !isSelectedAnswer(question, answer) && question.answered && !isCorrectAnswer(question, answer) ? 'bg-red-800 text-white margin-bottom-1' : '',
-        !isSelectedAnswer(question, answer) && question.answered && isCorrectAnswer(question, answer) ? 'bg-green-700 text-white margin-bottom-1' : '',
-        isSelectedAnswer(question, answer) || question.answered ? 'selected' : ''
-    ]" @click="selectAnswer(question, answer)" @mouseover="hoverEffect" @mouseout="resetHoverEffect"
+            'rounded-lg',
+            'font-bold',
+            'flex',
+            'p-2',
+            isSelectedAnswer(question, answer) ? 'bg-green-700 text-white margin-bottom-1' : '',
+            !isSelectedAnswer(question, answer) && question.answered && !isCorrectAnswer(question, answer) ? 'bg-red-800 text-white margin-bottom-1' : '',
+            !isSelectedAnswer(question, answer) && question.answered && isCorrectAnswer(question, answer) ? 'bg-green-700 text-white margin-bottom-1' : '',
+            isSelectedAnswer(question, answer) || question.answered ? 'selected' : ''
+        ]" @click="selectAnswer(question, answer)" @mouseover="hoverEffect" @mouseout="resetHoverEffect"
                             :style="{ pointerEvents: question.answered ? 'none' : 'auto' }">
                             <span class="bg-gray-400 p-3 rounded-lg">{{ String.fromCharCode(65 + index) }}</span> <span
                                 class="flex items-center pl-6">{{ answer }}</span>
@@ -58,6 +57,15 @@
     <div class="marcador">
         <!-- Marcador de puntuación -->
         <p>Puntuación: {{ score }}</p>
+        <!-- Mensaje según la puntuación -->
+        <p v-if="allQuestionsAnswered" class="mensajeMarcador">{{ getMessage(score) }}</p>
+        <!-- Nombre del usuario -->
+        <input type="text" v-model="nameInput" placeholder="Introduce tu nombre" v-if="showNameInput"
+            class="nombreInput">
+        <button @click="saveScoreAndName" :disabled="nameInput === ''" v-if="showNameInput"
+            :class="{ 'botonGuardarNombre-disabled': nameInput === '' }">Guardar</button>
+        <button @click="saveScoreAndName" :disabled="nameInput === ''" v-if="showNameInput"
+            :class="{ 'botonGuardarNombre-disabled': nameInput === '', 'botonGuardarNombre': nameInput !== '' }">Guardar</button>
     </div>
     <div v-if="questions && questions.length > 0">
         <!-- Resto del contenido -->
@@ -68,6 +76,7 @@
 import SeleccionDificultad from '../components/SeleccionDificultad.vue';
 
 export default {
+    props: ['difficulty', 'saveScoreAndName'],
     components: {
         SeleccionDificultad
     },
@@ -76,11 +85,18 @@ export default {
             loading: true,
             questions: null,
             selectedAnswer: null,
-            score: 0
+            score: 0,
+            nameInput: '',
+            showNameInput: false
         };
     },
     mounted() {
-        this.fetchQuestions();
+        this.fetchQuestions(this.difficulty);
+    },
+    computed: {
+        allQuestionsAnswered() {
+            return this.questions && this.questions.every(question => question.answered);
+        }
     },
     methods: {
         async fetchQuestions(difficulty) {
@@ -88,21 +104,50 @@ export default {
             try {
                 const response = await fetch(`https://opentdb.com/api.php?amount=10&difficulty=${difficulty}&type=multiple`);
                 const data = await response.json();
-
-                this.questions = data.results;
+                if (data.results.length) {
+                    this.questions = data.results;
+                } else {
+                    this.questions = null;
+                }
             } catch (error) {
                 console.error("Hubo un error al obtener las preguntas:", error);
             } finally {
                 this.loading = false;
             }
         },
+        showNamePrompt() {
+            if (this.allQuestionsAnswered) {
+                this.showNameInput = true;
+                console.log("Todas las preguntas han sido respondidas");
+            }
+        },
+        saveScoreAndName(data) {
+            // Verifica que el nombre no esté vacío
+            if (data.name.trim() !== '') {
+                // Guarda la puntuación y el nombre
+                this.players.push({ name: data.name, score: data.score });
+                // Navega a la ruta de la clasificación
+                this.$router.push('/ranking');
+            }
+        },
+        getMessage(score) {
+            if (score >= 90) {
+                return "¡Excelente trabajo! ¡Eres un experto!";
+            } else if (score >= 70) {
+                return "¡Muy bien hecho! ¡Estás en el camino correcto!";
+            } else if (score >= 50) {
+                return "¡Buen trabajo! ¡Sigue así!";
+            } else if (score >= 20) {
+                return "¡Puedes mejorar! ¡Sigue practicando!";
+            } else {
+                return "¡Necesitas practicar más! ¡No te rindas!";
+            }
+        },
         shuffledAnswers(question) {
-            // Concatenamos las respuestas correctas e incorrectas y las desordenamos
             const answers = [question.correct_answer, ...question.incorrect_answers];
             return this.shuffleArray(answers);
         },
         shuffleArray(array) {
-            // Algoritmo de Fisher-Yates para desordenar un array
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [array[i], array[j]] = [array[j], array[i]];
@@ -124,6 +169,11 @@ export default {
                 }
                 this.selectedAnswer = answer;
                 question.answered = true;
+
+                if (this.allQuestionsAnswered) {
+                    this.showNamePrompt();
+                    console.log("Todas las preguntas han sido respondidas");
+                }
             }
         },
         isSelectedAnswer(question, answer) {
@@ -143,16 +193,56 @@ export default {
 </script>
 
 <style scoped>
+.botonGuardarNombre-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    height: 50px;
+    width: 125px;
+    background-color: red;
+    text-align: center;
+    color: black;
+    margin-top: 6%;
+    font-size: 16px;
+    border: 4px black solid;
+}
+
+.botonGuardarNombre {
+    height: 50px;
+    width: 125px;
+    background-color: white;
+    text-align: center;
+    color: black;
+    margin-top: 6%;
+    font-size: 16px;
+    border: 4px black solid;
+}
+
+.nombreInput {
+    height: 50px;
+    width: 280px;
+    text-align: center;
+    font-size: 16px;
+    border: none;
+}
+
+.mensajeMarcador {
+    font-size: 16px;
+    text-align: center;
+    font-family: cursive;
+}
+
 .marcador {
     position: fixed;
     top: 50%;
-    right: 36px;
+    right: 9px;
+    text-align: center;
+    width: 17%;
     transform: translateY(-50%);
     background-color: rgba(0, 0, 0, 0.5);
     color: white;
-    padding: 30px;
+    padding: 18px;
     border-radius: 5px;
-    font-size: 35px;
+    font-size: 32px;
     z-index: 9999;
 }
 
@@ -161,7 +251,6 @@ main {
 }
 
 li {
-
     list-style: none;
 }
 
@@ -308,5 +397,25 @@ li {
 .bg-gray-800 {
     background-color: #4e5a6e;
     /* Cambia el color de fondo a gris oscuro */
+}
+
+.bg-gray-200 {
+    background-color: #E0E0E0;
+}
+
+.bg-gray-300 {
+    background-color: #D1D1D1;
+}
+
+.bg-gray-400 {
+    background-color: #B0B0B0;
+}
+
+.bg-gray-500 {
+    background-color: #9E9E9E;
+}
+
+.bg-gray-600 {
+    background-color: #757575;
 }
 </style>

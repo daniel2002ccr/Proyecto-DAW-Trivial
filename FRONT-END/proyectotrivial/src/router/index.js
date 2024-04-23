@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import RankingView from '../views/RankingView.vue'
 import CuentaView from '../views/CuentaView.vue'
@@ -36,12 +36,13 @@ const routes = [
     path: '/seleccion-dificultad',
     name: 'seleccion-dificultad',
     component: SeleccionDificultad
-  }
+  },
+  { path: '/:difficulty', component: PreguntasView, props: true },
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(process.env.BASE_URL),
   routes
-})
+});
 
 export default router

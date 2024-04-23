@@ -10,7 +10,7 @@
           <th>Partidas</th>
         </tr>
       </thead>
-      <tbody>
+      <!-- <tbody>
         <tr>
           <td>1</td>
           <td>nombre1</td>
@@ -35,10 +35,36 @@
           <td>puntuacion4</td>
           <td>partidas4</td>
         </tr>
+      </tbody> -->
+      <tbody>
+        <tr v-for="(player, index) in players" :key="index">
+          <td>{{ index + 1 }}</td>
+          <td>{{ player.name }}</td>
+          <td>{{ player.score }}</td>
+          <td>{{ player.games }}</td>
+        </tr>
       </tbody>
+
     </table>
   </div>
 </template>
+
+<script>
+export default {
+  props: ['players'],
+  data() {
+    return {
+      players: []
+    };
+  },
+  methods: {
+    saveScoreAndName(data) {
+      // Método para guardar la puntuación y el nombre en el arreglo de jugadores
+      this.players.push({ name: data.name, score: data.score });
+    }
+  }
+};
+</script>
 
 <style scoped>
 .ranking {
