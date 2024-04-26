@@ -5,8 +5,7 @@
         </div>
         <div v-else>
             <div v-if="questions && questions.length > 0">
-                <div v-for="(question, index) in questions" :key="index"
-                    class="rounded-lg bg-gray-200 p-2 neumorph-1 text-center font-bold text-gray-800">
+                <div v-for="(question, index) in questions" :key="index" class="rounded-lg bg-gray-200 p-2 neumorph-1 text-center font-bold text-gray-800">
                     <h2>Pregunta nº {{ index + 1 }}</h2>
                     <p>Type: {{ question.type }}</p>
                     <p>Dificultad: {{ question.difficulty }}</p>
@@ -14,17 +13,16 @@
                     <p class="bg-white p-5">Pregunta: {{ question.question }}</p>
                     <p class="rounded-lg font-bold flex">Respuestas:</p>
                     <ul class="neumorph-1 bg-gray-100 p-2 rounded-lg mb-3">
-                        <!-- Respuestas -->
                         <li v-for="(answer, index) in shuffledAnswers(question)" :key="index" :class="[
-            'rounded-lg',
-            'font-bold',
-            'flex',
-            'p-2',
-            isSelectedAnswer(question, answer) ? 'bg-green-700 text-white margin-bottom-1' : '',
-            !isSelectedAnswer(question, answer) && question.answered && !isCorrectAnswer(question, answer) ? 'bg-red-800 text-white margin-bottom-1' : '',
-            !isSelectedAnswer(question, answer) && question.answered && isCorrectAnswer(question, answer) ? 'bg-green-700 text-white margin-bottom-1' : '',
-            isSelectedAnswer(question, answer) || question.answered ? 'selected' : ''
-        ]" @click="selectAnswer(question, answer)" @mouseover="hoverEffect" @mouseout="resetHoverEffect"
+                            'rounded-lg',
+                            'font-bold',
+                            'flex',
+                            'p-2',
+                            isSelectedAnswer(question, answer) ? 'bg-green-700 text-white margin-bottom-1' : '',
+                            !isSelectedAnswer(question, answer) && question.answered && !isCorrectAnswer(question, answer) ? 'bg-red-800 text-white margin-bottom-1' : '',
+                            !isSelectedAnswer(question, answer) && question.answered && isCorrectAnswer(question, answer) ? 'bg-green-700 text-white margin-bottom-1' : '',
+                            isSelectedAnswer(question, answer) || question.answered ? 'selected' : ''
+                        ]" @click="selectAnswer(question, answer)" @mouseover="hoverEffect" @mouseout="resetHoverEffect"
                             :style="{ pointerEvents: question.answered ? 'none' : 'auto' }">
                             <span class="bg-gray-400 p-3 rounded-lg">{{ String.fromCharCode(65 + index) }}</span> <span
                                 class="flex items-center pl-6">{{ answer }}</span>
@@ -32,7 +30,6 @@
                     </ul>
                     <p>Respuesta correcta: </p>
                     <ul class="neumorph-1 bg-gray-100 p-2 rounded-lg mb-3">
-                        <!-- Respuesta correcta -->
                         <li class="bg-green-700 rounded-lg font-bold flex p-2 text-white">
                             <span class="bg-gray-800 p-3 rounded-lg">{{ String.fromCharCode(65) }}</span> <span
                                 class="flex items-center pl-6">{{ question.correct_answer }}</span>
@@ -40,7 +37,6 @@
                     </ul>
                     <p>Respuestas incorrectas:</p>
                     <ul class="neumorph-1 bg-gray-100 p-2 rounded-lg mb-3">
-                        <!-- Respuestas incorrectas -->
                         <li v-for="(answer, index) in question.incorrect_answers" :key="'incorrect_' + index"
                             class="bg-red-800 rounded-lg font-bold flex p-2 text-white margin-bottom-1">
                             <span class="bg-gray-800 p-3 rounded-lg">{{ String.fromCharCode(65 + index + 1) }}</span>
@@ -55,17 +51,10 @@
         </div>
     </main>
     <div class="marcador">
-        <!-- Marcador de puntuación -->
         <p>Puntuación: {{ score }}</p>
-        <!-- Mensaje según la puntuación -->
         <p v-if="allQuestionsAnswered" class="mensajeMarcador">{{ getMessage(score) }}</p>
-        <!-- Nombre del usuario -->
-        <input type="text" v-model="nameInput" placeholder="Introduce tu nombre" v-if="showNameInput"
-            class="nombreInput">
-        <button @click="saveScoreAndName" :disabled="nameInput === ''" v-if="showNameInput"
-            :class="{ 'botonGuardarNombre-disabled': nameInput === '' }">Guardar</button>
-        <button @click="saveScoreAndName" :disabled="nameInput === ''" v-if="showNameInput"
-            :class="{ 'botonGuardarNombre-disabled': nameInput === '', 'botonGuardarNombre': nameInput !== '' }">Guardar</button>
+        <input type="text" v-model="nameInput" placeholder="Introduce tu nombre" v-if="showNameInput" class="nombreInput">
+        <button @click="saveScoreAndName" :disabled="nameInput === ''" v-if="showNameInput" :class="{ 'botonGuardarNombre-disabled': nameInput === '' }">Guardar</button>
     </div>
     <div v-if="questions && questions.length > 0">
         <!-- Resto del contenido -->
@@ -121,15 +110,21 @@ export default {
                 console.log("Todas las preguntas han sido respondidas");
             }
         },
-        saveScoreAndName(data) {
-            // Verifica que el nombre no esté vacío
-            if (data.name.trim() !== '') {
-                // Guarda la puntuación y el nombre
-                this.players.push({ name: data.name, score: data.score });
-                // Navega a la ruta de la clasificación
-                this.$router.push('/ranking');
-            }
-        },
+        saveScoreAndName() {
+    // Verifica que el nombre no esté vacío
+    if (this.nameInput.trim() !== '') {
+        // Guarda la puntuación y el nombre
+        const data = {
+            name: this.nameInput,
+            score: this.score
+        };
+        // Guarda la puntuación y el nombre (no sé a dónde estás intentando guardar estos datos, así que aquí he supuesto una estructura básica)
+        this.saveScoreAndName(data);
+        // Navega a la ruta de la clasificación
+        this.$router.push('/ranking');
+    }
+},
+
         getMessage(score) {
             if (score >= 90) {
                 return "¡Excelente trabajo! ¡Eres un experto!";
