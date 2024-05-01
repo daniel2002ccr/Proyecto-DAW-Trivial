@@ -5,7 +5,8 @@
         </div>
         <div v-else>
             <div v-if="questions && questions.length > 0">
-                <div v-for="(question, index) in questions" :key="index" class="rounded-lg bg-gray-200 p-2 neumorph-1 text-center font-bold text-gray-800">
+                <div v-for="(question, index) in questions" :key="index"
+                    class="rounded-lg bg-gray-200 p-2 neumorph-1 text-center font-bold text-gray-800">
                     <h2>Pregunta nº {{ index + 1 }}</h2>
                     <p>Type: {{ question.type }}</p>
                     <p>Dificultad: {{ question.difficulty }}</p>
@@ -14,15 +15,15 @@
                     <p class="rounded-lg font-bold flex">Respuestas:</p>
                     <ul class="neumorph-1 bg-gray-100 p-2 rounded-lg mb-3">
                         <li v-for="(answer, index) in shuffledAnswers(question)" :key="index" :class="[
-                            'rounded-lg',
-                            'font-bold',
-                            'flex',
-                            'p-2',
-                            isSelectedAnswer(question, answer) ? 'bg-green-700 text-white margin-bottom-1' : '',
-                            !isSelectedAnswer(question, answer) && question.answered && !isCorrectAnswer(question, answer) ? 'bg-red-800 text-white margin-bottom-1' : '',
-                            !isSelectedAnswer(question, answer) && question.answered && isCorrectAnswer(question, answer) ? 'bg-green-700 text-white margin-bottom-1' : '',
-                            isSelectedAnswer(question, answer) || question.answered ? 'selected' : ''
-                        ]" @click="selectAnswer(question, answer)" @mouseover="hoverEffect" @mouseout="resetHoverEffect"
+            'rounded-lg',
+            'font-bold',
+            'flex',
+            'p-2',
+            isSelectedAnswer(question, answer) ? 'bg-green-700 text-white margin-bottom-1' : '',
+            !isSelectedAnswer(question, answer) && question.answered && !isCorrectAnswer(question, answer) ? 'bg-red-800 text-white margin-bottom-1' : '',
+            !isSelectedAnswer(question, answer) && question.answered && isCorrectAnswer(question, answer) ? 'bg-green-700 text-white margin-bottom-1' : '',
+            isSelectedAnswer(question, answer) || question.answered ? 'selected' : ''
+        ]" @click="selectAnswer(question, answer)" @mouseover="hoverEffect" @mouseout="resetHoverEffect"
                             :style="{ pointerEvents: question.answered ? 'none' : 'auto' }">
                             <span class="bg-gray-400 p-3 rounded-lg">{{ String.fromCharCode(65 + index) }}</span> <span
                                 class="flex items-center pl-6">{{ answer }}</span>
@@ -53,8 +54,10 @@
     <div class="marcador">
         <p>Puntuación: {{ score }}</p>
         <p v-if="allQuestionsAnswered" class="mensajeMarcador">{{ getMessage(score) }}</p>
-        <input type="text" v-model="nameInput" placeholder="Introduce tu nombre" v-if="showNameInput" class="nombreInput">
-        <button @click="saveScoreAndName" :disabled="nameInput === ''" v-if="showNameInput" :class="{ 'botonGuardarNombre-disabled': nameInput === '' }">Guardar</button>
+        <input type="text" v-model="nameInput" placeholder="Introduce tu nombre" v-if="showNameInput"
+            class="nombreInput">
+        <button @click="saveScoreAndName" :disabled="nameInput === ''" v-if="showNameInput"
+            :class="{ 'botonGuardarNombre-disabled': nameInput === '', 'botonGuardarNombre': nameInput !== '' }">Guardar</button>
     </div>
     <div v-if="questions && questions.length > 0">
         <!-- Resto del contenido -->
@@ -65,7 +68,7 @@
 import SeleccionDificultad from '../components/SeleccionDificultad.vue';
 
 export default {
-    props: ['difficulty', 'saveScoreAndName'],
+    props: ['difficulty'],
     components: {
         SeleccionDificultad
     },
@@ -76,7 +79,8 @@ export default {
             selectedAnswer: null,
             score: 0,
             nameInput: '',
-            showNameInput: false
+            showNameInput: false,
+            players: []
         };
     },
     mounted() {
@@ -110,21 +114,22 @@ export default {
                 console.log("Todas las preguntas han sido respondidas");
             }
         },
-        saveScoreAndName() {
-    // Verifica que el nombre no esté vacío
-    if (this.nameInput.trim() !== '') {
-        // Guarda la puntuación y el nombre
-        const data = {
-            name: this.nameInput,
-            score: this.score
-        };
-        // Guarda la puntuación y el nombre (no sé a dónde estás intentando guardar estos datos, así que aquí he supuesto una estructura básica)
-        this.saveScoreAndName(data);
-        // Navega a la ruta de la clasificación
-        this.$router.push('/ranking');
-    }
-},
 
+        saveScoreAndName() {
+            // Verifica que el nombre no esté vacío
+            if (this.nameInput.trim() !== '') {
+                // Guarda la puntuación y el nombre
+                const data = {
+                    name: this.nameInput,
+                    score: this.score
+                };
+                //  this.players.push(data);
+                //  this.showNameInput = false;
+                //  this.$router.push('/ranking');
+                console.log(this.players);
+                this.$router.push({ path: '/ranking', query: { name: data.name, score: data.score } });
+            }
+        },
         getMessage(score) {
             if (score >= 90) {
                 return "¡Excelente trabajo! ¡Eres un experto!";
@@ -188,6 +193,22 @@ export default {
 </script>
 
 <style scoped>
+[type=button]:not(:disabled),
+[type=reset]:not(:disabled),
+[type=submit]:not(:disabled),
+button:not(:disabled) {
+    cursor: pointer;
+    height: 50px;
+    width: 125px;
+    background-color: rgb(76, 206, 44);
+    text-align: center;
+    color: black;
+    margin-top: 6%;
+    font-weight: bold;
+    font-size: 16px;
+    border: 4px white solid;
+}
+
 .botonGuardarNombre-disabled {
     opacity: 0.5;
     cursor: not-allowed;
