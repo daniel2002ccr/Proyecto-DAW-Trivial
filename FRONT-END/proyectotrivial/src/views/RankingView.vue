@@ -1,21 +1,22 @@
 <template>
   <div class="ranking">
     <h1>RANKING</h1>
+    <button @click="eliminarDatos" class="botonEliminarDatos" :disabled="players.length === 0">Eliminar Datos</button>
     <table>
       <thead>
         <tr>
           <th>Posición</th>
           <th>Nombre</th>
           <th>Puntuación</th>
-          <!--  <th>Partidas</th> -->
+          <th>Dificultad</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(player, index) in players" :key="index">
           <td>{{ index + 1 }}</td>
-          <td>{{ player.data.name }}</td>
-          <td>{{ player.data.score }}</td>
-          <!-- <td>{{ player.games }}</td -->
+          <td>{{ player.name }}</td>
+          <td>{{ player.score }}</td>
+          <td>{{ player.difficulty }}</td>
         </tr>
       </tbody>
 
@@ -32,18 +33,102 @@ export default {
       players: []
     };
   },
+  mounted() {
+    // Recuperar datos del almacenamiento local al iniciar el componente
+    const savedPlayers = JSON.parse(localStorage.getItem('players'));
+    if (savedPlayers) {
+      // Copiar los jugadores guardados en el almacenamiento local en la lista de jugadores
+      this.players = [...savedPlayers];
+    }
+
+    // Verificar si hay nuevos datos en la URL y añadirlos
+    const params = new URLSearchParams(window.location.search);
+    const name = params.get('name');
+    const score = params.get('score');
+    const difficulty = params.get('difficulty');
+
+    if (name && score && difficulty) {
+      // Añadir los nuevos datos a la lista de jugadores
+      this.players.push({ name, score, difficulty });
+    }
+
+    // Ordenar los jugadores por puntuación y luego por dificultad
+    this.players.sort((a, b) => {
+      // Si la puntuación es diferente, ordena por puntuación
+      if (b.score !== a.score) {
+        return b.score - a.score; // Orden descendente por puntuación
+      } else {
+        // Si la puntuación es igual, ordena por dificultad
+        const difficultyOrder = { "hard": 3, "medium": 2, "easy": 1 };
+        return difficultyOrder[b.difficulty] - difficultyOrder[a.difficulty];
+      }
+    });
+
+    // Convertir los valores de dificultad a texto legible
+    this.players.forEach(player => {
+      player.difficulty = this.getReadableDifficulty(player.difficulty);
+    });
+
+    // Guardar los jugadores actualizados en localStorage
+    localStorage.setItem('players', JSON.stringify(this.players));
+  },
   methods: {
-    saveScoreAndName(data) {
-      console.log(this.players);
-      // Método para guardar la puntuación y el nombre en el arreglo de jugadores
-      this.players.push({ name: data.name, score: data.score });
-      console.log(this.players);
+    getReadableDifficulty(difficulty) {
+      switch (difficulty) {
+        case "hard":
+          return "Difícil";
+        case "medium":
+          return "Medio";
+        case "easy":
+          return "Fácil";
+        default:
+          return difficulty;
+      }
+    },
+    eliminarDatos() {
+      // Eliminar todos los datos de la lista de jugadores
+      this.players = [];
+
+      // Limpiar también el almacenamiento local
+      localStorage.removeItem('players');
     }
   }
 };
 </script>
 
 <style scoped>
+.botonEliminarDatos {
+  float: right;
+  width: 200px;
+  height: 40px;
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  margin-right: 100px;
+  margin-top: -50px;
+}
+
+.botonEliminarDatos:hover {
+  float: right;
+  width: 200px;
+  height: 40px;
+  border: 3px solid white;
+  font-size: 16px;
+  background-color: grey;
+  color: white;
+  font-weight: bold;
+  margin-right: 100px;
+  margin-top: -50px;
+}
+
+.botonEliminarDatos:disabled {
+  pointer-events: none;
+}
+
+.botonEliminarDatos:disabled:hover {
+  pointer-events: none;
+}
+
 .ranking {
   background-color: rgb(255, 50, 50);
 }

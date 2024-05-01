@@ -80,7 +80,8 @@ export default {
             score: 0,
             nameInput: '',
             showNameInput: false,
-            players: []
+            players: [],
+            answeredPlayers: []
         };
     },
     mounted() {
@@ -99,7 +100,8 @@ export default {
                 const data = await response.json();
                 if (data.results.length) {
                     this.questions = data.results;
-                } else {
+                }
+                else {
                     this.questions = null;
                 }
             } catch (error) {
@@ -121,13 +123,12 @@ export default {
                 // Guarda la puntuación y el nombre
                 const data = {
                     name: this.nameInput,
-                    score: this.score
+                    score: this.score,
+                    difficulty: this.difficulty,
+                    answered: true
                 };
-                //  this.players.push(data);
-                //  this.showNameInput = false;
-                //  this.$router.push('/ranking');
-                console.log(this.players);
-                this.$router.push({ path: '/ranking', query: { name: data.name, score: data.score } });
+                this.players.push(data);
+                this.$router.push({ path: '/ranking', query: { name: data.name, score: data.score, difficulty: data.difficulty } });
             }
         },
         getMessage(score) {
