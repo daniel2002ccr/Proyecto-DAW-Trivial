@@ -17,9 +17,10 @@
                             <th>Imagen</th>
                             <th>Cantidad</th>
                             <th>Activo</th>
+                            <th>Funcion a realizar</th>
                         </tr>
                     </thead>
-                    <tbody v-if="usuarios.length > 0">
+                  <!--   <tbody v-if="usuarios.length > 0">
                         <tr v-for="(usuario, index) in usuarios" :key="index">
                             <td>{{ usuario.id }}</td>
                             <td>{{ usuario.name }}</td>
@@ -28,16 +29,32 @@
                             <td>{{ usuario.cantidad }}</td>
                             <td>{{ usuario.activo }}</td>
                             <td>
-                                <router-link to="/" class="btn btn-success">
-                                    Editar Usuario
+                                <router-link :to="{path: '/admin/'+usuario.id+'actualizarUser'}" class="btn btn-success mx-2">
+                                    Editar
                                 </router-link>
-                                <button type="button" class="btn btn-danger">Borrar Usuario</button>
+                                <button type="button" class="btn btn-danger mx-2">Borrar</button>
                             </td>
                         </tr>
-                    </tbody>
+                    </tbody> 
                     <tbody v-else>
                         <tr>
-                            <td colspan="7">No hay usuarios</td>
+                            <td colspan="6">No hay usuarios</td>
+                        </tr>
+                    </tbody> -->
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Antonio</td>
+                            <td>antonio@email.com</td>
+                            <td>aqui no hay imagen</td>
+                            <td>20</td>
+                            <td>Full activo</td>
+                            <td>
+                                <router-link to="/admin/ActualizarUser" class="btn btn-success mx-2">
+                                    Editar
+                                </router-link>
+                                <button type="button" class="btn btn-danger mx-2">Borrar</button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>

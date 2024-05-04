@@ -5,6 +5,7 @@ import CuentaView from '../views/CuentaView.vue'
 import PreguntasView from '../views/PreguntasView.vue'
 import AdminsView from '../views/usuarios/AdminsView.vue'
 import InsertarUsuarioView from '../views/usuarios/InsertarUsuarioView.vue'
+import ActualizarUsuarioView from '../views/usuarios/ActualizarUsuarioView.vue'
 import SeleccionDificultad from '../components/SeleccionDificultad.vue';
 
 const routes = [
@@ -37,6 +38,11 @@ const routes = [
     path: '/admin/crearUser',
     name: 'InsertarUsuarioView',
     component: InsertarUsuarioView
+  },
+  {
+    path: '/admin/actualizarUser',
+    name: 'ActualizarUsuarioView',
+    component: ActualizarUsuarioView
   },
   {
     path: '/seleccion-dificultad',
