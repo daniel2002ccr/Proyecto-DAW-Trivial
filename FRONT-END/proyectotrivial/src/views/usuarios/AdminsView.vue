@@ -17,7 +17,7 @@
                     <th>Activo</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody v-if="this.usuario.length > 0">
                     <tr v-for="(usuario, index) in this.usuarios" :key="index">
                         <td>usuario.id</td>
                         <td>usuario.name</td>
@@ -30,6 +30,11 @@
                                 Editar Usuario</router-link>
                             <button type="button" class="btn btn-danger">Borrar Usuario</button>
                         </td>
+                    </tr>
+                </tbody>
+                <tbody v-else>
+                    <tr>
+                        <td colspan="7">No hay usuarios</td>
                     </tr>
                 </tbody>
             </table>

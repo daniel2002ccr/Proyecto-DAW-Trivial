@@ -3,7 +3,8 @@ import HomeView from '../views/HomeView.vue'
 import RankingView from '../views/RankingView.vue'
 import CuentaView from '../views/CuentaView.vue'
 import PreguntasView from '../views/PreguntasView.vue'
-import AdminView from '../views/AdminView.vue'
+import AdminsView from '../views/usuarios/AdminsView.vue'
+import InsertarUsuarioView from '../views/usuarios/InsertarUsuarioView.vue'
 import SeleccionDificultad from '../components/SeleccionDificultad.vue';
 
 const routes = [
@@ -30,7 +31,12 @@ const routes = [
   {
     path: '/admin',
     name: 'admin',
-    component: AdminView
+    component: AdminsView
+  },
+  {
+    path: '/admin/crearUser',
+    name: 'InsertarUsuarioView',
+    component: InsertarUsuarioView
   },
   {
     path: '/seleccion-dificultad',
