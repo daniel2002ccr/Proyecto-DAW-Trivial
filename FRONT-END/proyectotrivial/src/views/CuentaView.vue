@@ -4,22 +4,17 @@
             <div class="text-center">
                 <img src="https://us.123rf.com/450wm/hugok1000/hugok10001905/hugok1000190500198/123291745-ilustraci%C3%B3n-de-avatar-de-perfil-predeterminado-en-azul-y-blanco-sin-persona.jpg"
                     width="100" class="rounded-circle">
-                <h3 class="mt-2">Nombre jugador</h3>
-                <span class="mt-1 clearfix">------- ---------</span>
+                <h3 class="mt-2">{{ jugador ? jugador.name : '---' }}</h3>
 
                 <div class="row mt-3 mb-3">
 
-                    <div class="col-md-4">
-                        <h5>Ranking</h5>
-                        <span class="num">1º</span>
-                    </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <h5>Puntos</h5>
-                        <span class="num">100</span>
+                        <span class="num">{{ jugador ? jugador.score : '---' }}</span>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <h5>Partidas</h5>
-                        <span class="num">10</span>
+                        <span class="num">{{ partidasJugadas }}</span>
                     </div>
 
                 </div>
@@ -27,6 +22,26 @@
                 <hr class="line">
 
                 <small class="mt-4">Descripción del jugador</small>
+                <template v-if="!editandoDescripcion && !guardado">
+                    <input type="text" v-model="nuevaDescripcion" class="form-control"
+                        placeholder="Añadir descripción..." :disabled="guardado">
+                </template>
+                <template v-else>
+                    <p v-if="!editandoDescripcion">{{ jugador.descripcion }}</p>
+                    <input v-else type="text" v-model="nuevaDescripcion" class="form-control"
+                        placeholder="Añadir descripción..." :disabled="guardado">
+                </template>
+
+                <button class="botonGuardarDescripcion" @click="guardarDescripcion"
+                    :disabled="guardado || nuevaDescripcion.trim() === ''">Guardar</button>
+
+                <template v-if="guardado">
+                    <div class="mt-4">
+                        <button class="botonEditarDescripcion" @click="editarDescripcion">Editar</button>
+                        <button class="botonEliminarDescripcion" @click="eliminarDescripcion">Eliminar</button>
+                    </div>
+                </template>
+
                 <div class="social-buttons mt-5">
                     <button class="neo-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"
                             class="imagen">
@@ -66,7 +81,139 @@
     </div>
 </template>
 
+<script>
+export default {
+    data() {
+        return {
+            jugador: null,
+            nuevaDescripcion: '',
+            editandoDescripcion: false,
+            guardado: false,
+            partidasJugadas: 1 // Inicializamos el contador de partidas jugadas
+        };
+    },
+    mounted() {
+        this.cargarDatosJugador();
+    },
+    methods: {
+        cargarDatosJugador() {
+            const { name, score, ranking } = this.$route.params;
+            this.jugador = { name, score, ranking, descripcion: '' };
+        },
+        guardarDescripcion() {
+            this.jugador.descripcion = this.nuevaDescripcion;
+            this.guardado = true; // Marcamos como guardado
+            this.editandoDescripcion = false; // Después de guardar, dejamos de editar
+            // Verificar si el nombre del jugador está en el ranking
+            if (this.nombresEnRanking.includes(this.jugador.name)) {
+                this.partidasJugadas++;
+            }
+        },
+        editarDescripcion() {
+            this.editandoDescripcion = true; // Habilitamos la edición
+            this.guardado = false; // Habilitamos el botón de guardar
+        },
+        eliminarDescripcion() {
+            this.nuevaDescripcion = ''; // Vaciamos la descripción
+            this.guardado = false; // Marcamos como no guardado
+            this.editandoDescripcion = false; // Volvemos al estado inicial
+        }
+    }
+};
+</script>
+
 <style scoped>
+.botonGuardarDescripcion {
+    margin-top: 25px;
+    border-radius: 100px;
+    height: 32px;
+    color: #fff;
+    background-color: #0069d9;
+    border-color: #0062cc;
+    border: none;
+    width: 30%;
+}
+
+.botonGuardarDescripcion:hover {
+    margin-top: 25px;
+    border-radius: 100px;
+    height: 32px;
+    color: #0069d9;
+    background-color: #fff;
+    border-color: #fff;
+    border: none;
+    width: 30%;
+    transition: all 0.6s;
+}
+
+.botonGuardarDescripcion:disabled {
+    margin-top: 25px;
+    border-radius: 100px;
+    height: 32px;
+    color: #fff;
+    background-color: #0069d9;
+    border-color: #0062cc;
+    border: none;
+    width: 30%;
+}
+
+.botonEditarDescripcion {
+    margin-top: 25px;
+    border-radius: 100px;
+    height: 32px;
+    color: #fff;
+    background-color: #1c9e2d;
+    border-color: #1c9e2d;
+    border: none;
+    width: 30%;
+}
+
+.botonEditarDescripcion:hover {
+    margin-top: 25px;
+    border-radius: 100px;
+    height: 32px;
+    color: #1c9e2d;
+    background-color: #fff;
+    border-color: #fff;
+    border: none;
+    width: 30%;
+    transition: all 0.6s;
+}
+
+.botonEliminarDescripcion {
+    margin-top: 25px;
+    border-radius: 100px;
+    height: 32px;
+    color: #fff;
+    background-color: #eb0f0f;
+    border-color: #eb0f0f;
+    border: none;
+    width: 30%;
+}
+
+.botonEliminarDescripcion:hover {
+    margin-top: 25px;
+    border-radius: 100px;
+    height: 32px;
+    color: #eb0f0f;
+    background-color: #fff;
+    border-color: #fff;
+    border: none;
+    width: 30%;
+    transition: all 0.6s;
+}
+
+.form-control {
+    margin-top: 9px;
+    width: 100%;
+    height: 40px;
+    font-size: 14px;
+}
+
+small.mt-4 {
+    font-size: 17px;
+}
+
 .rounded-circle {
     height: 22%;
 }
@@ -96,11 +243,11 @@ body {
 }
 
 .card {
-    margin-top: 15%;
+    margin-top: 10%;
     margin-left: 66%;
     color: #fff;
-    width: 350px;
-    height: 520px;
+    width: 370px;
+    height: 685px;
     border-radius: 10px;
     background: linear-gradient(145deg, #9a40a9, #b74cc9);
     box-shadow: 20px 20px 60px #913ca0,

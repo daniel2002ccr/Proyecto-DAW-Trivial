@@ -9,14 +9,18 @@
           <th>Nombre</th>
           <th>Puntuación</th>
           <th>Dificultad</th>
+          <th>Ajustes</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(player, index) in players" :key="index">
-          <td>{{ index + 1 }}</td>
-          <td>{{ player.name }}</td>
-          <td>{{ player.score }}</td>
-          <td>{{ player.difficulty }}</td>
+          <td class="posicion">{{ index + 1 }}</td>
+          <td class="fila">{{ player.name }}</td>
+          <td class="fila">{{ player.score }}</td>
+          <td class="fila">{{ player.difficulty }}</td>
+          <td>
+            <button class="botonPerfil" @click="verPerfil(player, index)">Perfil</button>
+          </td>
         </tr>
       </tbody>
 
@@ -91,12 +95,53 @@ export default {
 
       // Limpiar también el almacenamiento local
       localStorage.removeItem('players');
+    },
+    verPerfil(player, index) {
+      this.$router.push({
+        name: 'CuentaView',
+        params: {
+          name: player.name,
+          score: player.score,
+          ranking: index + 1
+        }
+      });
     }
   }
 };
 </script>
 
 <style scoped>
+.posicion {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.fila {
+  font-size: 20px;
+}
+
+.botonPerfil {
+  background-color: white;
+  color: black;
+  font-size: 17px;
+  font-weight: bold;
+  border-radius: 100px;
+  height: 30px;
+  width: 30%;
+  padding-top: 1%;
+  padding-bottom: 1%;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.botonPerfil:hover {
+  background-color: black;
+  color: white;
+  transition: all 0.7s;
+}
+
 .botonEliminarDatos {
   float: right;
   width: 200px;

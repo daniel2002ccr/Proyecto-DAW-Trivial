@@ -20,8 +20,8 @@ const routes = [
     component: RankingView
   },
   {
-    path: '/cuenta',
-    name: 'cuenta',
+    path: '/cuenta/:name/:score',
+    name: 'CuentaView',
     component: CuentaView
   },
   {
