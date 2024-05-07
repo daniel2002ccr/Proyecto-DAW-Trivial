@@ -1,6 +1,8 @@
 <template>
   <div class="home">
-    <input type="button" class="botonInicioSesion" value="Iniciar Sesión">
+    <form action="/admin">
+    <input type="submit" class="botonInicioSesion" value="Acceso admin" to="/admin">
+  </form>
     <input type="button" class="botonRegistro" value="Crear cuenta">
     <img alt="Vue logo" src="../assets/logoTrivWorld.png" class="imagenLogo">
     <router-link to="/seleccion-dificultad" class="blinking-button">Iniciar partida</router-link>

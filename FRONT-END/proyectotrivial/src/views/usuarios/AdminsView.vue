@@ -56,6 +56,20 @@
                                 <button type="button" class="btn btn-danger mx-2">Borrar</button>
                             </td>
                         </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Luis</td>
+                            <td>luis@email.com</td>
+                            <td>aqui no hay imagen</td>
+                            <td>20</td>
+                            <td>Full activo</td>
+                            <td>
+                                <router-link to="/admin/ActualizarUser" class="btn btn-success mx-2">
+                                    Editar
+                                </router-link>
+                                <button type="button" @click="borrarUsuario(usuario.id)" class="btn btn-danger mx-2">Borrar</button>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>      
@@ -87,7 +101,23 @@ export default {
                     console.error('Hubo un problema con la solicitud:', error);
                 });
         },
-    }
+        borrarUsuario(usuarioId){
+            if(confirm('¿Estas seguro de que quieres borrar este usuario?')){
+            axios.delete(`http://localhost:8080/trivial/v1/users/${usuarioId}/delete`)
+            .then(res =>{
+                alert('El usuario ha sido borrado con éxito!');
+                this.getUsuarios();
+            })
+            .catch(function (error) {
+                if (error.response){
+                    if (error.response.status == 404){
+                        alert('Error 404, no existe el id de ese usuario...');
+                    }
+                }
+            })
+        }
+    },
+    },
 }
 </script>
 
