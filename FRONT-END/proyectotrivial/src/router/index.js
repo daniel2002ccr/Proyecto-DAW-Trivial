@@ -25,6 +25,11 @@ const routes = [
     component: CuentaView
   },
   {
+    path: '/cuenta',
+    name: 'CuentaViewWithoutParams',
+    component: CuentaView
+  },
+  {
     path: '/preguntas',
     name: 'preguntas',
     component: PreguntasView
@@ -55,6 +60,16 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
+});
+
+router.beforeEach((to, from, next) => {
+  // Agrega la clase 'no-scroll' al body si la ruta es '/'
+  if (to.path === '/') {
+    document.body.classList.add('no-scroll');
+  } else {
+    document.body.classList.remove('no-scroll');
+  }
+  next();
 });
 
 export default router

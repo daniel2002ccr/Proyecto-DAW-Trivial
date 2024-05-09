@@ -4,6 +4,7 @@
             <div class="text-center">
                 <img src="https://us.123rf.com/450wm/hugok1000/hugok10001905/hugok1000190500198/123291745-ilustraci%C3%B3n-de-avatar-de-perfil-predeterminado-en-azul-y-blanco-sin-persona.jpg"
                     width="100" class="rounded-circle">
+                <input class="inputFotito" type="file" @change="onFileChange">
                 <h3 class="mt-2">{{ jugador ? jugador.name : '---' }}</h3>
 
                 <div class="row mt-3 mb-3">
@@ -72,7 +73,7 @@
 
                 <div class="profile mt-5">
 
-                    <button class="profile_button px-5">Ver perfil</button>
+                    <button class="profile_button px-5">Mi cuenta</button>
 
                 </div>
 
@@ -82,9 +83,11 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 export default {
     data() {
         return {
+            imagen: '',
             jugador: null,
             nuevaDescripcion: '',
             editandoDescripcion: false,
@@ -95,19 +98,31 @@ export default {
     mounted() {
         this.cargarDatosJugador();
     },
+    computed: {
+        ...mapGetters(['descripcionJugador']), // Importa la descripción del jugador desde Vuex si estás utilizando Vuex
+        imagenPerfil() {
+            // Si el jugador tiene una imagen cargada, la muestra. De lo contrario, muestra la imagen por defecto.
+            return this.jugador.imagen ? URL.createObjectURL(this.jugador.imagen) : 'https://us.123rf.com/450wm/hugok1000/hugok10001905/hugok1000190500198/123291745-ilustraci%C3%B3n-de-avatar-de-perfil-predeterminado-en-azul-y-blanco-sin-persona.jpg';
+        }
+    },
+
     methods: {
         cargarDatosJugador() {
             const { name, score, ranking } = this.$route.params;
             this.jugador = { name, score, ranking, descripcion: '' };
         },
         guardarDescripcion() {
+            // Guardar la descripción
             this.jugador.descripcion = this.nuevaDescripcion;
+            // Verificar si se ha seleccionado una imagen nueva
+            if (this.imagen) {
+                // Asignar la imagen nueva al jugador
+                this.jugador.imagen = this.imagen;
+                // Reiniciar la variable imagen para evitar que se guarde la misma imagen en el próximo guardado
+                this.imagen = '';
+            }
             this.guardado = true; // Marcamos como guardado
             this.editandoDescripcion = false; // Después de guardar, dejamos de editar
-            // Verificar si el nombre del jugador está en el ranking
-            if (this.nombresEnRanking.includes(this.jugador.name)) {
-                this.partidasJugadas++;
-            }
         },
         editarDescripcion() {
             this.editandoDescripcion = true; // Habilitamos la edición
@@ -117,12 +132,30 @@ export default {
             this.nuevaDescripcion = ''; // Vaciamos la descripción
             this.guardado = false; // Marcamos como no guardado
             this.editandoDescripcion = false; // Volvemos al estado inicial
-        }
+        },
+        onFileChange(event) {
+            const file = event.target.files[0]; // Obtener el archivo seleccionado por el usuario
+            if (file) {
+                // Asignar la imagen seleccionada a la variable imagen
+                this.imagen = file;
+                // Si ya hay una imagen asignada al jugador, liberar el objeto URL anterior
+                if (this.jugador.imagen) {
+                    URL.revokeObjectURL(this.jugador.imagen);
+                }
+                // Mostrar la imagen seleccionada previamente al usuario
+                this.jugador.imagen = URL.createObjectURL(file);
+            }
+        },
     }
 };
 </script>
 
 <style scoped>
+.inputFotito {
+    margin-top: 10px;
+    width: 250px;
+}
+
 .botonGuardarDescripcion {
     margin-top: 25px;
     border-radius: 100px;
@@ -215,7 +248,7 @@ small.mt-4 {
 }
 
 .rounded-circle {
-    height: 22%;
+    height: 19%;
 }
 
 .imagen {

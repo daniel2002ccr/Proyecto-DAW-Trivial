@@ -1,12 +1,26 @@
 <template>
   <div class="home">
     <form action="/admin">
-    <input type="submit" class="botonInicioSesion" value="Acceso admin" to="/admin">
-  </form>
+      <input type="submit" class="botonInicioSesion" value="Acceso admin" to="/admin">
+    </form>
     <input type="button" class="botonRegistro" value="Crear cuenta">
     <img alt="Vue logo" src="../assets/logoTrivWorld.png" class="imagenLogo">
     <router-link to="/seleccion-dificultad" class="blinking-button">Iniciar partida</router-link>
   </div>
+  <footer class="footer">
+    <div class="social">
+      <!-- Logos de redes sociales -->
+      <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+      <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+      <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+    </div>
+    <div class="legal">
+      <!-- Enlaces a páginas legales -->
+      <router-link to="/faq">FAQs</router-link>
+      <router-link to="/cookies">Cookies</router-link>
+      <router-link to="/aviso-legal">Aviso legal</router-link>
+    </div>
+  </footer>
 </template>
 
 <script>
@@ -22,6 +36,38 @@ export default {
 </script>
 
 <style scoped>
+.footer {
+  color: white;
+  padding: 2px;
+  position: absolute;
+  background-color: orange;
+  bottom: 0px;
+  width: 100%;
+  height: 54px;
+}
+
+.social {
+  display: flex;
+}
+
+.social-link {
+  color: white;
+  font-size: 20px;
+  margin-right: 10px;
+}
+
+.legal {
+  font-size: 14px;
+
+  a {
+    color: white;
+  }
+}
+
+.no-scroll {
+  overflow: hidden;
+}
+
 button {
   font-family: 'Courier New', Courier, monospace;
 }

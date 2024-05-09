@@ -14,7 +14,7 @@
                     <p class="bg-white p-5">Pregunta: {{ question.question }}</p>
                     <p class="rounded-lg font-bold flex">Respuestas:</p>
                     <ul class="neumorph-1 bg-gray-100 p-2 rounded-lg mb-3">
-                        <li v-for="(answer, index) in shuffledAnswers(question)" :key="index" :class="[
+                        <li v-for="(answer, index) in shuffledAnswers(index)" :key="index" :class="[
             'rounded-lg',
             'font-bold',
             'flex',
@@ -81,7 +81,8 @@ export default {
             nameInput: '',
             showNameInput: false,
             players: [],
-            answeredPlayers: []
+            answeredPlayers: [],
+            originalAnswersOrder: [],
         };
     },
     mounted() {
@@ -100,6 +101,12 @@ export default {
                 const data = await response.json();
                 if (data.results.length) {
                     this.questions = data.results;
+                    // Guarda el orden original de las respuestas
+                    this.questions.forEach(question => {
+                        const allAnswers = [...question.incorrect_answers, question.correct_answer];
+                        this.shuffleArray(allAnswers);
+                        this.originalAnswersOrder.push(allAnswers);
+                    });
                 }
                 else {
                     this.questions = null;
@@ -144,9 +151,11 @@ export default {
                 return "¡Necesitas practicar más! ¡No te rindas!";
             }
         },
-        shuffledAnswers(question) {
-            const answers = [question.correct_answer, ...question.incorrect_answers];
-            return this.shuffleArray(answers);
+        shuffledAnswers(index) {
+            if (this.questions && this.questions.length > index) {
+                return this.originalAnswersOrder[index];
+            }
+            return [];
         },
         shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
@@ -154,6 +163,16 @@ export default {
                 [array[i], array[j]] = [array[j], array[i]];
             }
             return array;
+        },
+        answerClass(question, answer) {
+            if (question.answered) {
+                if (this.isCorrectAnswer(question, answer)) {
+                    return 'bg-green-700 text-white margin-bottom-1';
+                } else if (this.selectedAnswer === answer) {
+                    return 'bg-red-800 text-white margin-bottom-1';
+                }
+            }
+            return '';
         },
         selectAnswer(question, answer) {
             if (!question.answered) {
@@ -168,13 +187,10 @@ export default {
                         this.score = 0;
                     }
                 }
-                this.selectedAnswer = answer;
+                // Marcar la pregunta como respondida
                 question.answered = true;
-
-                if (this.allQuestionsAnswered) {
-                    this.showNamePrompt();
-                    console.log("Todas las preguntas han sido respondidas");
-                }
+                // Mostrar el campo de entrada del nombre si todas las preguntas han sido respondidas
+                this.showNamePrompt();
             }
         },
         isSelectedAnswer(question, answer) {
@@ -194,6 +210,10 @@ export default {
 </script>
 
 <style scoped>
+.no-scroll {
+  overflow: hidden;
+}
+
 [type=button]:not(:disabled),
 [type=reset]:not(:disabled),
 [type=submit]:not(:disabled),
