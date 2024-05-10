@@ -20,28 +20,29 @@
                             <th>Funcion a realizar</th>
                         </tr>
                     </thead>
-                  <!--   <tbody v-if="usuarios.length > 0">
+                    <tbody v-if="usuarios.length > 0">
                         <tr v-for="(usuario, index) in usuarios" :key="index">
-                            <td>{{ usuario.id }}</td>
-                            <td>{{ usuario.name }}</td>
-                            <td>{{ usuario.email }}</td>
-                            <td>{{ usuario.imagen }}</td>
+                            <td>{{ usuario.userId }}</td>
+                            <td>{{ usuario.userName }}</td>
+                            <td>{{ usuario.userEmail }}</td>
+                            <td>{{ usuario.üserImage }}</td>
                             <td>{{ usuario.cantidad }}</td>
                             <td>{{ usuario.activo }}</td>
                             <td>
-                                <router-link :to="{path: '/admin/'+usuario.id+'actualizarUser'}" class="btn btn-success mx-2">
+                                <router-link :to="{ path: '/admin/' + usuario.userId + '/actualizarUser' }"
+                                    class="btn btn-success mx-2">
                                     Editar
                                 </router-link>
                                 <button type="button" class="btn btn-danger mx-2">Borrar</button>
                             </td>
                         </tr>
-                    </tbody> 
+                    </tbody>
                     <tbody v-else>
                         <tr>
                             <td colspan="6">No hay usuarios</td>
                         </tr>
-                    </tbody> -->
-                    <tbody>
+                    </tbody>
+                    <!--         <tbody>
                         <tr>
                             <td>1</td>
                             <td>Antonio</td>
@@ -70,9 +71,9 @@
                                 <button type="button" @click="borrarUsuario(usuario.id)" class="btn btn-danger mx-2">Borrar</button>
                             </td>
                         </tr>
-                    </tbody>
+                    </tbody>  -->
                 </table>
-            </div>      
+            </div>
         </div>
     </div>
 </template>
@@ -101,22 +102,22 @@ export default {
                     console.error('Hubo un problema con la solicitud:', error);
                 });
         },
-        borrarUsuario(usuarioId){
-            if(confirm('¿Estas seguro de que quieres borrar este usuario?')){
-            axios.delete(`http://localhost:8080/trivial/v1/users/${usuarioId}/delete`)
-            .then(res =>{
-                alert('El usuario ha sido borrado con éxito!');
-                this.getUsuarios();
-            })
-            .catch(function (error) {
-                if (error.response){
-                    if (error.response.status == 404){
-                        alert('Error 404, no existe el id de ese usuario...');
-                    }
-                }
-            })
-        }
-    },
+        borrarUsuario(usuarioId) {
+            if (confirm('¿Estas seguro de que quieres borrar este usuario?')) {
+                axios.delete(`http://localhost:8080/trivial/v1/users/${usuarioId}/delete`)
+                    .then(res => {
+                        alert('El usuario ha sido borrado con éxito!');
+                        this.getUsuarios();
+                    })
+                    .catch(function (error) {
+                        if (error.response) {
+                            if (error.response.status == 404) {
+                                alert('Error 404, no existe el id de ese usuario...');
+                            }
+                        }
+                    })
+            }
+        },
     },
 }
 </script>
@@ -125,8 +126,10 @@ export default {
 .card-header h4 {
     margin-bottom: 0;
 }
+
 .card-header .btn {
     margin-left: auto;
-    margin-top: 10px; /* Ajusta la separación del botón desde la parte superior */
+    margin-top: 10px;
+    /* Ajusta la separación del botón desde la parte superior */
 }
 </style>

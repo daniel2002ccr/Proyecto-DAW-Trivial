@@ -7,7 +7,7 @@
             <div class="card-body">
                 <div class="mb-3">
                     <label for="">Nombre</label>
-                    <input type="text" v-model="model.usuario.nombre" class="form-control" required>
+                    <input type="text" v-model="model.usuario.userName" class="form-control" required>
                 </div>
                 <div class="mb-3">
                     <label for="">Email</label>
@@ -41,7 +41,7 @@ export default {
         return {
             model: {
                 usuario: {
-                    nombre: '',
+                    userName: this.userName,
                     email: '',
                     cantidad: 0,
                     activo: true,

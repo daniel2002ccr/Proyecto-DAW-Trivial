@@ -23,7 +23,7 @@ public class DBUtils {
 
 	public static Connection conectaBBDD() throws ClassNotFoundException, SQLException {
 		Class.forName("com.mysql.cj.jdbc.Driver");
-		String urlDB = "jdbc:mysql://localhost:3306/trivial_BBDD?serverTimezone=UTC";
+		String urlDB = "jdbc:mysql://localhost:3306/trivial?serverTimezone=UTC";
 		String user = "root";
 		String password = "PracticaRoot";
 		Connection connection = DriverManager.getConnection(urlDB, user, password);
