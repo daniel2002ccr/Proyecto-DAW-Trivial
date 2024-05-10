@@ -1,5 +1,6 @@
 package com.proyecto.trivial.controllers.rest;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.proyecto.trivial.dtos.UsersDTO;
 import com.proyecto.trivial.entities.UserEntity;
@@ -74,11 +76,26 @@ public class UsersRestController {
 	}
 
 	@PostMapping("/users")
-	public ResponseEntity insertarUsuario(@RequestBody UserEntity user) {
-		usersRepository.save(user);
-//		http://localhost:8080/trivial/v1/users/1
+	public ResponseEntity<?> insertarUsuario(@RequestParam("userName") String userName,
+			@RequestParam("userEmail") String userEmail, @RequestParam("userPasswd") String userPasswd,
+			@RequestParam("userImage") MultipartFile userImage, @RequestParam("cantidad") Integer cantidad,
+			@RequestParam("activo") Integer activo) {
+		try {
+			UserEntity user = new UserEntity();
+			user.setUserName(userName);
+			user.setUserEmail(userEmail);
+			user.setUserPasswd(userPasswd);
+			user.setUserImage(userImage.getBytes());
+			user.setCantidad(cantidad);
+			user.setActivo(activo);
 
-		return new ResponseEntity<>("Usuario insertado con éxito.", HttpStatus.OK);
+			usersRepository.save(user);
+
+			return new ResponseEntity<>("Usuario insertado con éxito.", HttpStatus.OK);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return new ResponseEntity<>("Error al insertar el usuario", HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 	@PutMapping("/users")
@@ -87,6 +104,24 @@ public class UsersRestController {
 		usersRepository.save(user);
 		return new ResponseEntity<>("Usuario actualizado con éxito.", HttpStatus.OK);
 	}
+
+//	@PutMapping("/users/{userId}")
+//	public ResponseEntity actualizarUsuario(@PathVariable Integer id, @RequestBody UserEntity user) {
+//		UserEntity existingUser = usersRepository.findById(id).orElse(null);
+//		if (existingUser == null) {
+//			return new ResponseEntity<>("Usuario no encontrado", HttpStatus.NOT_FOUND);
+//		}
+//
+//		// Actualizar los campos del usuario existente
+//		existingUser.setUserName(user.getUserName());
+//		existingUser.setUserEmail(user.getUserEmail());
+//		existingUser.setUserImage(user.getUserImage());
+//		existingUser.setCantidad(user.getCantidad());
+//		existingUser.setActivo(user.getActivo());
+//
+//		usersRepository.save(existingUser);
+//		return new ResponseEntity<>("Usuario actualizado con éxito.", HttpStatus.OK);
+//	}
 
 	@DeleteMapping("/users/{id}")
 	public ResponseEntity borrarUsuario(@PathVariable("id") Integer id) {

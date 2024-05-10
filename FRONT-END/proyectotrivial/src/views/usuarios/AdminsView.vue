@@ -17,7 +17,7 @@
                             <th>Imagen</th>
                             <th>Cantidad</th>
                             <th>Activo</th>
-                            <th>Funcion a realizar</th>
+                            <th>Función a realizar</th>
                         </tr>
                     </thead>
                     <tbody v-if="usuarios.length > 0">
@@ -25,15 +25,18 @@
                             <td class="posicion">{{ usuario.userId }}</td>
                             <td>{{ usuario.userName }}</td>
                             <td>{{ usuario.userEmail }}</td>
-                            <td>{{ usuario.üserImage }}</td>
+                            <td><img src="data:image/jpeg;base64,{{ usuario.userImage }}" /></td>
                             <td>{{ usuario.cantidad }}</td>
                             <td>{{ usuario.activo }}</td>
                             <td>
-                                <router-link :to="{ path: '/admin/' + usuario.userId + '/actualizarUser' }"
+                                <router-link :to="{ name: 'ActualizarUsuarioView', params: { userId: usuario.userId } }"
                                     class="btn btn-success mx-2">
                                     Editar
                                 </router-link>
-                                <button type="button" class="btn btn-danger mx-2">Borrar</button>
+
+
+                                <button type="button" @click="borrarUsuario(usuario.userId)"
+                                    class="btn btn-danger mx-2">Desactivar</button>
                             </td>
                         </tr>
                     </tbody>
@@ -102,22 +105,22 @@ export default {
                     console.error('Hubo un problema con la solicitud:', error);
                 });
         },
-        borrarUsuario(usuarioId) {
-            if (confirm('¿Estas seguro de que quieres borrar este usuario?')) {
-                axios.delete(`http://localhost:8080/trivial/v1/users/${usuarioId}/delete`)
-                    .then(res => {
-                        alert('El usuario ha sido borrado con éxito!');
-                        this.getUsuarios();
-                    })
-                    .catch(function (error) {
-                        if (error.response) {
-                            if (error.response.status == 404) {
-                                alert('Error 404, no existe el id de ese usuario...');
-                            }
-                        }
-                    })
+        borrarUsuario(userId) {
+            const usuario = this.usuarios.find(u => u.userId === userId);
+
+            if (usuario.activo === 0) {
+                alert('El usuario ya no está activo.');
+                return;
             }
-        },
+            axios.delete(`http://localhost:8080/trivial/v1/users/${userId}`)
+                .then(response => {
+                    alert('Usuario desactivado con éxito');
+                    this.getUsuarios();
+                })
+                .catch(error => {
+                    console.error('Error al intentar desactivado usuario:', error);
+                });
+        }
     },
 }
 </script>

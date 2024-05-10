@@ -54,7 +54,7 @@ const routes = [
     component: InsertarUsuarioView
   },
   {
-    path: '/admin/actualizarUser',
+    path: '/admin/usuarios/:userId/editarUsuario',
     name: 'ActualizarUsuarioView',
     component: ActualizarUsuarioView
   },

@@ -6,12 +6,16 @@
             </div>
             <div class="card-body">
                 <div class="mb-3">
+                    <label for="">ID:</label>
+                    <input type="text" v-model="model.usuario.userId" class="form-control" readonly>
+                </div>
+                <div class="mb-3">
                     <label for="">Nombre</label>
                     <input type="text" v-model="model.usuario.userName" class="form-control" required>
                 </div>
                 <div class="mb-3">
                     <label for="">Email</label>
-                    <input type="text" v-model="model.usuario.email" class="form-control" required>
+                    <input type="text" v-model="model.usuario.userEmail" class="form-control" required>
                 </div>
                 <div class="mb-3">
                     <label for="">Foto de perfil</label>
@@ -35,36 +39,39 @@
 
 <script>
 import axios from 'axios';
+
 export default {
     name: 'editarUsuario',
+    props: ["userId", "userName", "userEmail", "userImage", "cantidad", "activo"],
     data() {
         return {
             model: {
                 usuario: {
+                    userId: this.userId,
                     userName: this.userName,
-                    email: '',
-                    cantidad: 0,
-                    activo: true,
-                    imagen: null
+                    userEmail: this.userEmail,
+                    userPasswd: '',
+                    userImage: this.userImage,
+                    cantidad: this.cantidad,
+                    activo: this.activo
                 }
             }
         }
     },
     methods: {
         handleFileUpload(event) {
-            this.model.usuario.imagen = event.target.files[0]; // Asignar el archivo seleccionado al modelo de datos
+            this.model.usuario.userImage = event.target.files[0];
         },
         actualizarUsuario() {
-            axios.put('http://localhost:8080/trivial/v1/users', this.model.usuario)
+            axios.put(`http://localhost:8080/trivial/v1/users/${this.userId}`, this.model.usuario)
                 .then(response => {
                     console.log(response)
-                    this.users = response.data;
+                    alert('Usuario actualizado con éxito.');
+                    this.$router.push('/admin');
                 })
                 .catch(error => {
-                    console.error('Hubo un problema con la solicitud:', error);
-                    
+                    console.error('Error al intentar actualizar el usuario:', error);
                 });
-            console.log(this.model.usuario); // Ejemplo de cómo acceder al modelo de usuario con la imagen
         }
     }
 }
