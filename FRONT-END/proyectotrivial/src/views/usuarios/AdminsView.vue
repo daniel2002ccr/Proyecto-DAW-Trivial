@@ -22,7 +22,7 @@
                     </thead>
                     <tbody v-if="usuarios.length > 0">
                         <tr v-for="(usuario, index) in usuarios" :key="index">
-                            <td>{{ usuario.userId }}</td>
+                            <td class="posicion">{{ usuario.userId }}</td>
                             <td>{{ usuario.userName }}</td>
                             <td>{{ usuario.userEmail }}</td>
                             <td>{{ usuario.üserImage }}</td>
@@ -123,13 +123,85 @@ export default {
 </script>
 
 <style scoped>
+.btn-primary {
+    transition: all 0.7s;
+}
+
+.btn-success {
+    transition: all 0.7s;
+}
+
+.btn-danger {
+    transition: all 0.7s;
+}
+
+.btn-primary:hover {
+    color: #0062cc;
+    background-color: white;
+    border-color: #0062cc;
+    transition: all 0.5s;
+}
+
+.btn-success:hover {
+    color: #218838;
+    background-color: white;
+    border-color: #218838;
+    transition: all 0.5s;
+}
+
+.btn-danger:hover {
+    color: #c82333;
+    background-color: white;
+    border-color: #c82333;
+    transition: all 0.5s;
+}
+
+.posicion {
+    font-size: 23px;
+    font-weight: bold;
+    padding-top: 20px;
+}
+
+span {
+    font-size: 37px;
+    margin-bottom: -3%;
+    padding-left: 2%;
+}
+
+.card {
+    border: 2px solid black;
+}
+
 .card-header h4 {
     margin-bottom: 0;
 }
 
+.card-header {
+    background-color: white;
+    border-bottom: 0px solid white
+}
+
 .card-header .btn {
     margin-left: auto;
-    margin-top: 10px;
-    /* Ajusta la separación del botón desde la parte superior */
+    margin-top: 9px;
+}
+
+table {
+    margin-top: 1%;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    border: 2px solid black;
+    padding: 20px;
+    text-align: center;
+}
+
+.table thead th {
+    background-color: #f2f2f2;
+    text-align: center;
+    border-bottom: 2px solid black;
 }
 </style>

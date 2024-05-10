@@ -4,9 +4,15 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -54,5 +60,32 @@ public class CategoriasRestController {
 		}
 		List<CategoriasDTO> c = categoriasRepository.buscaCategorias(id.toString(), nombre, activoInteger);
 		return c;
+	}
+
+	@PostMapping("/categorias")
+	public ResponseEntity insertarCategoria(@RequestBody CategoriaEntity categoria) {
+
+		categoriasRepository.save(categoria);
+		return new ResponseEntity<>("Categoría insertada con éxito.", HttpStatus.OK);
+	}
+
+	@PutMapping("/categorias")
+	public ResponseEntity actualizarCategoria(@RequestBody CategoriaEntity categoria) {
+
+		categoriasRepository.save(categoria);
+		return new ResponseEntity<>("Categoría actualizada con éxito.", HttpStatus.OK);
+	}
+
+	@DeleteMapping("/categorias/{id}")
+	public ResponseEntity borrarCategoria(@PathVariable("id") Integer id) {
+
+//		http://localhost:8080/trivial/v1/categorias/81
+
+		CategoriaEntity c = categoriasRepository.findById(id).get();
+
+		c.setActivo(0);
+
+		categoriasRepository.save(c);
+		return new ResponseEntity<>("Categoría borrada con éxito", HttpStatus.OK);
 	}
 }
