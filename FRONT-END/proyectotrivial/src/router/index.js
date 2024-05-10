@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import RankingView from '../views/RankingView.vue'
 import CuentaView from '../views/CuentaView.vue'
+import NoticiasView from '../views/NoticiasView.vue'
 import PreguntasView from '../views/PreguntasView.vue'
 import AdminsView from '../views/usuarios/AdminsView.vue'
 import InsertarUsuarioView from '../views/usuarios/InsertarUsuarioView.vue'
@@ -31,6 +32,11 @@ const routes = [
     path: '/cuenta',
     name: 'CuentaViewWithoutParams',
     component: CuentaView
+  },
+  {
+    path: '/noticias',
+    name: 'NoticiasView',
+    component: NoticiasView
   },
   {
     path: '/preguntas',
