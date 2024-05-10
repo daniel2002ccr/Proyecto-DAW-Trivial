@@ -7,6 +7,9 @@ import AdminsView from '../views/usuarios/AdminsView.vue'
 import InsertarUsuarioView from '../views/usuarios/InsertarUsuarioView.vue'
 import ActualizarUsuarioView from '../views/usuarios/ActualizarUsuarioView.vue'
 import SeleccionDificultad from '../components/SeleccionDificultad.vue';
+import PoliticaProteccionDatos from '../components/PoliticaProteccionDatos.vue';
+import PoliticaCookies from '../components/PoliticaCookies.vue';
+import AvisoLegal from '../components/AvisoLegal.vue';
 
 const routes = [
   {
@@ -55,6 +58,21 @@ const routes = [
     component: SeleccionDificultad
   },
   { path: '/:difficulty', component: PreguntasView, props: true },
+  {
+    path: '/protecciondatos',
+    name: 'PoliticaProteccionDatos',
+    component: PoliticaProteccionDatos
+  },
+  {
+    path: '/cookies',
+    name: 'PoliticaCookies',
+    component: PoliticaCookies
+  },
+  {
+    path: '/aviso-legal',
+    name: 'AvisoLegal',
+    component: AvisoLegal
+  }
 ]
 
 const router = createRouter({
@@ -63,7 +81,6 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  // Agrega la clase 'no-scroll' al body si la ruta es '/'
   if (to.path === '/') {
     document.body.classList.add('no-scroll');
   } else {
