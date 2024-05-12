@@ -13,7 +13,6 @@
                 también lo convierte en unícono de inspiración para todos los aspirantes a la gloria en el TrivWorld.
                 ¡Un logro que quedará grabado en la historia de esta competencia intelectual!</p>
         </div>
-
         <div class="noticias-pequenas">
             <div>
                 <img src="../img/ImagenNoticiaPequeña1.jpg" alt="Noticia Pequeña Imagen 1">

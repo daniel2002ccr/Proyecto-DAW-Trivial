@@ -23,7 +23,6 @@
           </td>
         </tr>
       </tbody>
-
     </table>
   </div>
 </template>
@@ -38,42 +37,34 @@ export default {
     };
   },
   mounted() {
-    // Recuperar datos del almacenamiento local al iniciar el componente
     const savedPlayers = JSON.parse(localStorage.getItem('players'));
+
     if (savedPlayers) {
-      // Copiar los jugadores guardados en el almacenamiento local en la lista de jugadores
       this.players = [...savedPlayers];
     }
 
-    // Verificar si hay nuevos datos en la URL y añadirlos
     const params = new URLSearchParams(window.location.search);
     const name = params.get('name');
     const score = params.get('score');
     const difficulty = params.get('difficulty');
 
     if (name && score && difficulty) {
-      // Añadir los nuevos datos a la lista de jugadores
       this.players.push({ name, score, difficulty });
     }
-
     // Ordenar los jugadores por puntuación y luego por dificultad
     this.players.sort((a, b) => {
       // Si la puntuación es diferente, ordena por puntuación
       if (b.score !== a.score) {
-        return b.score - a.score; // Orden descendente por puntuación
+        return b.score - a.score;
       } else {
         // Si la puntuación es igual, ordena por dificultad
         const difficultyOrder = { "hard": 3, "medium": 2, "easy": 1 };
         return difficultyOrder[b.difficulty] - difficultyOrder[a.difficulty];
       }
     });
-
-    // Convertir los valores de dificultad a texto legible
     this.players.forEach(player => {
       player.difficulty = this.getReadableDifficulty(player.difficulty);
     });
-
-    // Guardar los jugadores actualizados en localStorage
     localStorage.setItem('players', JSON.stringify(this.players));
   },
   methods: {
@@ -90,10 +81,8 @@ export default {
       }
     },
     eliminarDatos() {
-      // Eliminar todos los datos de la lista de jugadores
       this.players = [];
 
-      // Limpiar también el almacenamiento local
       localStorage.removeItem('players');
     },
     verPerfil(player, index) {

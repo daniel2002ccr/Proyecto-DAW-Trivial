@@ -8,7 +8,7 @@
                 <div v-for="(question, index) in questions" :key="index"
                     class="rounded-lg bg-gray-200 p-2 neumorph-1 text-center font-bold text-gray-800">
                     <h2>Pregunta nº {{ index + 1 }}</h2>
-                    <p>Type: {{ question.type }}</p>
+                    <!--      <p>Type: {{ question.type }}</p> -->
                     <p>Dificultad: {{ question.difficulty }}</p>
                     <p>Categoría: {{ question.category }}</p>
                     <p class="bg-white p-5">Pregunta: {{ question.question }}</p>
@@ -60,7 +60,6 @@
             :class="{ 'botonGuardarNombre-disabled': nameInput === '', 'botonGuardarNombre': nameInput !== '' }">Guardar</button>
     </div>
     <div v-if="questions && questions.length > 0">
-        <!-- Resto del contenido -->
     </div>
 </template>
 
@@ -101,7 +100,6 @@ export default {
                 const data = await response.json();
                 if (data.results.length) {
                     this.questions = data.results;
-                    // Guarda el orden original de las respuestas
                     this.questions.forEach(question => {
                         const allAnswers = [...question.incorrect_answers, question.correct_answer];
                         this.shuffleArray(allAnswers);
@@ -123,11 +121,8 @@ export default {
                 console.log("Todas las preguntas han sido respondidas");
             }
         },
-
         saveScoreAndName() {
-            // Verifica que el nombre no esté vacío
             if (this.nameInput.trim() !== '') {
-                // Guarda la puntuación y el nombre
                 const data = {
                     name: this.nameInput,
                     score: this.score,
@@ -177,19 +172,15 @@ export default {
         selectAnswer(question, answer) {
             if (!question.answered) {
                 if (this.isCorrectAnswer(question, answer)) {
-                    // Sumar 10 puntos si la respuesta es correcta
                     this.score += 10;
                 } else {
-                    // Restar 5 puntos si la respuesta es incorrecta, asegurándose de que el marcador no baje de 0
                     if (this.score >= 5) {
                         this.score -= 5;
                     } else {
                         this.score = 0;
                     }
                 }
-                // Marcar la pregunta como respondida
                 question.answered = true;
-                // Mostrar el campo de entrada del nombre si todas las preguntas han sido respondidas
                 this.showNamePrompt();
             }
         },
@@ -210,8 +201,12 @@ export default {
 </script>
 
 <style scoped>
+h2 {
+    font-family: cursive;
+}
+
 .no-scroll {
-  overflow: hidden;
+    overflow: hidden;
 }
 
 [type=button]:not(:disabled),
@@ -297,143 +292,115 @@ li {
 
 .rounded-lg {
     border-radius: 0.5rem;
-    /* Aplica esquinas redondeadas */
 }
 
 .bg-gray-100 {
     background-color: #f3f4f6;
-    /* Cambia el color de fondo a gris claro */
 }
 
 .p-2 {
     padding: 0.5rem;
-    /* Agrega espacio de relleno de 0.5 rem */
 }
 
 .text-center {
     text-align: center;
-    /* Centra el texto horizontalmente */
 }
 
 .font-bold {
     font-weight: 700;
-    /* Aplica negrita */
 }
 
 .text-gray-800 {
     color: #374151;
-    /* Cambia el color del texto a gris oscuro */
 }
 
 .bg-white {
     background-color: #ffffff;
-    /* Cambia el color de fondo a blanco */
 }
 
 .p-5 {
     padding: 1.25rem;
-    /* Agrega espacio de relleno de 1.25 rem */
 }
 
 
 .bg-red-800 {
     background-color: #dc2626;
-    /* Cambia el color de fondo a rojo */
 }
 
 .rounded-lg {
     border-radius: 0.5rem;
-    /* Aplica esquinas redondeadas */
 }
 
 .font-bold {
     font-weight: 700;
-    /* Aplica negrita */
 }
 
 .flex {
     display: flex;
-    /* Usa flexbox */
 }
 
 .p-2 {
     padding: 0.5rem;
-    /* Agrega espacio de relleno de 0.5 rem */
 }
 
 .flex {
     display: flex;
-    /* Usa flexbox */
 }
 
 .items-center {
     align-items: center;
-    /* Centra los elementos verticalmente */
 }
 
 .pl-6 {
     padding-left: 1.5rem;
-    /* Agrega espacio de relleno a la izquierda */
 }
 
 .bg-gray-400 {
     background-color: #cbd5e0;
-    /* Cambia el color de fondo a gris */
 }
 
 .p-3 {
     padding: 0.75rem;
-    /* Agrega espacio de relleno de 0.75 rem */
 }
 
 .rounded-lg {
     border-radius: 0.5rem;
-    /* Aplica esquinas redondeadas */
 }
 
 .bg-red-800 {
     background-color: #dc2626;
-    /* Cambia el color de fondo a rojo */
 }
 
 .rounded-lg {
     border-radius: 0.5rem;
-    /* Aplica esquinas redondeadas */
 }
 
 .font-bold {
     font-weight: 700;
-    /* Aplica negrita */
 }
 
 .flex {
     display: flex;
-    /* Usa flexbox */
 }
 
 .p-2 {
     padding: 0.5rem;
-    /* Agrega espacio de relleno de 0.5 rem */
 }
 
 .text-white {
     color: #ffffff;
-    /* Cambia el color del texto a blanco */
 }
 
 .bg-green-700 {
     background-color: #047857;
-    /* Cambia el color de fondo a verde oscuro */
 }
 
 .margin-bottom-1 {
     margin-bottom: 1%;
-    /* Agrega relleno en la parte inferior del 2% */
 }
 
 .bg-gray-800 {
     background-color: #4e5a6e;
-    /* Cambia el color de fondo a gris oscuro */
 }
 
 .bg-gray-200 {

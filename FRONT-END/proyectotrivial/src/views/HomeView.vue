@@ -181,29 +181,12 @@ button {
   }
 }
 
-/* .blinking-button::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  margin-left: -390px;
-  padding-top: 15px;
-  padding-left: 100px;
-  padding-right: 100px;
-  padding-bottom: 15px;
-  animation: flash 2s infinite;
-  color: white;
-} */
-
 label {
   margin-left: 2%;
 
 }
 
 input {
-
   width: 90%;
   margin: 0.5em 0;
   box-sizing: border-box;
@@ -214,7 +197,6 @@ input {
 }
 
 select {
-
   padding: 1px 2px;
   margin: 0.5em 0;
   box-sizing: border-box;
@@ -279,7 +261,6 @@ button {
 }
 
 body {
-
   display: flex;
   flex-direction: column;
 
@@ -289,8 +270,6 @@ body {
   width: 100%;
   background-color: #231f20;
 }
-
-
 
 h2 {
   text-align: center;
@@ -390,8 +369,6 @@ button.dropbtn:nth-child(2) {
   margin-right: 2%;
   padding-top: 10px;
   padding-bottom: 10px;
-  /* padding-left: 10px; */
-  /* padding-right: 10px; */
   margin-top: -70px;
   color: white;
   border: 5px solid white;
@@ -405,8 +382,6 @@ button.dropbtn:nth-child(2) {
   margin-right: 4%;
   padding-top: 10px;
   padding-bottom: 10px;
-  /* padding-left: 10px; */
-  /* padding-right: 10px; */
   margin-top: -70px;
   transition: 0.5s;
   cursor: pointer;
@@ -419,11 +394,8 @@ button.dropbtn:nth-child(2) {
 .botonRegistro {
   float: right;
   width: 12%;
-  /* margin-right: 100px; */
   padding-top: 10px;
   padding-bottom: 10px;
-  /* padding-left: 10px; */
-  /* padding-right: 10px; */
   margin-top: -70px;
   color: white;
   border: 5px solid white;
@@ -434,11 +406,8 @@ button.dropbtn:nth-child(2) {
 .botonRegistro:hover {
   float: right;
   width: 12%;
-  /* margin-right: 100px; */
   padding-top: 10px;
   padding-bottom: 10px;
-  /* padding-left: 10px; */
-  /* padding-right: 10px; */
   margin-top: -70px;
   transition: 0.5s;
   cursor: pointer;
@@ -452,7 +421,6 @@ table {
   font-family: arial, sans-serif;
   border-collapse: collapse;
   width: 100%;
-
 }
 
 td,

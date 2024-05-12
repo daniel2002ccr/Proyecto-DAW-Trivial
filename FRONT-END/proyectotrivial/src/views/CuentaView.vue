@@ -6,9 +6,7 @@
                     width="100" class="rounded-circle">
                 <input class="inputFotito" type="file" @change="onFileChange">
                 <h3 class="mt-2">{{ jugador ? jugador.name : '---' }}</h3>
-
                 <div class="row mt-3 mb-3">
-
                     <div class="col-md-6">
                         <h5>Puntos</h5>
                         <span class="num">{{ jugador ? jugador.score : '---' }}</span>
@@ -17,9 +15,7 @@
                         <h5>Partidas</h5>
                         <span class="num">{{ partidasJugadas }}</span>
                     </div>
-
                 </div>
-
                 <hr class="line">
 
                 <small class="mt-4">Descripción del jugador</small>
@@ -35,14 +31,12 @@
 
                 <button class="botonGuardarDescripcion" @click="guardarDescripcion"
                     :disabled="guardado || nuevaDescripcion.trim() === ''">Guardar</button>
-
                 <template v-if="guardado">
                     <div class="mt-4">
                         <button class="botonEditarDescripcion" @click="editarDescripcion">Editar</button>
                         <button class="botonEliminarDescripcion" @click="eliminarDescripcion">Eliminar</button>
                     </div>
                 </template>
-
                 <div class="social-buttons mt-5">
                     <button class="neo-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"
                             class="imagen">
@@ -70,13 +64,9 @@
                                 d="M459.4 151.7c.3 4.5 .3 9.1 .3 13.6 0 138.7-105.6 298.6-298.6 298.6-59.5 0-114.7-17.2-161.1-47.1 8.4 1 16.6 1.3 25.3 1.3 49.1 0 94.2-16.6 130.3-44.8-46.1-1-84.8-31.2-98.1-72.8 6.5 1 13 1.6 19.8 1.6 9.4 0 18.8-1.3 27.6-3.6-48.1-9.7-84.1-52-84.1-103v-1.3c14 7.8 30.2 12.7 47.4 13.3-28.3-18.8-46.8-51-46.8-87.4 0-19.5 5.2-37.4 14.3-53 51.7 63.7 129.3 105.3 216.4 109.8-1.6-7.8-2.6-15.9-2.6-24 0-57.8 46.8-104.9 104.9-104.9 30.2 0 57.5 12.7 76.7 33.1 23.7-4.5 46.5-13.3 66.6-25.3-7.8 24.4-24.4 44.8-46.1 57.8 21.1-2.3 41.6-8.1 60.4-16.2-14.3 20.8-32.2 39.3-52.6 54.3z" />
                         </svg></button>
                 </div>
-
                 <div class="profile mt-5">
-
                     <button class="profile_button px-5">Mi cuenta</button>
-
                 </div>
-
             </div>
         </div>
     </div>
@@ -84,6 +74,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
+
 export default {
     data() {
         return {
@@ -92,57 +83,48 @@ export default {
             nuevaDescripcion: '',
             editandoDescripcion: false,
             guardado: false,
-            partidasJugadas: 1 // Inicializamos el contador de partidas jugadas
+            partidasJugadas: 1
         };
     },
     mounted() {
         this.cargarDatosJugador();
     },
     computed: {
-        ...mapGetters(['descripcionJugador']), // Importa la descripción del jugador desde Vuex si estás utilizando Vuex
+        ...mapGetters(['descripcionJugador']),
         imagenPerfil() {
-            // Si el jugador tiene una imagen cargada, la muestra. De lo contrario, muestra la imagen por defecto.
             return this.jugador.imagen ? URL.createObjectURL(this.jugador.imagen) : 'https://us.123rf.com/450wm/hugok1000/hugok10001905/hugok1000190500198/123291745-ilustraci%C3%B3n-de-avatar-de-perfil-predeterminado-en-azul-y-blanco-sin-persona.jpg';
         }
     },
-
     methods: {
         cargarDatosJugador() {
             const { name, score, ranking } = this.$route.params;
             this.jugador = { name, score, ranking, descripcion: '' };
         },
         guardarDescripcion() {
-            // Guardar la descripción
             this.jugador.descripcion = this.nuevaDescripcion;
-            // Verificar si se ha seleccionado una imagen nueva
             if (this.imagen) {
-                // Asignar la imagen nueva al jugador
                 this.jugador.imagen = this.imagen;
-                // Reiniciar la variable imagen para evitar que se guarde la misma imagen en el próximo guardado
                 this.imagen = '';
             }
-            this.guardado = true; // Marcamos como guardado
-            this.editandoDescripcion = false; // Después de guardar, dejamos de editar
+            this.guardado = true;
+            this.editandoDescripcion = false;
         },
         editarDescripcion() {
-            this.editandoDescripcion = true; // Habilitamos la edición
-            this.guardado = false; // Habilitamos el botón de guardar
+            this.editandoDescripcion = true;
+            this.guardado = false;
         },
         eliminarDescripcion() {
-            this.nuevaDescripcion = ''; // Vaciamos la descripción
-            this.guardado = false; // Marcamos como no guardado
-            this.editandoDescripcion = false; // Volvemos al estado inicial
+            this.nuevaDescripcion = '';
+            this.guardado = false;
+            this.editandoDescripcion = false;
         },
         onFileChange(event) {
-            const file = event.target.files[0]; // Obtener el archivo seleccionado por el usuario
+            const file = event.target.files[0];
             if (file) {
-                // Asignar la imagen seleccionada a la variable imagen
                 this.imagen = file;
-                // Si ya hay una imagen asignada al jugador, liberar el objeto URL anterior
                 if (this.jugador.imagen) {
                     URL.revokeObjectURL(this.jugador.imagen);
                 }
-                // Mostrar la imagen seleccionada previamente al usuario
                 this.jugador.imagen = URL.createObjectURL(file);
             }
         },
@@ -304,7 +286,6 @@ body {
 }
 
 .num {
-
     color: #eee !important;
 }
 

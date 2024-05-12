@@ -7,7 +7,7 @@
             <div class="card-body">
                 <div class="mb-3">
                     <label for="">ID:</label>
-                    <input type="text" v-model="model.usuario.userId" class="form-control" readonly>
+                    <input type="text" :value="userId" class="form-control" readonly>
                 </div>
                 <div class="mb-3">
                     <label for="">Nombre</label>
@@ -19,15 +19,15 @@
                 </div>
                 <div class="mb-3">
                     <label for="">Foto de perfil</label>
-                    <input type="file" @change="handleFileUpload" class="form-control">
+                    <input type="file" @change="handleFileUpload" class="form-control" id="botonInput">
                 </div>
                 <div class="mb-3">
                     <label for="">Cantidad</label>
                     <input type="number" v-model="model.usuario.cantidad" class="form-control">
                 </div>
-                <div class="form-check mb-3">
-                    <input type="checkbox" class="form-check-input" id="activo" v-model="model.usuario.activo">
-                    <label class="form-check-label" for="activo">Activo</label>
+                <div class="mb-3">
+                    <label for="">Activo:</label>
+                    <input type="number" v-model="model.usuario.activo" class="form-control" min="0" max="1">
                 </div>
                 <div class="mb-3">
                     <button type="button" class="btn btn-primary" @click="actualizarUsuario">Actualizar usuario</button>
@@ -42,21 +42,34 @@ import axios from 'axios';
 
 export default {
     name: 'editarUsuario',
-    props: ["userId", "userName", "userEmail", "userImage", "cantidad", "activo"],
+    props: {
+        userName: String,
+        userEmail: String,
+        userImage: String,
+        cantidad: Number,
+        activo: String
+    },
     data() {
         return {
+            userId: null,
             model: {
                 usuario: {
-                    userId: this.userId,
-                    userName: this.userName,
-                    userEmail: this.userEmail,
-                    userPasswd: '',
-                    userImage: this.userImage,
-                    cantidad: this.cantidad,
-                    activo: this.activo
+                    userName: '',
+                    userEmail: '',
+                    userImage: '',
+                    cantidad: '',
+                    activo: 0
                 }
             }
         }
+    },
+    mounted() {
+        this.userId = this.$route.params.userId;
+        this.model.usuario.userName = this.userName;
+        this.model.usuario.userEmail = this.userEmail;
+        this.model.usuario.userImage = this.userImage;
+        this.model.usuario.cantidad = this.cantidad;
+        this.model.usuario.activo = this.activo;
     },
     methods: {
         handleFileUpload(event) {
@@ -77,8 +90,20 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .form-check-input[type=checkbox] {
     transform: scale(1.5);
+}
+
+#botonInput {
+    padding-top: 14px;
+    padding-bottom: 43px;
+}
+
+.btn.btn-primary:hover {
+    color: #0062cc;
+    background-color: white;
+    border-color: #0062cc;
+    transition: all 0.5s;
 }
 </style>

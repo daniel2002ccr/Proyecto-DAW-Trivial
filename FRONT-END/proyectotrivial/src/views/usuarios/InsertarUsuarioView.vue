@@ -56,7 +56,7 @@ export default {
     },
     methods: {
         handleFileUpload(event) {
-            this.model.usuario.userImage = event.target.files[0]; // Asignar el archivo seleccionado al modelo de datos
+            this.model.usuario.userImage = event.target.files[0];
         },
         validarActivo(activo) {
             return activo === 0 || activo === 1;
@@ -77,15 +77,13 @@ export default {
             axios.post('http://localhost:8080/trivial/v1/users', formData)
                 .then(response => {
                     console.log(response);
-                    // Redirigir al usuario a la URL deseada después de guardar el usuario exitosamente
                     window.location.href = 'http://localhost:8081/admin';
                 })
                 .catch(error => {
                     console.error('Hubo un problema con la solicitud:', error);
                 });
         }
-
     }
 }
 </script>
-<style></style>
+<style scoped></style>
