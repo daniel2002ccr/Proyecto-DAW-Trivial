@@ -86,7 +86,6 @@ export default {
               player.difficulty = this.getReadableDifficulty(player.difficulty);
             }
           });
-
           this.players.sort((a, b) => {
             if (this.getSourceScore(b) !== this.getSourceScore(a)) {
               return this.getSourceScore(b) - this.getSourceScore(a);
@@ -95,7 +94,6 @@ export default {
               return difficultyOrder[b.difficulty] - difficultyOrder[a.difficulty];
             }
           });
-          
         });
     },
     getSourceName(player) {
