@@ -31,7 +31,6 @@
                             <td>
                                 <router-link :to="{ name: 'ActualizarUsuarioView', params: { userId: usuario.userId } }"
                                     class="btn btn-success mx-2">Editar</router-link>
-
                                 <button type="button" @click="borrarUsuario(usuario.userId)"
                                     class="btn btn-danger mx-2">Desactivar</button>
                             </td>
@@ -65,11 +64,9 @@ export default {
         getUsuarios() {
             axios.get('http://localhost:8080/trivial/v1/users')
                 .then(response => {
-                    console.log(response)
                     this.usuarios = response.data;
                 })
                 .catch(error => {
-                    console.error('Hubo un problema con la solicitud:', error);
                 });
         },
         borrarUsuario(userId) {
@@ -85,7 +82,6 @@ export default {
                     this.getUsuarios();
                 })
                 .catch(error => {
-                    console.error('Error al intentar desactivado usuario:', error);
                 });
         }
     },

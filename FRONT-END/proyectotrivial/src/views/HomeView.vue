@@ -282,7 +282,6 @@ h2 {
 h3 {
   text-align: center;
   color: red;
-
 }
 
 .container {
@@ -298,7 +297,6 @@ h3 {
   display: flex;
   justify-content: center;
   flex-direction: column;
-
 }
 
 .dropbtn {

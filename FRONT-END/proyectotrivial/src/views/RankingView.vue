@@ -78,7 +78,6 @@ export default {
             ...player,
             source: 'database'
           }))];
-
           this.players.forEach(player => {
             if (player.source === 'database') {
               player.difficulty = 'Inicial';

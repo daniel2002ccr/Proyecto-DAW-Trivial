@@ -121,7 +121,6 @@ export default {
                     this.questions = null;
                 }
             } catch (error) {
-                console.error("Hubo un error al obtener las preguntas:", error);
             } finally {
                 this.loading = false;
             }
@@ -132,18 +131,15 @@ export default {
                     nombre: this.newCategory,
                     activo: 0
                 });
-                console.log(response.data);
                 alert('Categoría agregada con éxito.');
                 this.newCategory = '';
             } catch (error) {
-                console.error('Error al agregar la categoría:', error);
                 alert('Error al agregar la categoría. Por favor, inténtalo de nuevo.');
             }
         },
         showNamePrompt() {
             if (this.allQuestionsAnswered) {
                 this.showNameInput = true;
-                console.log("Todas las preguntas han sido respondidas");
             }
         },
         saveScoreAndName() {
@@ -420,7 +416,6 @@ li {
 .p-5 {
     padding: 1.25rem;
 }
-
 
 .bg-red-800 {
     background-color: #dc2626;
