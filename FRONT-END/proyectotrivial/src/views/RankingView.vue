@@ -95,6 +95,7 @@ export default {
               return difficultyOrder[b.difficulty] - difficultyOrder[a.difficulty];
             }
           });
+          
         });
     },
     getSourceName(player) {
