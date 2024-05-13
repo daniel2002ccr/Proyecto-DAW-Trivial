@@ -8,7 +8,6 @@
                 <div v-for="(question, index) in questions" :key="index"
                     class="rounded-lg bg-gray-200 p-2 neumorph-1 text-center font-bold text-gray-800">
                     <h2>Pregunta nº {{ index + 1 }}</h2>
-                    <!--      <p>Type: {{ question.type }}</p> -->
                     <p>Dificultad: {{ question.difficulty }}</p>
                     <p>Categoría: {{ question.category }}</p>
                     <p class="bg-white p-5">Pregunta: {{ question.question }}</p>
@@ -51,6 +50,16 @@
             </div>
         </div>
     </main>
+    <div class="nuevaCategoria">
+        <h3 class="nuevaCategoriaTitulo">Añadir nueva categoría:</h3>
+        <div class="flex flex-col space-y-2">
+            <label for="newCategory" class="nuevaCategoriaEstilos">Nombre:</label>
+            <input type="text" id="newCategory" v-model="newCategory" class="categoriaInput">
+            <button @click="addCategory"
+                :class="{ 'botonGuardarCategoria-disabled': newCategory.trim() === '', 'botonGuardarCategoria': newCategory.trim() !== '' }"
+                :disabled="newCategory.trim() === ''">Añadir</button>
+        </div>
+    </div>
     <div class="marcador">
         <p>Puntuación: {{ score }}</p>
         <p v-if="allQuestionsAnswered" class="mensajeMarcador">{{ getMessage(score) }}</p>
@@ -64,6 +73,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import SeleccionDificultad from '../components/SeleccionDificultad.vue';
 
 export default {
@@ -82,6 +92,7 @@ export default {
             players: [],
             answeredPlayers: [],
             originalAnswersOrder: [],
+            newCategory: ''
         };
     },
     mounted() {
@@ -113,6 +124,20 @@ export default {
                 console.error("Hubo un error al obtener las preguntas:", error);
             } finally {
                 this.loading = false;
+            }
+        },
+        async addCategory() {
+            try {
+                const response = await axios.post('http://localhost:8080/trivial/v1/categorias', {
+                    nombre: this.newCategory,
+                    activo: 0
+                });
+                console.log(response.data);
+                alert('Categoría agregada con éxito.');
+                this.newCategory = '';
+            } catch (error) {
+                console.error('Error al agregar la categoría:', error);
+                alert('Error al agregar la categoría. Por favor, inténtalo de nuevo.');
             }
         },
         showNamePrompt() {
@@ -201,6 +226,33 @@ export default {
 </script>
 
 <style scoped>
+.nuevaCategoriaEstilos {
+    margin-top: 3px;
+    margin-left: 5px;
+    font-size: 20px;
+}
+
+.nuevaCategoriaTitulo {
+    font-size: 22.6px;
+    font-family: monospace;
+}
+
+.nuevaCategoria {
+    position: fixed;
+    top: 50%;
+    left: 9px;
+    text-align: center;
+    width: 17%;
+    height: 21%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 18px;
+    border-radius: 5px;
+    font-size: 32px;
+    z-index: 9999;
+}
+
 h2 {
     font-family: cursive;
 }
@@ -249,9 +301,56 @@ button:not(:disabled) {
     border: 4px black solid;
 }
 
+button.botonGuardarCategoria-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    height: 50px;
+    width: 100%;
+    font-weight: bold;
+    font-size: 16px;
+    color: white;
+    text-align: center;
+    height: 50px;
+    background-color: black;
+    margin-left: -278px;
+    margin-top: 70px;
+}
+
+button.botonGuardarCategoria {
+    height: 50px;
+    width: 100%;
+    color: white;
+    transition: all 0.6s;
+    border: 4px solid white;
+    background-color: black;
+    margin-left: -278px;
+    margin-top: 70px;
+}
+
+button.botonGuardarCategoria:hover {
+    height: 50px;
+    width: 100%;
+    color: black;
+    transition: all 0.6s;
+    border: 4px solid black;
+    background-color: white;
+    margin-left: -278px;
+    margin-top: 70px;
+}
+
 .nombreInput {
     height: 50px;
     width: 280px;
+    text-align: center;
+    font-size: 16px;
+    border: none;
+}
+
+.categoriaInput {
+    height: 41px;
+    margin-left: 6px;
+    width: 196px;
+    color: black;
     text-align: center;
     font-size: 16px;
     border: none;

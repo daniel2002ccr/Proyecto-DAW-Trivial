@@ -15,8 +15,8 @@
       <tbody>
         <tr v-for="(player, index) in players" :key="index">
           <td class="posicion">{{ index + 1 }}</td>
-          <td class="fila">{{ player.name }}</td>
-          <td class="fila">{{ player.score }}</td>
+          <td class="fila">{{ getSourceName(player) }}</td>
+          <td class="fila">{{ getSourceScore(player) }}</td>
           <td class="fila">{{ player.difficulty }}</td>
           <td>
             <button class="botonPerfil" @click="verPerfil(player, index)">Perfil</button>
@@ -28,15 +28,21 @@
 </template>
 
 <script>
+import axios from 'axios';
 
 export default {
 
   data() {
     return {
+      rankingData: [],
+      rankingId: 1,
+      puntuacion: "100",
       players: []
     };
   },
   mounted() {
+    this.getRanking();
+
     const savedPlayers = JSON.parse(localStorage.getItem('players'));
 
     if (savedPlayers) {
@@ -51,13 +57,10 @@ export default {
     if (name && score && difficulty) {
       this.players.push({ name, score, difficulty });
     }
-    // Ordenar los jugadores por puntuación y luego por dificultad
     this.players.sort((a, b) => {
-      // Si la puntuación es diferente, ordena por puntuación
       if (b.score !== a.score) {
         return b.score - a.score;
       } else {
-        // Si la puntuación es igual, ordena por dificultad
         const difficultyOrder = { "hard": 3, "medium": 2, "easy": 1 };
         return difficultyOrder[b.difficulty] - difficultyOrder[a.difficulty];
       }
@@ -68,6 +71,50 @@ export default {
     localStorage.setItem('players', JSON.stringify(this.players));
   },
   methods: {
+    getRanking() {
+      axios.get('http://localhost:8080/trivial/v1/ranking')
+        .then(response => {
+          this.players = [...this.players, ...response.data.map(player => ({
+            ...player,
+            source: 'database'
+          }))];
+          this.players.forEach(player => {
+            if (player.source === 'database') {
+              player.difficulty = 'Inicial';
+            } else {
+              player.difficulty = this.getReadableDifficulty(player.difficulty);
+            }
+          });
+          this.players.sort((a, b) => {
+            if (this.getSourceScore(b) !== this.getSourceScore(a)) {
+              return this.getSourceScore(b) - this.getSourceScore(a);
+            } else {
+              const difficultyOrder = { "hard": 3, "medium": 2, "easy": 1 };
+              return difficultyOrder[b.difficulty] - difficultyOrder[a.difficulty];
+            }
+          });
+        })
+        .catch(error => {
+          console.error('Hubo un problema con la solicitud:', error);
+        });
+    },
+    getSourceName(player) {
+      return player.source === 'database' ? player.userId.userName : player.name;
+    },
+    getSourceScore(player) {
+      return player.source === 'database' ? player.puntuacion : player.score;
+    },
+    async guardarDatosEnBaseDeDatos(playerData) {
+      try {
+        const response = await axios.post('http://localhost:8080/trivial/v1/ranking', {
+          rankingId: this.rankingId,
+          puntuacion: playerData.score
+        });
+        console.log(response.data);
+      } catch (error) {
+        console.error('Error al guardar los datos en la base de datos:', error);
+      }
+    },
     getReadableDifficulty(difficulty) {
       switch (difficulty) {
         case "hard":
