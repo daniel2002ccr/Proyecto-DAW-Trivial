@@ -262,7 +262,7 @@ body {
     margin-left: 66%;
     color: #fff;
     width: 370px;
-    height: 685px;
+    height: 716px;
     border-radius: 10px;
     background: linear-gradient(145deg, #9a40a9, #b74cc9);
     box-shadow: 20px 20px 60px #913ca0,

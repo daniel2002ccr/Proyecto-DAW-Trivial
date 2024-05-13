@@ -78,6 +78,7 @@ export default {
             ...player,
             source: 'database'
           }))];
+
           this.players.forEach(player => {
             if (player.source === 'database') {
               player.difficulty = 'Inicial';
@@ -85,6 +86,7 @@ export default {
               player.difficulty = this.getReadableDifficulty(player.difficulty);
             }
           });
+
           this.players.sort((a, b) => {
             if (this.getSourceScore(b) !== this.getSourceScore(a)) {
               return this.getSourceScore(b) - this.getSourceScore(a);
@@ -93,9 +95,6 @@ export default {
               return difficultyOrder[b.difficulty] - difficultyOrder[a.difficulty];
             }
           });
-        })
-        .catch(error => {
-          console.error('Hubo un problema con la solicitud:', error);
         });
     },
     getSourceName(player) {
@@ -103,17 +102,6 @@ export default {
     },
     getSourceScore(player) {
       return player.source === 'database' ? player.puntuacion : player.score;
-    },
-    async guardarDatosEnBaseDeDatos(playerData) {
-      try {
-        const response = await axios.post('http://localhost:8080/trivial/v1/ranking', {
-          rankingId: this.rankingId,
-          puntuacion: playerData.score
-        });
-        console.log(response.data);
-      } catch (error) {
-        console.error('Error al guardar los datos en la base de datos:', error);
-      }
     },
     getReadableDifficulty(difficulty) {
       switch (difficulty) {
@@ -129,15 +117,21 @@ export default {
     },
     eliminarDatos() {
       this.players = [];
-
       localStorage.removeItem('players');
     },
     verPerfil(player, index) {
+      let playerName = player.name;
+      let playerScore = player.score;
+
+      if (player.source === 'database') {
+        playerName = player.userId.userName;
+        playerScore = player.puntuacion;
+      }
       this.$router.push({
         name: 'CuentaView',
         params: {
-          name: player.name,
-          score: player.score,
+          name: playerName,
+          score: playerScore,
           ranking: index + 1
         }
       });
