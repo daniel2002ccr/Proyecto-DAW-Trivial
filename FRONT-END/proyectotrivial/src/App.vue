@@ -94,4 +94,60 @@ a:hover {
   padding-top: 1px;
   border-radius: 9999px;
 }
+
+@media screen and (max-width: 425px) {
+  nav {
+    height: 120px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+
+  a.router-link-active.router-link-exact-active {
+    margin-left: -140px;
+    margin-top: -295px;
+  }
+
+  a.router-link-active.router-link-exact-active:hover {
+    margin-left: -140px;
+    margin-top: -295px;
+    text-decoration: none;
+    color: black;
+    background-color: white;
+    padding-bottom: 17px;
+    padding-top: -2px;
+    width: 147px;
+    height: 327px;
+    border-radius: 9999px;
+  }
+
+  a {
+    margin-right: -50px;
+    margin-top: -56px;
+  }
+
+  a:hover {
+    margin-right: -50px;
+    margin-top: -56px;
+  }
+
+  .logo-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .link-hover {
+    padding: 10px;
+  }
+
+  path {
+    display: none;
+  }
+
+  .imagen {
+    width: 50px;
+    height: 50px;
+  }
+}
 </style>

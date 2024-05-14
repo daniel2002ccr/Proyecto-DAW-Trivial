@@ -432,4 +432,76 @@ tr:nth-child(even) {
   background-color: #dddddd;
   text-align: center;
 }
+
+@media screen and (max-width: 425px) {
+  .nav {}
+
+  .home {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+
+  .imagenLogo {
+    width: 100%;
+    margin-bottom: 300px;
+    margin-right: 143px;
+  }
+
+  a.blinking-button {
+    margin: auto;
+    margin-top: -358px;
+    margin-bottom: 400px;
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .botonInicioSesion {
+    height: 57px;
+    width: 200px;
+    margin-left: 224px;
+    margin-top: -62px;
+  }
+
+  .botonInicioSesion:hover {
+    height: 57px;
+    width: 200px;
+    margin-left: 224px;
+    margin-top: -62px;
+  }
+
+  .botonRegistro {
+    height: 57px;
+    width: 200px;
+    margin-right: 227px;
+    margin-left: 14px;
+    margin-top: -65px;
+  }
+
+  .botonRegistro:hover {
+    height: 57px;
+    width: 200px;
+    margin-right: 227px;
+    margin-left: 14px;
+    margin-top: -65px;
+  }
+
+  .footer {
+    margin-top: auto;
+    text-align: center;
+  }
+
+  .social {
+    width: 425px;
+    margin-left: 40px;
+  }
+
+  .legal {}
+}
 </style>
