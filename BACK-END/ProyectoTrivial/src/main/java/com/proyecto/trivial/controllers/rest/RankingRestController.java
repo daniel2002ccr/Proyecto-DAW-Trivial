@@ -31,16 +31,12 @@ public class RankingRestController {
 	@GetMapping("/ranking")
 	public Iterable<RankingEntity> obtenerTodosRanking() {
 
-		// http://localhost:8080/trivial/v1/ranking
-
 		Iterable<RankingEntity> ranking = rankingRepository.findAll();
 		return ranking;
 	}
 
 	@GetMapping(value = "/ranking/{id}")
 	public Optional<RankingEntity> obtenerTodosRankingPorID(@PathVariable("id") Integer id) {
-
-//		http://localhost:8080/trivial/v1/ranking/1
 
 		return rankingRepository.findById(id);
 	}
@@ -49,8 +45,6 @@ public class RankingRestController {
 	public List<RankingDTO> obtenerTodosRankingConFiltros(
 			@RequestParam(value = "rankingId", required = false) Integer rankingId,
 			@RequestParam(value = "puntuacion", required = false) String puntuacion) {
-
-		// http://localhost:8080/trivial/v1/ranking?id=1&nombre&activo=1
 
 		List<RankingDTO> ra = rankingRepository.buscaRanking(rankingId.toString(), puntuacion);
 		return ra;

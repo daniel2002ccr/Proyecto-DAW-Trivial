@@ -31,8 +31,6 @@ public class RolesRestController {
 	@GetMapping("/roles")
 	public Iterable<RolEntity> obtenerTodosRoles() {
 
-		// http://localhost:8080/trivial/v1/roles
-
 		Iterable<RolEntity> roles = rolesRepository.findAll();
 		return roles;
 	}
@@ -40,16 +38,12 @@ public class RolesRestController {
 	@GetMapping(value = "/roles/{id}")
 	public Optional<RolEntity> obtenerTodosRolesPorID(@PathVariable("id") Integer id) {
 
-//		http://localhost:8080/trivial/v1/roles/1
-
 		return rolesRepository.findById(id);
 	}
 
 	@GetMapping(value = "/roles", params = { "roleId", "userRole" })
 	public List<RolesDTO> obtenerTodosRolesConFiltros(@RequestParam(value = "roleId", required = false) Integer roleId,
 			@RequestParam(value = "userRole", required = false) String userRole) {
-
-		// http://localhost:8080/trivial/v1/roles?id=1&nombre&activo=1
 
 		List<RolesDTO> r = rolesRepository.buscaRoles(roleId.toString(), userRole);
 		return r;

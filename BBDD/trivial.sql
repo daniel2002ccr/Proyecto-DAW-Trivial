@@ -142,9 +142,3 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2024-03-06 13:06:04
-
-
-select * from users;
-select * from ranking;
-select * from roles;
-select * from categoria;

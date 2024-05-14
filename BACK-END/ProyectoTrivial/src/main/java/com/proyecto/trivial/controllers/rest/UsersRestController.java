@@ -34,16 +34,12 @@ public class UsersRestController {
 	@GetMapping("/users")
 	public Iterable<UserEntity> obtenerTodosUsuarios() {
 
-		// http://localhost:8080/trivial/v1/users
-
 		Iterable<UserEntity> users = usersRepository.findAll();
 		return users;
 	}
 
 	@GetMapping(value = "/users/{id}")
 	public Optional<UserEntity> obtenerTodosUsuariosPorID(@PathVariable("id") Integer id) {
-
-//		http://localhost:8080/trivial/v1/users/1
 
 		return usersRepository.findById(id);
 	}
@@ -58,8 +54,6 @@ public class UsersRestController {
 			@RequestParam(value = "userImage", required = false) String userImage,
 			@RequestParam(value = "cantidad", required = false) String cantidad,
 			@RequestParam(value = "activo", required = false) String activo) {
-
-		// http://localhost:8080/trivial/v1/users?id=1&nombre&activo=1
 
 		Integer cantidadInteger = null;
 		if (!cantidad.equals("")) {
@@ -120,8 +114,6 @@ public class UsersRestController {
 
 	@DeleteMapping("/users/{id}")
 	public ResponseEntity borrarUsuario(@PathVariable("id") Integer id) {
-
-//		http://localhost:8080/trivial/v1/users/81
 
 		UserEntity u = usersRepository.findById(id).get();
 

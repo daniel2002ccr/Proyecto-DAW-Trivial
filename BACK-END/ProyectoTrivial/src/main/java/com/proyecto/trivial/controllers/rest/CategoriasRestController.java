@@ -32,16 +32,12 @@ public class CategoriasRestController {
 	@GetMapping("/categoria")
 	public Iterable<CategoriaEntity> obtenerTodasCategorias() {
 
-		// http://localhost:8080/trivial/v1/categoria
-
 		Iterable<CategoriaEntity> categorias = categoriasRepository.findAll();
 		return categorias;
 	}
 
 	@GetMapping(value = "/categoria/{id}")
 	public Optional<CategoriaEntity> obtenerTodasCategoriasPorID(@PathVariable("id") Integer id) {
-
-//		http://localhost:8080/trivial/v1/categoria/1
 
 		return categoriasRepository.findById(id);
 	}
@@ -51,8 +47,6 @@ public class CategoriasRestController {
 			@RequestParam(value = "id", required = false) Integer id,
 			@RequestParam(value = "nombre", required = false) String nombre,
 			@RequestParam(value = "activo", required = false) String activo) {
-
-		// http://localhost:8080/trivial/v1/categoria?id=1&nombre&activo=1
 
 		Integer activoInteger = null;
 		if (!activo.equals("")) {
@@ -78,8 +72,6 @@ public class CategoriasRestController {
 
 	@DeleteMapping("/categorias/{id}")
 	public ResponseEntity borrarCategoria(@PathVariable("id") Integer id) {
-
-//		http://localhost:8080/trivial/v1/categorias/81
 
 		CategoriaEntity c = categoriasRepository.findById(id).get();
 
