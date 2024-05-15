@@ -110,14 +110,13 @@ a:hover {
 
   a.router-link-active.router-link-exact-active:hover {
     margin-left: -140px;
-    margin-top: -295px;
+    margin-top: -46px;
     text-decoration: none;
     color: black;
     background-color: white;
-    padding-bottom: 17px;
     padding-top: -2px;
-    width: 147px;
-    height: 327px;
+    width: 151px;
+    height: 38px;
     border-radius: 9999px;
   }
 
@@ -139,6 +138,11 @@ a:hover {
 
   .link-hover {
     padding: 10px;
+  }
+
+  .link-hover:hover {
+    height: 31px;
+    padding-top: 10px;
   }
 
   path {

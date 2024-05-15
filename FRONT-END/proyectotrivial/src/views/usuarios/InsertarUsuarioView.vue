@@ -85,4 +85,10 @@ export default {
     }
 }
 </script>
-<style scoped></style>
+<style scoped>
+@media screen and (max-width: 425px) {
+    .form-control {
+        height: 45px;
+    }
+}
+</style>

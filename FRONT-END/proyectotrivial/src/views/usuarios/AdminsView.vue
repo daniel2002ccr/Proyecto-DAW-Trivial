@@ -13,9 +13,12 @@
                         <tr>
                             <th>Id</th>
                             <th>Nombre</th>
-                            <th>Email</th>
-                            <th>Imagen</th>
-                            <th>Cantidad</th>
+                            <th class="d-none d-md-table-cell"
+                                v-bind:class="{ 'd-none d-sm-table-cell': screenWidth < 425 }">Email</th>
+                            <th class="d-none d-md-table-cell"
+                                v-bind:class="{ 'd-none d-sm-table-cell': screenWidth < 425 }">Imagen</th>
+                            <th class="d-none d-md-table-cell"
+                                v-bind:class="{ 'd-none d-sm-table-cell': screenWidth < 425 }">Cantidad</th>
                             <th>Activo</th>
                             <th>Función a realizar</th>
                         </tr>
@@ -24,9 +27,15 @@
                         <tr v-for="(usuario, index) in usuarios" :key="index">
                             <td class="posicion">{{ usuario.userId }}</td>
                             <td>{{ usuario.userName }}</td>
-                            <td>{{ usuario.userEmail }}</td>
-                            <td><img :src="'data:image/jpeg;base64,' + usuario.userImage" class="imagen-usuario" /></td>
-                            <td>{{ usuario.cantidad }}</td>
+                            <td class="d-none d-md-table-cell"
+                                v-bind:class="{ 'd-none d-sm-table-cell': screenWidth < 425 }">{{ usuario.userEmail }}
+                            </td>
+                            <td class="d-none d-md-table-cell"
+                                v-bind:class="{ 'd-none d-sm-table-cell': screenWidth < 425 }"><img
+                                    :src="'data:image/jpeg;base64,' + usuario.userImage" class="imagen-usuario" /></td>
+                            <td class="d-none d-md-table-cell"
+                                v-bind:class="{ 'd-none d-sm-table-cell': screenWidth < 425 }">{{ usuario.cantidad }}
+                            </td>
                             <td>{{ usuario.activo }}</td>
                             <td>
                                 <router-link :to="{ name: 'ActualizarUsuarioView', params: { userId: usuario.userId } }"
@@ -174,5 +183,43 @@ td {
     background-color: #f2f2f2;
     text-align: center;
     border-bottom: 2px solid black;
+}
+
+@media screen and (max-width: 425px) {
+    .card-body {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .card-header {
+        margin-right: 16px;
+        margin-top: 5px;
+    }
+
+    th,
+    td {
+        padding: 0px;
+    }
+
+    .posicion {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .d-none.d-sm-table-cell {
+        display: none !important;
+    }
+
+    table.table-bordered tbody tr td:nth-child(2) {
+        padding-top: 15px;
+    }
+
+    table.table-bordered tbody tr td:nth-child(6) {
+        padding-top: 15px;
+    }
+
+    table.table-bordered tbody tr td:nth-child(7) {
+        padding-top: 8px;
+    }
 }
 </style>

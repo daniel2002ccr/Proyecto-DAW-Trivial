@@ -499,5 +499,9 @@ tr:nth-child(even) {
     width: 425px;
     margin-left: 40px;
   }
+
+  .legal {
+    display: none
+  }
 }
 </style>
