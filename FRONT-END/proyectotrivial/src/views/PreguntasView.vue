@@ -28,21 +28,6 @@
                                 class="flex items-center pl-6">{{ answer }}</span>
                         </li>
                     </ul>
-                    <p>Respuesta correcta: </p>
-                    <ul class="neumorph-1 bg-gray-100 p-2 rounded-lg mb-3">
-                        <li class="bg-green-700 rounded-lg font-bold flex p-2 text-white">
-                            <span class="bg-gray-800 p-3 rounded-lg">{{ String.fromCharCode(65) }}</span> <span
-                                class="flex items-center pl-6">{{ question.correct_answer }}</span>
-                        </li>
-                    </ul>
-                    <p>Respuestas incorrectas:</p>
-                    <ul class="neumorph-1 bg-gray-100 p-2 rounded-lg mb-3">
-                        <li v-for="(answer, index) in question.incorrect_answers" :key="'incorrect_' + index"
-                            class="bg-red-800 rounded-lg font-bold flex p-2 text-white margin-bottom-1">
-                            <span class="bg-gray-800 p-3 rounded-lg">{{ String.fromCharCode(65 + index + 1) }}</span>
-                            <span class="flex items-center pl-6">{{ answer }}</span>
-                        </li>
-                    </ul>
                 </div>
             </div>
             <div v-else>
@@ -379,6 +364,27 @@ main {
 
 li {
     list-style: none;
+}
+
+@media screen and (max-width: 425px) {
+    .nuevaCategoria {
+        display: none;
+    }
+
+    .marcador {
+        display: block;
+        position: relative;
+        bottom: 0;
+        top: 89%;
+        margin-top: 351px;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+    }
+
+    main {
+        height: 6891px;
+    }
 }
 
 .neumorph-1 {

@@ -434,8 +434,6 @@ tr:nth-child(even) {
 }
 
 @media screen and (max-width: 425px) {
-  .nav {}
-
   .home {
     display: flex;
     flex-direction: column;
@@ -501,7 +499,5 @@ tr:nth-child(even) {
     width: 425px;
     margin-left: 40px;
   }
-
-  .legal {}
 }
 </style>

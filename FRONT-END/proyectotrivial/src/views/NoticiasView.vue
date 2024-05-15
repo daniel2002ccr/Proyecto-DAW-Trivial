@@ -166,4 +166,47 @@ h1 {
     margin-top: -10px;
     margin-bottom: 10px;
 }
+
+@media screen and (max-width: 425px) {
+    .noticia-grande {
+        margin-left: -120px;
+        width: 410px;
+        height: 628px;
+    }
+
+    .tituloNoticiaGrande {
+        margin-top: 3%;
+        font-size: 18px;
+        text-align: center;
+        margin-bottom: 3%;
+    }
+
+    .imagenNoticiaGrande {
+        margin-left: 3px;
+        width: 392px;
+    }
+
+    .parrafoNoticiaGrande {
+        padding-right: 10px;
+        padding-left: 14px;
+        font-size: 14px;
+    }
+
+    .noticias-pequenas {
+        margin-top: 646px;
+        margin-left: -424px;
+    }
+
+    .noticias-pequenas> :nth-child(2) {
+        margin-left: -420px;
+        margin-top: 361px;
+        margin-bottom: -7px;
+    }
+
+    .noticias-pequenas> :nth-child(4) {
+        margin-left: -420px;
+        margin-top: 365px;
+        margin-bottom: 15px;
+    }
+}
 </style>

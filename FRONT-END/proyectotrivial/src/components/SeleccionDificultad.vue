@@ -72,4 +72,20 @@ li:hover {
     margin-left: 546px;
     margin-right: 546px;
 }
+
+@media screen and (max-width: 425px) {
+    h1 {
+        font-size: 28px;
+    }
+
+    li {
+        margin-left: -208px;
+        margin-top: 74px;
+    }
+
+    li:hover {
+        margin-left: -208px;
+        margin-top: 74px;
+    }
+}
 </style>

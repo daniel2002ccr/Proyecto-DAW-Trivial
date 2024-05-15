@@ -232,4 +232,43 @@ th {
   background-color: #f2f2f2;
   text-align: center;
 }
+
+@media screen and (max-width: 425px) {
+  h1 {
+    margin-right: 137px;
+    font-size: 30px;
+  }
+
+  .botonEliminarDatos {
+    margin-right: 8px;
+    margin-top: -45px;
+    width: 123px;
+  }
+
+  .botonEliminarDatos:hover {
+    margin-right: 8px;
+    margin-top: -45px;
+    width: 123px;
+    font-size: 15px;
+  }
+
+  th,
+  td {
+    padding: 0px;
+  }
+
+  .botonPerfil {
+    font-size: 15px;
+    margin-right: 22px;
+    margin-left: 17px;
+    width: 63%;
+  }
+
+  .botonPerfil:hover {
+    font-size: 15px;
+    margin-right: 22px;
+    margin-left: 17px;
+    width: 63%;
+  }
+}
 </style>

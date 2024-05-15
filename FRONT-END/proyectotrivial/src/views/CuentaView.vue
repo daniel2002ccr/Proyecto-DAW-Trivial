@@ -345,4 +345,14 @@ body {
     cursor: pointer;
     transition: 0.5s;
 }
+
+@media screen and (max-width: 425px) {
+    .card {
+        margin-left: 1px
+    }
+
+    .col-md-6 {
+        width: 50%;
+    }
+}
 </style>
