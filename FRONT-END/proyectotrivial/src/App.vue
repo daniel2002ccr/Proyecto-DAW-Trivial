@@ -1,5 +1,5 @@
 <template>
-  <nav>
+  <nav :class="navClass">
     <router-link to="/" class="link-hover"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"
         class="imagen">
         <path fill="#ffffff"
@@ -17,12 +17,74 @@
         <path fill="#ffffff"
           d="M552 64H88c-13.3 0-24 10.7-24 24v8H24c-13.3 0-24 10.7-24 24v272c0 30.9 25.1 56 56 56h472c26.5 0 48-21.5 48-48V88c0-13.3-10.7-24-24-24zM56 400a8 8 0 0 1 -8-8V144h16v248a8 8 0 0 1 -8 8zm236-16H140c-6.6 0-12-5.4-12-12v-8c0-6.6 5.4-12 12-12h152c6.6 0 12 5.4 12 12v8c0 6.6-5.4 12-12 12zm208 0H348c-6.6 0-12-5.4-12-12v-8c0-6.6 5.4-12 12-12h152c6.6 0 12 5.4 12 12v8c0 6.6-5.4 12-12 12zm-208-96H140c-6.6 0-12-5.4-12-12v-8c0-6.6 5.4-12 12-12h152c6.6 0 12 5.4 12 12v8c0 6.6-5.4 12-12 12zm208 0H348c-6.6 0-12-5.4-12-12v-8c0-6.6 5.4-12 12-12h152c6.6 0 12 5.4 12 12v8c0 6.6-5.4 12-12 12zm0-96H140c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h360c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12z" />
       </svg>Noticias</router-link>
-
   </nav>
   <router-view />
 </template>
 
+<script>
+export default {
+  computed: {
+    navClass() {
+      const currentRoute = this.$route.path;
+
+      if (currentRoute === '/ranking') {
+        return 'nav-seccion';
+      } else if (currentRoute === '/noticias') {
+        return 'nav-seccion';
+      } else if (currentRoute === '/admin') {
+        return 'nav-seccion';
+      } else if (currentRoute.includes('/cuenta/')) {
+        const userId = this.$route.params.userId;
+        return `nav-seccion`;
+      } else if (currentRoute === '/seleccion-dificultad') {
+        return 'nav-seccion';
+      } else if (currentRoute === '/easy') {
+        return 'nav-seccion';
+      } else if (currentRoute === '/medium') {
+        return 'nav-seccion';
+      } else if (currentRoute === '/hard') {
+        return 'nav-seccion';
+      } else if (currentRoute === '/admin/crearUser') {
+        return 'nav-seccion';
+      } else if (currentRoute.includes('/admin/usuarios/')) {
+        const userId = this.$route.params.userId;
+        return `nav-seccion`;
+      } else {
+      }
+    }
+  }
+}
+</script>
+
 <style scoped>
+@media screen and (max-width: 425px) {
+  .nav-seccion {
+    padding-right: 90px;
+    padding-top: 39px;
+    padding-left: 109px;
+
+    a.router-link-active.router-link-exact-active {
+      margin-right: -241px;
+      background-color: transparent;
+    }
+
+    a.router-link-active.router-link-exact-active:hover {
+      margin-right: -220px;
+      margin-left: -225px;
+    }
+
+    a.link-hover {
+      margin-left: -187px;
+      margin-right: -226px;
+      background-color: transparent;
+    }
+
+    path {
+      display: none;
+    }
+  }
+}
+
 .link-hover:hover svg path {
   fill: #000000;
 }
