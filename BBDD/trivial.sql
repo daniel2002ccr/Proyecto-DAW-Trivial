@@ -4,7 +4,7 @@ USE trivial;
 
 -- MySQL dump 10.13  Distrib 8.0.30, for Win64 (x86_64)
 --
--- Host: localhost    Database: trivial_bbdd
+-- Host: localhost    Database: trivial
 -- ------------------------------------------------------
 -- Server version	8.0.30
 
