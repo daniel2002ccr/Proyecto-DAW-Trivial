@@ -1,0 +1,21 @@
+services:
+  backend:
+    build: ./BACK-END
+    ports:
+      - "8080:8080"
+    networks:
+      - trivial
+
+  db:
+    image: mysql:5.7.17
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: trivial
+      MYSQL_USER: root
+      MYSQL_PASSWORD: PracticaRoot
+    networks:
+      - trivial
+
+networks:
+  my-network:
+    driver: bridge
