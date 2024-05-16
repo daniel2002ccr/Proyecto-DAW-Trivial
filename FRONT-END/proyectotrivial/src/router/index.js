@@ -4,6 +4,7 @@ import RankingView from '../views/RankingView.vue'
 import CuentaView from '../views/CuentaView.vue'
 import NoticiasView from '../views/NoticiasView.vue'
 import PreguntasView from '../views/PreguntasView.vue'
+import LoginView from '../views/LoginView.vue'
 import AdminsView from '../views/usuarios/AdminsView.vue'
 import InsertarUsuarioView from '../views/usuarios/InsertarUsuarioView.vue'
 import ActualizarUsuarioView from '../views/usuarios/ActualizarUsuarioView.vue'
@@ -42,6 +43,11 @@ const routes = [
     path: '/preguntas',
     name: 'preguntas',
     component: PreguntasView
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: LoginView
   },
   {
     path: '/admin',
