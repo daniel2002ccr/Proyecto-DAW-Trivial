@@ -4,7 +4,7 @@
             <div class="card-header">
                 <h4 class="d-flex justify-content-between align-items-center">
                     <span>Usuarios</span>
-                    <router-link to="/admin/crearUser" class="btn btn-primary">Añadir Usuario</router-link>
+                    <router-link to="/login/crearUser" class="btn btn-primary">Añadir Usuario</router-link>
                 </h4>
             </div>
             <div class="card-body">
@@ -60,7 +60,7 @@
 import axios from 'axios'
 
 export default {
-    name: 'admin',
+    name: 'login',
     data() {
         return {
             usuarios: []

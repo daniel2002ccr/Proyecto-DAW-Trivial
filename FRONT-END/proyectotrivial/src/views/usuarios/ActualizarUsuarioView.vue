@@ -79,7 +79,7 @@ export default {
             axios.put(`http://localhost:8080/trivial/v1/users/${this.userId}`, this.model.usuario)
                 .then(response => {
                     alert('Usuario actualizado con éxito.');
-                    this.$router.push('/admin');
+                    this.$router.push('/login');
                 })
                 .catch(error => {
                 });

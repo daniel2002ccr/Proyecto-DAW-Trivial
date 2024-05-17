@@ -12,6 +12,8 @@ import SeleccionDificultad from '../components/SeleccionDificultad.vue';
 import PoliticaProteccionDatos from '../components/PoliticaProteccionDatos.vue';
 import PoliticaCookies from '../components/PoliticaCookies.vue';
 import AvisoLegal from '../components/AvisoLegal.vue';
+import Login from '@/components/Login.vue';
+import Admin from '@/components/Admin.vue';
 
 const routes = [
   {
@@ -44,23 +46,23 @@ const routes = [
     name: 'preguntas',
     component: PreguntasView
   },
-  {
-    path: '/login',
+  /* {
+    path: '/admin',
     name: 'login',
     component: LoginView
   },
   {
-    path: '/admin',
+    path: '/login',
     name: 'admin',
     component: AdminsView
-  },
+  }, */
   {
-    path: '/admin/crearUser',
+    path: '/login/crearUser',
     name: 'InsertarUsuarioView',
     component: InsertarUsuarioView
   },
   {
-    path: '/admin/usuarios/:userId/editarUsuario',
+    path: '/login/usuarios/:userId/editarUsuario',
     name: 'ActualizarUsuarioView',
     component: ActualizarUsuarioView
   },
@@ -84,6 +86,17 @@ const routes = [
     path: '/aviso-legal',
     name: 'AvisoLegal',
     component: AvisoLegal
+  },
+  {
+    path: '/',
+    name: 'login',
+    component: Login
+  },
+  {
+    path: '/admin',
+    name: 'admin',
+    component: Admin,
+   /* meta: { requiresAuth: true }, */
   }
 ]
 
@@ -93,6 +106,16 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    const token = localStorage.getItem('token');
+    if (token) {
+      next();
+    } else {
+      next({ path: '/' });
+    }
+  } else {
+    next();
+  }
   if (to.path === '/') {
     document.body.classList.add('no-scroll');
   } else {
@@ -101,4 +124,5 @@ router.beforeEach((to, from, next) => {
   next();
 });
 
-export default router
+
+export default router;

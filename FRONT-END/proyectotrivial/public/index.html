@@ -11,7 +11,7 @@
   <!-- Font Awesome CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <title>
-    <%= htmlWebpackPlugin.options.title %>
+    TRIWORLD
   </title>
 </head>
 
@@ -21,9 +21,39 @@
         Please enable it to continue.</strong>
   </noscript>
   <div id="app"></div>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
   <!-- built files will be auto injected -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function (event) {
+      event.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      fetch('/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username, password })
+      })
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('Fallo en la autenticación');
+          }
+        })
+        .then(data => {
+          localStorage.setItem('token', data.token);
+          window.location.href = '/admin';
+        })
+        .catch(error => {
+          alert(error.message);
+        });
+    });
+  </script>
 </body>
 
 </html>
