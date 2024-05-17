@@ -1,11 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
+const path = require('path');
 
 const app = express();
 const secretKey = 'mysecretkey';
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Middleware para verificar y decodificar el token JWT
 function verifyToken(req, res, next) {
@@ -27,10 +29,9 @@ function verifyToken(req, res, next) {
 
 // Ruta de inicio de sesión para autenticación
 app.post('/login', (req, res) => {
-    // Verificar las credenciales del usuario
     const { username, password } = req.body;
 
-    if (username === 'root' && password === 'PracticaRoot') {
+    if (username === 'admin' && password === 'password') {
         const token = jwt.sign({ username }, secretKey);
         res.json({ token });
     } else {
@@ -40,7 +41,12 @@ app.post('/login', (req, res) => {
 
 // Ruta protegida que requiere un token válido para acceder
 app.get('/admin', verifyToken, (req, res) => {
-    res.json({ message: 'Admin area' });
+    res.sendFile(path.join(__dirname, 'admin.html'));
+});
+
+// Servir la página de inicio de sesión
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // Iniciar el servidor en el puerto 8081
