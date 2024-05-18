@@ -2,6 +2,7 @@ package com.proyecto.trivial.repositories;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -11,7 +12,8 @@ import com.proyecto.trivial.dtos.UsersDTO;
 import com.proyecto.trivial.entities.UserEntity;
 
 @Repository
-public interface IUsersRepository extends CrudRepository<UserEntity, Integer> {
+//public interface IUsersRepository extends CrudRepository<UserEntity, Integer> {
+public interface IUsersRepository extends JpaRepository<UserEntity, Integer> {
 
 	@Query("SELECT new com.proyecto.trivial.dtos.UsersDTO(u.userId, u.userName, u.userPasswd, u.userEmail, u.userImage, u.cantidad, u.activo) "
 			+ "FROM com.proyecto.trivial.entities.UserEntity u "
@@ -24,4 +26,6 @@ public interface IUsersRepository extends CrudRepository<UserEntity, Integer> {
 	public List<UsersDTO> buscaUsuarios(@Param("userId") String userId, @Param("userName") String userName,
 			@Param("userPasswd") String userPasswd, @Param("userEmail") String userEmail,
 			@Param("userImage") String userImage, @Param("cantidad") Integer cantidad, @Param("activo") Integer activo);
+	
+	  UserEntity findByUserName(String userName);
 }
