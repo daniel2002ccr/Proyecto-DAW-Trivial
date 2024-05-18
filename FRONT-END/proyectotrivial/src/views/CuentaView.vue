@@ -19,26 +19,11 @@
                 <hr class="line">
 
                 <small class="mt-4">Descripción del jugador</small>
-                <template v-if="!editandoDescripcion && !guardado && !jugador.descripcion">
-                    <!-- Ocultar el input si la descripción ya existe -->
-                    <input type="text" v-model="nuevaDescripcion" class="form-control"
-                        placeholder="Añadir descripción..." :disabled="guardado">
-                </template>
-                <template v-else>
-                    <p v-if="!editandoDescripcion">{{ jugador.descripcion }}</p>
-                    <input v-else type="text" v-model="nuevaDescripcion" class="form-control"
-                        placeholder="Añadir descripción..." :disabled="guardado">
-                </template>
-
-                <!-- Ocultar el botón de guardar si la descripción ya ha sido escrita -->
-                <button v-if="editandoDescripcion || (!jugador.descripcion && !guardado)" class="botonGuardarDescripcion" @click="guardarDescripcion"
-                    :disabled="guardado || nuevaDescripcion.trim() === ''">Guardar</button>
-                <template v-if="guardado">
-                    <div class="mt-4">
-                        <button class="botonEditarDescripcion" @click="editarDescripcion">Editar</button>
-                        <button class="botonEliminarDescripcion" @click="eliminarDescripcion">Eliminar</button>
-                    </div>
-                </template>
+                <br>
+                <input type="text" v-model="jugador.descripcion" class="form-control">
+                <br>
+                <button class="botonGuardarDescripcion" @click="guardarDescripcion" :disabled="!jugador.descripcion.trim()">Guardar</button>
+                <button class="botonEliminarDescripcion" @click="eliminarDescripcion" v-if="jugador.descripcion">Eliminar</button>
                 <div class="social-buttons mt-5">
                     <button class="neo-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"
                             class="imagen">
@@ -75,6 +60,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -85,7 +71,7 @@ export default {
                 name: '',
                 score: '',
                 ranking: '',
-                descripcion: ''
+                descripcion: '',
             },
             nuevaDescripcion: '',
             editandoDescripcion: false,
@@ -104,28 +90,52 @@ export default {
     },
     methods: {
         cargarDatosJugador() {
-            const { name, score, ranking } = this.$route.params;
-            this.jugador = { name, score, ranking, descripcion: '' };
+            const { name, score, ranking, descripcion } = this.$route.params;
+            this.jugador = { name, score, ranking, descripcion };
         },
         guardarDescripcion() {
-            this.jugador.descripcion = this.nuevaDescripcion;
-            if (this.imagen) {
-                this.jugador.imagen = this.imagen;
-                this.imagen = '';
-            }
-            this.guardado = true;
-            this.editandoDescripcion = false;
-        },
-        editarDescripcion() {
-            this.editandoDescripcion = true;
-            this.guardado = false;
+            axios.put(`http://localhost:8080/v1/ranking/${this.jugador.id}`, this.jugador)
+                .then(response => {
+                    console.log('Descripción actualizada:', response);
+                })
+                .catch(error => {
+                    console.error('Error al actualizar la descripción:', error);
+                });
         },
         eliminarDescripcion() {
-            this.jugador.descripcion = ''; // Elimina la descripción del jugador
-            this.nuevaDescripcion = ''; // Reinicia el valor del input de texto
-            this.guardado = false; // Restablece el estado del botón de guardado
-            this.editandoDescripcion = false; // Asegura que el modo de edición esté desactivado
+            axios.delete(`http://localhost:8080/v1/ranking/${this.jugador.name}`, this.jugador)
+                .then(response => {
+                    console.log('Descripción eliminada en la base de datos:', response);
+
+                    // Actualizar la descripción localmente
+                    this.jugador.descripcion = '';
+
+                    // Redirigir a la página de ranking
+                    this.$router.push('/ranking');
+                })
+                .catch(error => {
+                    console.error('Error eliminando la descripción:', error);
+                });
         },
+        /* guardarDescripcion() {
+             this.jugador.descripcion = this.nuevaDescripcion;
+             if (this.imagen) {
+                 this.jugador.imagen = this.imagen;
+                 this.imagen = '';
+             }
+             this.guardado = true;
+             this.editandoDescripcion = false;
+         },
+         editarDescripcion() {
+             this.editandoDescripcion = true;
+             this.guardado = false;
+         },
+         eliminarDescripcion() {
+             this.jugador.descripcion = ''; // Elimina la descripción del jugador
+             this.nuevaDescripcion = ''; // Reinicia el valor del input de texto
+             this.guardado = false; // Restablece el estado del botón de guardado
+             this.editandoDescripcion = false; // Asegura que el modo de edición esté desactivado
+         }, */
         onFileChange(event) {
             const file = event.target.files[0];
             if (file) {

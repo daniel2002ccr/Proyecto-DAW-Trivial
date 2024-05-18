@@ -27,7 +27,7 @@ const routes = [
     component: RankingView
   },
   {
-    path: '/cuenta/:name/:score',
+    path: '/cuenta/:name/:score/:descripcion',
     name: 'CuentaView',
     component: CuentaView
   },
@@ -88,7 +88,7 @@ const routes = [
     component: AvisoLegal
   },
   {
-    path: '/',
+    path: '/login',
     name: 'login',
     component: Login
   },

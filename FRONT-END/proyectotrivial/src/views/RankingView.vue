@@ -9,6 +9,7 @@
           <th>Nombre</th>
           <th>Puntuación</th>
           <th>Dificultad</th>
+          <th>Descripción</th>
           <th>Ajustes</th>
         </tr>
       </thead>
@@ -18,6 +19,7 @@
           <td class="fila">{{ getSourceName(player) }}</td>
           <td class="fila">{{ getSourceScore(player) }}</td>
           <td class="fila">{{ player.difficulty }}</td>
+          <td class="fila">{{ player.descripcion }}</td>
           <td>
             <button class="botonPerfil" @click="verPerfil(player, index)">Perfil</button>
           </td>
@@ -37,6 +39,7 @@ export default {
       rankingData: [],
       rankingId: 1,
       puntuacion: "100",
+      descripcion: '',
       players: []
     };
   },
@@ -53,9 +56,10 @@ export default {
     const name = params.get('name');
     const score = params.get('score');
     const difficulty = params.get('difficulty');
+    const descripcion = params.get('descripcion');
 
-    if (name && score && difficulty) {
-      this.players.push({ name, score, difficulty });
+    if (name && score && difficulty && descripcion) {
+      this.players.push({ name, score, difficulty, descripcion });
     }
     this.players.sort((a, b) => {
       if (b.score !== a.score) {
@@ -120,17 +124,20 @@ export default {
     verPerfil(player, index) {
       let playerName = player.name;
       let playerScore = player.score;
+      let playerDescripcion = player.descripcion;
 
       if (player.source === 'database') {
         playerName = player.userId.userName;
         playerScore = player.puntuacion;
+        playerDescripcion = player.descripcion;
       }
       this.$router.push({
         name: 'CuentaView',
         params: {
           name: playerName,
           score: playerScore,
-          ranking: index + 1
+          ranking: index + 1,
+          descripcion: playerDescripcion
         }
       });
     }

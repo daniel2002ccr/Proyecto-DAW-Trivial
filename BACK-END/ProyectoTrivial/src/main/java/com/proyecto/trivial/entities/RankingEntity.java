@@ -29,6 +29,9 @@ public class RankingEntity {
 	@Column(name = "puntuacion")
 	private Integer puntuacion;
 
+	@Column(name = "descripcion", nullable = false)
+	private String descripcion;
+
 	public RankingEntity() {
 		super();
 	}
@@ -39,6 +42,16 @@ public class RankingEntity {
 		this.userId = userId;
 		this.id = id;
 		this.puntuacion = puntuacion;
+	}
+
+	public RankingEntity(Integer rankingId, UserEntity userId, CategoriaEntity id, Integer puntuacion,
+			String descripcion) {
+		super();
+		this.rankingId = rankingId;
+		this.userId = userId;
+		this.id = id;
+		this.puntuacion = puntuacion;
+		this.descripcion = descripcion;
 	}
 
 	public Integer getRankingId() {
@@ -71,5 +84,13 @@ public class RankingEntity {
 
 	public void setPuntuacion(Integer puntuacion) {
 		this.puntuacion = puntuacion;
+	}
+
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
 	}
 }

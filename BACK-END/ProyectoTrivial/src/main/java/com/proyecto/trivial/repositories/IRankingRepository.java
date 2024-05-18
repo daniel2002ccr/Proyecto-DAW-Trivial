@@ -13,10 +13,12 @@ import com.proyecto.trivial.entities.RankingEntity;
 @Repository
 public interface IRankingRepository extends CrudRepository<RankingEntity, Integer> {
 
-	@Query("SELECT new com.proyecto.trivial.dtos.RankingDTO(ra.rankingId, ra.puntuacion) "
+	@Query("SELECT new com.proyecto.trivial.dtos.RankingDTO(ra.rankingId, ra.puntuacion, ra.descripcion) "
 			+ "FROM com.proyecto.trivial.entities.RankingEntity ra "
 			+ "WHERE (:rankingId is null OR CAST (ra.rankingId AS String) LIKE CONCAT('%', :rankingId, '%')) "
-			+ "AND (:puntuacion is null OR ra.puntuacion >= :puntuacion) ")
+			+ "AND (:puntuacion is null OR ra.puntuacion >= :puntuacion) "
+			+ "AND (:descripcion is null OR ra.descripcion >= :descripcion) ")
 
-	public List<RankingDTO> buscaRanking(@Param("rankingId") String rankingId, @Param("puntuacion") String puntuacion);
+	public List<RankingDTO> buscaRanking(@Param("rankingId") String rankingId, @Param("puntuacion") String puntuacion,
+			@Param("descripcion") String descripcion);
 }
