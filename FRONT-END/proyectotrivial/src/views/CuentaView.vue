@@ -2,8 +2,8 @@
     <div class="container d-flex justify-content-center">
         <div class="card p-3 py-4">
             <div class="text-center">
-                <img src="https://us.123rf.com/450wm/hugok1000/hugok10001905/hugok1000190500198/123291745-ilustraci%C3%B3n-de-avatar-de-perfil-predeterminado-en-azul-y-blanco-sin-persona.jpg"
-                    width="100" class="rounded-circle">
+                <!-- Eliminar la imagen de la URL y obtenerla del jugador -->
+                <img v-if="jugador && jugador.imagen" :src="jugador.imagen" width="100" class="rounded-circle">
                 <input class="inputFotito" type="file" @change="onFileChange">
                 <h3 class="mt-2">{{ jugador ? jugador.name : '---' }}</h3>
                 <div class="row mt-3 mb-3">
@@ -19,7 +19,8 @@
                 <hr class="line">
 
                 <small class="mt-4">Descripción del jugador</small>
-                <template v-if="!editandoDescripcion && !guardado">
+                <template v-if="!editandoDescripcion && !guardado && !jugador.descripcion">
+                    <!-- Ocultar el input si la descripción ya existe -->
                     <input type="text" v-model="nuevaDescripcion" class="form-control"
                         placeholder="Añadir descripción..." :disabled="guardado">
                 </template>
@@ -29,7 +30,8 @@
                         placeholder="Añadir descripción..." :disabled="guardado">
                 </template>
 
-                <button class="botonGuardarDescripcion" @click="guardarDescripcion"
+                <!-- Ocultar el botón de guardar si la descripción ya ha sido escrita -->
+                <button v-if="editandoDescripcion || (!jugador.descripcion && !guardado)" class="botonGuardarDescripcion" @click="guardarDescripcion"
                     :disabled="guardado || nuevaDescripcion.trim() === ''">Guardar</button>
                 <template v-if="guardado">
                     <div class="mt-4">
@@ -56,7 +58,7 @@
                     <button class="neo-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"
                             class="imagen">
                             <path fill="#e40c0c"
-                                d="M549.7 124.1c-6.3-23.7-24.8-42.3-48.3-48.6C458.8 64 288 64 288 64S117.2 64 74.6 75.5c-23.5 6.3-42 24.9-48.3 48.6-11.4 42.9-11.4 132.3-11.4 132.3s0 89.4 11.4 132.3c6.3 23.7 24.8 41.5 48.3 47.8C117.2 448 288 448 288 448s170.8 0 213.4-11.5c23.5-6.3 42-24.2 48.3-47.8 11.4-42.9 11.4-132.3 11.4-132.3s0-89.4-11.4-132.3zm-317.5 213.5V175.2l142.7 81.2-142.7 81.2z" />
+                                d="M549.7 124.1c-6.3-23.7-24.8-42.3-48.3-48.6C458.8 64 288 64 288 64S117.2 64 74.6 75.5c-23.5 6.3-42 24.9-48.3 48.6c-11.4 42.9-11.4 132.3-11.4 132.3s0 89.4 11.4 132.3c6.3 23.7 24.8 41.5 48.3 47.8C117.2 448 288 448 288 448s170.8 0 213.4-11.5c23.5-6.3 42-24.2 48.3-47.8c11.4-42.9 11.4-132.3 11.4-132.3s0-89.4-11.4-132.3zm-317.5 213.5V175.2l142.7 81.2-142.7 81.2z" />
                         </svg></button>
                     <button class="neo-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
                             class="imagen">
@@ -79,7 +81,12 @@ export default {
     data() {
         return {
             imagen: '',
-            jugador: null,
+            jugador: {
+                name: '',
+                score: '',
+                ranking: '',
+                descripcion: ''
+            },
             nuevaDescripcion: '',
             editandoDescripcion: false,
             guardado: false,
@@ -114,9 +121,10 @@ export default {
             this.guardado = false;
         },
         eliminarDescripcion() {
-            this.nuevaDescripcion = '';
-            this.guardado = false;
-            this.editandoDescripcion = false;
+            this.jugador.descripcion = ''; // Elimina la descripción del jugador
+            this.nuevaDescripcion = ''; // Reinicia el valor del input de texto
+            this.guardado = false; // Restablece el estado del botón de guardado
+            this.editandoDescripcion = false; // Asegura que el modo de edición esté desactivado
         },
         onFileChange(event) {
             const file = event.target.files[0];
