@@ -106,19 +106,21 @@ export default {
             this.jugador.rankingId = this.rankingId; // Asigna el valor de la prop rankingId al objeto jugador
         },
         actualizarDescripcion() {
-            axios.put(`http://localhost:8080/trivial/v1/ranking`, { descripcion: this.jugador.descripcion })
-                .then(response => {
-                    console.log(this.jugador.descripcion);
-                    console.log('Descripción actualizada:', response);
-                    this.jugador.descripcion = descripcion;
-                    this.$router.push('/ranking');
-                })
-                .catch(error => {
-                    console.error('Error al actualizar la descripción:', error);
-                    console.log(this.jugador.descripcion);
-                    console.log(this.nuevaDescripcion);
-                });
-        },
+  const rankingData = {
+    rankingId: this.rankingId, // Asegúrate de que rankingId esté disponible
+    descripcion: this.jugador.descripcion
+  };
+
+  axios.put(`http://localhost:8080/trivial/v1/ranking/${this.rankingId}`, rankingData)
+    .then(response => {
+      console.log('Descripción actualizada:', response);
+      // Redirigir a la página de administrador después de actualizar
+      this.$router.push('/ranking');
+    })
+    .catch(error => {
+      console.error('Error al actualizar la descripción:', error);
+    });
+},
         eliminarDescripcion() {
             axios.delete(`http://localhost:8080/trivial/v1/ranking/${this.jugador.rankingId}`)
                 .then(response => {
