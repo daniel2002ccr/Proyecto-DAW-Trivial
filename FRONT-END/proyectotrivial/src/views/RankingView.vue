@@ -41,13 +41,25 @@ export default {
     return {
       rankingData: [],
       rankingId: 1,
+      userName: '',
       puntuacion: "100",
       descripcion: '',
-      players: []
+      players: [],
+      model: {
+        usuario: {
+          userName: '',
+          userEmail: '',
+          userPasswd: '',
+          userImage: null,
+          cantidad: '',
+          activo: 0
+        }
+      }
     };
   },
   mounted() {
     this.getRanking();
+    this.insertarJugador();
 
     const savedPlayers = JSON.parse(localStorage.getItem('players'));
 
@@ -80,6 +92,20 @@ export default {
     localStorage.setItem('players', JSON.stringify(this.players));
   },
   methods: {
+    insertarJugador() {
+      let formData = new FormData();
+      formData.append('rankingId', this.rankingId);
+      formData.append('userName', this.model.usuario.userName);
+      formData.append('puntuacion', this.puntuacion);
+      formData.append('descripcion', this.descripcion);
+
+      axios.post('http://localhost:8080/trivial/v1/ranking', formData)
+        .then(response => {
+          window.location.href = 'http://localhost:8081/ranking';
+        })
+        .catch(error => {
+        });
+    },
     getRanking() {
       axios.get('http://localhost:8080/trivial/v1/ranking')
         .then(response => {
@@ -104,8 +130,42 @@ export default {
           });
         });
     },
+    async insertarJugador() {
+      let jugadorExistente = this.players.find(player => player.name === this.name);
+
+      if (jugadorExistente) {
+        if (parseInt(this.puntuacion) > parseInt(jugadorExistente.puntuacion)) {
+          jugadorExistente.puntuacion = parseInt(this.puntuacion);
+          jugadorExistente.descripcion = this.descripcion;
+          axios.put(`http://localhost:8080/trivial/v1/ranking/${jugadorExistente.rankingId}`, {
+            puntuacion: parseInt(this.puntuacion),
+            descripcion: this.descripcion
+          })
+            .then(response => {
+              alert('Datos del jugador actualizados con éxito');
+            })
+            .catch(error => {
+            });
+        } else {
+          alert('Ya existe un jugador con el mismo nombre en el ranking con una puntuación igual o mayor.');
+        }
+      } else {
+        let formData = new FormData();
+        formData.append('userName', this.name);
+        formData.append('puntuacion', this.puntuacion);
+        formData.append('descripcion', this.descripcion);
+
+        axios.post('http://localhost:8080/trivial/v1/ranking', formData)
+          .then(response => {
+            alert('Jugador insertado en el ranking con éxito');
+            window.location.href = 'http://localhost:8081/ranking';
+          })
+          .catch(error => {
+          });
+      }
+    },
     getSourceName(player) {
-      return player.source === 'database' ? player.userId.userName : player.name;
+      return player.source === 'database' && player.userId ? player.userId.userName : player.name;
     },
     getSourceScore(player) {
       return player.source === 'database' ? player.puntuacion : player.score;
@@ -113,20 +173,18 @@ export default {
     actualizarDescripcion(player) {
       axios.put(`http://localhost:8080/trivial/v1/ranking/${player.rankingId}`, { descripcion: player.descripcion })
         .then(response => {
-          console.log('Descripción actualizada con éxito:', response.data);
+          alert('Descripción actualizada con éxito');
         })
         .catch(error => {
-          console.error('Error al actualizar la descripción:', error);
         });
     },
     eliminarDescripcion(player, index) {
       axios.delete(`http://localhost:8080/trivial/v1/ranking/${player.rankingId}`)
         .then(response => {
           this.players[index].descripcion = '';
-          console.log('Descripción eliminada con éxito:', response.data);
+          alert('Descripción eliminada con éxito');
         })
         .catch(error => {
-          console.error('Error al eliminar la descripción:', error);
         });
     },
     getReadableDifficulty(difficulty) {

@@ -2,7 +2,6 @@
     <div class="container d-flex justify-content-center">
         <div class="card p-3 py-4">
             <div class="text-center">
-                <!-- Eliminar la imagen de la URL y obtenerla del jugador -->
                 <img v-if="jugador && jugador.imagen" :src="jugador.imagen" width="100" class="rounded-circle">
                 <input class="inputFotito" type="file" @change="onFileChange">
                 <h3 class="mt-2">{{ jugador ? jugador.name : '---' }}</h3>
@@ -67,7 +66,7 @@ import { mapGetters } from 'vuex';
 
 export default {
     props: {
-        rankingId: Number, // Asegúrate de que la prop rankingId esté siendo pasada al componente
+        rankingId: Number,
         userId: Number,
         userName: String,
         puntuacion: Number,
@@ -78,7 +77,7 @@ export default {
         return {
             imagen: '',
             jugador: {
-                rankingId: '1', // Inicializar rankingId con el valor de la prop
+                rankingId: '1',
                 name: '',
                 score: '',
                 ranking: '',
@@ -101,34 +100,28 @@ export default {
     },
     methods: {
         cargarDatosJugador() {
-            const {rankingId, name, score, ranking, descripcion} = this.$route.params;
-            this.jugador = {rankingId, name, score, ranking, descripcion};
-            this.jugador.rankingId = this.rankingId; // Asigna el valor de la prop rankingId al objeto jugador
+            const { rankingId, name, score, ranking, descripcion } = this.$route.params;
+            this.jugador = { rankingId, name, score, ranking, descripcion };
+            this.jugador.rankingId = this.rankingId;
         },
         actualizarDescripcion() {
-  const rankingData = {
-    rankingId: this.rankingId, // Asegúrate de que rankingId esté disponible
-    descripcion: this.jugador.descripcion
-  };
-
-  axios.put(`http://localhost:8080/trivial/v1/ranking/${this.rankingId}`, rankingData)
-    .then(response => {
-      console.log('Descripción actualizada:', response);
-      // Redirigir a la página de administrador después de actualizar
-      this.$router.push('/ranking');
-    })
-    .catch(error => {
-      console.error('Error al actualizar la descripción:', error);
-    });
-},
+            const rankingData = {
+                rankingId: this.rankingId,
+                descripcion: this.jugador.descripcion
+            };
+            axios.put(`http://localhost:8080/trivial/v1/ranking/${this.rankingId}`, rankingData)
+                .then(response => {
+                    this.$router.push('/ranking');
+                })
+                .catch(error => {
+                });
+        },
         eliminarDescripcion() {
             axios.delete(`http://localhost:8080/trivial/v1/ranking/${this.jugador.rankingId}`)
                 .then(response => {
-                    console.log('Descripción eliminada:', response);
-                    this.jugador.descripcion = ''; // Vacía el contenido del input de descripción
+                    this.jugador.descripcion = '';
                 })
                 .catch(error => {
-                    console.error('Error al eliminar la descripción:', error);
                 });
         },
         /* guardarDescripcion() {

@@ -53,9 +53,10 @@ DROP TABLE IF EXISTS `ranking`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `ranking` (
   `ranking_id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int NOT NULL,
-  `ID_Categoria` int NOT NULL,
+  `user_id` int NULL,
+  `ID_Categoria` int NULL,
   `puntuacion` int DEFAULT NULL,
+   `descripcion` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ranking_id`),
   KEY `user_id` (`user_id`),
   KEY `ID_Categoria` (`ID_Categoria`),
@@ -70,7 +71,7 @@ CREATE TABLE `ranking` (
 
 LOCK TABLES `ranking` WRITE;
 /*!40000 ALTER TABLE `ranking` DISABLE KEYS */;
-INSERT INTO `ranking` VALUES (1,1,1,100),(2,2,1,90),(3,3,2,95);
+INSERT INTO `ranking` VALUES (1,1,1,100, 'hola1'),(2,2,1,90, 'hola2'),(3,3,2,95, 'hola3');
 /*!40000 ALTER TABLE `ranking` ENABLE KEYS */;
 UNLOCK TABLES;
 

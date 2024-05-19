@@ -46,16 +46,16 @@ const routes = [
     name: 'preguntas',
     component: PreguntasView
   },
-  /* {
-    path: '/admin',
+/* {
+    path: '/login',
     name: 'login',
     component: LoginView
-  },
+  }, */
   {
     path: '/login',
-    name: 'admin',
+    name: 'login',
     component: AdminsView
-  }, */
+  }, 
   {
     path: '/login/crearUser',
     name: 'InsertarUsuarioView',
@@ -87,11 +87,11 @@ const routes = [
     name: 'AvisoLegal',
     component: AvisoLegal
   },
-  {
+ /* {
     path: '/login',
     name: 'login',
     component: Login
-  },
+  }, */
   {
     path: '/admin',
     name: 'admin',
