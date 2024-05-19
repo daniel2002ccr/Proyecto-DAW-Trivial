@@ -12,8 +12,8 @@ import com.proyecto.trivial.dtos.UsersDTO;
 import com.proyecto.trivial.entities.UserEntity;
 
 @Repository
-//public interface IUsersRepository extends CrudRepository<UserEntity, Integer> {
-public interface IUsersRepository extends JpaRepository<UserEntity, Integer> {
+public interface IUsersRepository extends CrudRepository<UserEntity, Integer> {
+//public interface IUsersRepository extends JpaRepository<UserEntity, Integer> {
 
 	@Query("SELECT new com.proyecto.trivial.dtos.UsersDTO(u.userId, u.userName, u.userPasswd, u.userEmail, u.userImage, u.cantidad, u.activo) "
 			+ "FROM com.proyecto.trivial.entities.UserEntity u "

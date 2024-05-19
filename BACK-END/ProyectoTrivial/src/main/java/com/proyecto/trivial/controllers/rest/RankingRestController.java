@@ -58,14 +58,50 @@ public class RankingRestController {
 		rankingRepository.save(ranking);
 		return new ResponseEntity<>("Ranking insertado con éxito.", HttpStatus.OK);
 	}
+	
+//    @PutMapping("/ranking/{id}")
+//    public ResponseEntity<String> actualizarRanking(@RequestBody RankingEntity ranking, @PathVariable int id) {
+//        // Verifica si el registro existe
+//        Optional<RankingEntity> rankingOptional = rankingRepository.findById(id);
+//        if (!rankingOptional.isPresent()) {
+//            return new ResponseEntity<>("No se encontró el registro con el ID proporcionado.", HttpStatus.NOT_FOUND);
+//        }
+//
+//        // Actualiza el registro
+//        RankingEntity existingRanking = rankingOptional.get();
+//        existingRanking.setUserId(ranking.getUserId());
+//        existingRanking.setPuntuacion(ranking.getPuntuacion());
+//        existingRanking.setDescripcion(ranking.getDescripcion());
+//
+//        // Guarda los cambios
+//        rankingRepository.save(existingRanking);
+//
+//        return new ResponseEntity<>("Ranking actualizado con éxito.", HttpStatus.OK);
+//    }
 
-	@PutMapping("/ranking")
-	public ResponseEntity actualizarRanking(@RequestBody RankingEntity ranking) {
-
-		rankingRepository.save(ranking);
-		return new ResponseEntity<>("Ranking actualizado con éxito.", HttpStatus.OK);
+	@DeleteMapping("/ranking/{id}")
+	public ResponseEntity borrarDescripcion(@PathVariable("id") Integer id) {
+	    RankingEntity r = rankingRepository.findById(id).get();
+	    r.setDescripcion("");
+	    rankingRepository.save(r);
+	    return new ResponseEntity<>("Descripción borrada con éxito", HttpStatus.OK);
 	}
-//	
+
+
+	@PutMapping("/ranking/{id}")
+	public ResponseEntity actualizarRanking(@PathVariable("id") Integer id, @RequestBody RankingEntity ranking) {
+	    Optional<RankingEntity> rankingOptional = rankingRepository.findById(id);
+	    if (rankingOptional.isPresent()) {
+	        RankingEntity existingRanking = rankingOptional.get();
+	        existingRanking.setDescripcion(ranking.getDescripcion());
+	        rankingRepository.save(existingRanking);
+	        return new ResponseEntity<>("Ranking actualizado con éxito.", HttpStatus.OK);
+	    } else {
+	        return new ResponseEntity<>("No se encontró el ranking con ID: " + id, HttpStatus.NOT_FOUND);
+	    }
+	}
+
+	
 //	@DeleteMapping("/ranking/{id}/descripcion")
 //    public ResponseEntity vaciarDescripcion(@PathVariable("id") Integer id) {
 //        try {
@@ -100,16 +136,16 @@ public class RankingRestController {
 //		return new ResponseEntity<>("Descripción borrada con éxito", HttpStatus.OK);
 //	}
 	
-	@DeleteMapping("/ranking/{id}/descripcion")
-    public ResponseEntity<String> borrarDescripcion(@PathVariable("id") Integer id) {
-        Optional<RankingEntity> rankingOpt = rankingRepository.findById(id);
-        if (rankingOpt.isPresent()) {
-            RankingEntity ranking = rankingOpt.get();
-            ranking.setDescripcion("");
-            rankingRepository.save(ranking);
-            return new ResponseEntity<>("Descripción borrada con éxito", HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("Ranking no encontrado.", HttpStatus.NOT_FOUND);
-        }
-    }
+//	@DeleteMapping("/ranking/{id}/descripcion")
+//    public ResponseEntity<String> borrarDescripcion(@PathVariable("id") Integer id) {
+//        Optional<RankingEntity> rankingOpt = rankingRepository.findById(id);
+//        if (rankingOpt.isPresent()) {
+//            RankingEntity ranking = rankingOpt.get();
+//            ranking.setDescripcion("");
+//            rankingRepository.save(ranking);
+//            return new ResponseEntity<>("Descripción borrada con éxito", HttpStatus.OK);
+//        } else {
+//            return new ResponseEntity<>("Ranking no encontrado.", HttpStatus.NOT_FOUND);
+//        }
+//    }
 }

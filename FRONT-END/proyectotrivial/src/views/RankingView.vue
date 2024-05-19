@@ -37,7 +37,7 @@ export default {
   data() {
     return {
       rankingData: [],
-      rankingId: 1,
+      rankingId: '1',
       puntuacion: "100",
       descripcion: '',
       players: []
@@ -125,11 +125,13 @@ export default {
       let playerName = player.name;
       let playerScore = player.score;
       let playerDescripcion = player.descripcion;
+        let playerId = player.id;
 
       if (player.source === 'database') {
         playerName = player.userId.userName;
         playerScore = player.puntuacion;
         playerDescripcion = player.descripcion;
+        playerId = player.rankingId;
       }
       this.$router.push({
         name: 'CuentaView',
@@ -137,9 +139,16 @@ export default {
           name: playerName,
           score: playerScore,
           ranking: index + 1,
-          descripcion: playerDescripcion
+          descripcion: playerDescripcion,
+          id: playerId
         }
       });
+    },
+        actualizarDescripcionJugador(jugadorActualizado) {
+        const playerIndex = this.players.findIndex(player => player.id === jugadorActualizado.id);
+        if (playerIndex !== -1) {
+            this.players[playerIndex].descripcion = jugadorActualizado.descripcion;
+        }
     }
   }
 };

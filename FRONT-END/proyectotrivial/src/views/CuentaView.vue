@@ -17,13 +17,15 @@
                     </div>
                 </div>
                 <hr class="line">
-
+                <h4>puta mierda</h4>
+                <span class="num">{{ jugador ? jugador.rankingId : '---' }}</span>
+                <span class="num">{{ jugador ? jugador.userId : '---' }}</span>
                 <small class="mt-4">Descripción del jugador</small>
                 <br>
                 <input type="text" v-model="jugador.descripcion" class="form-control">
                 <br>
-                <button class="botonGuardarDescripcion" @click="guardarDescripcion" :disabled="!jugador.descripcion.trim()">Guardar</button>
-                <button class="botonEliminarDescripcion" @click="eliminarDescripcion" v-if="jugador.descripcion">Eliminar</button>
+                <button class="botonGuardarDescripcion" @click="actualizarDescripcion">Actualizar</button>
+                <button class="botonEliminarDescripcion" @click="eliminarDescripcion">Eliminar</button>
                 <div class="social-buttons mt-5">
                     <button class="neo-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"
                             class="imagen">
@@ -64,10 +66,19 @@ import axios from 'axios';
 import { mapGetters } from 'vuex';
 
 export default {
+    props: {
+        rankingId: Number, // Asegúrate de que la prop rankingId esté siendo pasada al componente
+        userId: Number,
+        userName: String,
+        puntuacion: Number,
+        ranking: Number,
+        descripcion: String
+    },
     data() {
         return {
             imagen: '',
             jugador: {
+                rankingId: '1', // Inicializar rankingId con el valor de la prop
                 name: '',
                 score: '',
                 ranking: '',
@@ -90,31 +101,32 @@ export default {
     },
     methods: {
         cargarDatosJugador() {
-            const { name, score, ranking, descripcion } = this.$route.params;
-            this.jugador = { name, score, ranking, descripcion };
+            const {rankingId, name, score, ranking, descripcion} = this.$route.params;
+            this.jugador = {rankingId, name, score, ranking, descripcion};
+            this.jugador.rankingId = this.rankingId; // Asigna el valor de la prop rankingId al objeto jugador
         },
-        guardarDescripcion() {
-            axios.put(`http://localhost:8080/v1/ranking/${this.jugador.id}`, this.jugador)
+        actualizarDescripcion() {
+            axios.put(`http://localhost:8080/trivial/v1/ranking`, { descripcion: this.jugador.descripcion })
                 .then(response => {
+                    console.log(this.jugador.descripcion);
                     console.log('Descripción actualizada:', response);
-                })
-                .catch(error => {
-                    console.error('Error al actualizar la descripción:', error);
-                });
-        },
-        eliminarDescripcion() {
-            axios.delete(`http://localhost:8080/v1/ranking/${this.jugador.name}`, this.jugador)
-                .then(response => {
-                    console.log('Descripción eliminada en la base de datos:', response);
-
-                    // Actualizar la descripción localmente
-                    this.jugador.descripcion = '';
-
-                    // Redirigir a la página de ranking
+                    this.jugador.descripcion = descripcion;
                     this.$router.push('/ranking');
                 })
                 .catch(error => {
-                    console.error('Error eliminando la descripción:', error);
+                    console.error('Error al actualizar la descripción:', error);
+                    console.log(this.jugador.descripcion);
+                    console.log(this.nuevaDescripcion);
+                });
+        },
+        eliminarDescripcion() {
+            axios.delete(`http://localhost:8080/trivial/v1/ranking/${this.jugador.rankingId}`)
+                .then(response => {
+                    console.log('Descripción eliminada:', response);
+                    this.jugador.descripcion = ''; // Vacía el contenido del input de descripción
+                })
+                .catch(error => {
+                    console.error('Error al eliminar la descripción:', error);
                 });
         },
         /* guardarDescripcion() {

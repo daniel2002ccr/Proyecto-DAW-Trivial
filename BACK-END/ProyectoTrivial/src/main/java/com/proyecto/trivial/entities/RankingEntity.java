@@ -54,6 +54,21 @@ public class RankingEntity {
 		this.descripcion = descripcion;
 	}
 
+	public RankingEntity(Integer rankingId, UserEntity userId, Integer puntuacion, String descripcion) {
+		super();
+		this.rankingId = rankingId;
+		this.userId = userId;
+		this.puntuacion = puntuacion;
+		this.descripcion = descripcion;
+	}
+
+	public RankingEntity(Integer rankingId, Integer puntuacion, String descripcion) {
+		super();
+		this.rankingId = rankingId;
+		this.puntuacion = puntuacion;
+		this.descripcion = descripcion;
+	}
+
 	public Integer getRankingId() {
 		return rankingId;
 	}
