@@ -77,7 +77,7 @@ export default {
 
             axios.post('http://localhost:8080/trivial/v1/users', formData)
                 .then(response => {
-                    window.location.href = 'http://localhost:8081/login';
+                    window.location.href = 'http://localhost:8081/admin';
                 })
                 .catch(error => {
                 });

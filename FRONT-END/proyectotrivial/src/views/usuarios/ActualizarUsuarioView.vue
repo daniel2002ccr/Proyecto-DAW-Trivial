@@ -15,7 +15,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="">Email</label>
-                    <input type="text" v-model="model.usuario.userEmail" class="form-control" required>
+                    <input type="text" :value="userEmail" class="form-control" readonly>
                 </div>
                 <div class="mb-3">
                     <label for="">Foto de perfil</label>
@@ -75,11 +75,19 @@ export default {
         handleFileUpload(event) {
             this.model.usuario.userImage = event.target.files[0];
         },
+        obtenerDatosUsuario() {
+            axios.get(`http://localhost:8080/trivial/v1/users/${this.userId}`, this.model.usuario)
+                .then(response => {
+                  datos =  response.data();
+                })
+                .catch(error => {
+                });
+        },
         actualizarUsuario() {
             axios.put(`http://localhost:8080/trivial/v1/users/${this.userId}`, this.model.usuario)
                 .then(response => {
                     alert('Usuario actualizado con éxito.');
-                    this.$router.push('/login');
+                    this.$router.push('/admin');
                 })
                 .catch(error => {
                 });

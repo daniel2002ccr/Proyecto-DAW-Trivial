@@ -4,7 +4,6 @@ import RankingView from '../views/RankingView.vue'
 import CuentaView from '../views/CuentaView.vue'
 import NoticiasView from '../views/NoticiasView.vue'
 import PreguntasView from '../views/PreguntasView.vue'
-import LoginView from '../views/LoginView.vue'
 import AdminsView from '../views/usuarios/AdminsView.vue'
 import InsertarUsuarioView from '../views/usuarios/InsertarUsuarioView.vue'
 import ActualizarUsuarioView from '../views/usuarios/ActualizarUsuarioView.vue'
@@ -12,8 +11,8 @@ import SeleccionDificultad from '../components/SeleccionDificultad.vue';
 import PoliticaProteccionDatos from '../components/PoliticaProteccionDatos.vue';
 import PoliticaCookies from '../components/PoliticaCookies.vue';
 import AvisoLegal from '../components/AvisoLegal.vue';
-import Login from '@/components/Login.vue';
-import Admin from '@/components/Admin.vue';
+import RegistrarView from '../views/RegistrarView';
+import LoginView from '../views/LoginView'
 
 const routes = [
   {
@@ -46,23 +45,19 @@ const routes = [
     name: 'preguntas',
     component: PreguntasView
   },
-/* {
-    path: '/login',
-    name: 'login',
-    component: LoginView
-  }, */
+
   {
-    path: '/login',
-    name: 'login',
+    path: '/admin',
+    name: 'admin',
     component: AdminsView
   }, 
   {
-    path: '/login/crearUser',
+    path: '/admin/crearUser',
     name: 'InsertarUsuarioView',
     component: InsertarUsuarioView
   },
   {
-    path: '/login/usuarios/:userId/editarUsuario',
+    path: '/admin/usuarios/:userId/editarUsuario',
     name: 'ActualizarUsuarioView',
     component: ActualizarUsuarioView
   },
@@ -87,17 +82,24 @@ const routes = [
     name: 'AvisoLegal',
     component: AvisoLegal
   },
- /* {
-    path: '/login',
-    name: 'login',
-    component: Login
-  }, */
   {
+    path: '/registrar',
+    name: 'registrarView',
+    component: RegistrarView
+  },
+  {
+    path: '/login',
+    name: 'loginView',
+    component: LoginView
+  },
+
+
+  /*{
     path: '/admin',
     name: 'admin',
     component: Admin,
-   /* meta: { requiresAuth: true }, */
-  }
+   /* meta: { requiresAuth: true }, 
+  } */
 ]
 
 const router = createRouter({

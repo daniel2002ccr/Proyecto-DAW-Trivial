@@ -1,55 +1,101 @@
 <template>
-    <div>
-        <h2>Inicio de Sesión</h2>
-        <form @submit.prevent="admin">
-            <label for="username">Usuario:</label>
-            <input type="text" v-model="username" required />
-            <br />
-            <label for="password">Contraseña:</label>
-            <input type="password" v-model="password" required />
-            <br />
-            <button type="submit">Iniciar Sesión</button>
-        </form>
+    <div v-if="!isRegistered" id="containerLogIn" class="container">
+      <h1 class="tituloRegister">Log In</h1>
+      <form class="formularioRegister" @submit.prevent="login">
+        <div class="form-group">
+          <input type="email" v-model="email" class="form-control rounded" placeholder="Email" required>
+        </div>
+        <div class="form-group">
+          <input type="password" v-model="password" class="form-control rounded" placeholder="Password" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Log In</button>
+      </form>
     </div>
-</template>
-
-<script>
-import axios from 'axios'
-
+  </template>
+  
+  <script>
 export default {
-    name: 'admin',
-    data() {
-        return {
-            username: '',
-            password: ''
-        }
-    },
-    methods: {
-        login() {
-            fetch('/admin', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username: this.username, password: this.password })
-            })
-                .then(response => {
-                    if (response.ok) {
-                        return response.json();
-                    } else {
-                        throw new Error('Fallo en la autenticación');
-                    }
-                })
-                .then(data => {
-                    localStorage.setItem('token', data.token);
-                    this.$router.push('/admin');
-                })
-                .catch(error => {
-                    alert(error.message);
-                });
-        }
+  data() {
+    return {
+      email: '',
+      password: '',
+      isRegistered: false
     }
-};
+  },
+  created() {
+    this.checkRegistrationStatus();
+  },
+  methods: {
+    checkRegistrationStatus() {
+      this.isRegistered = JSON.parse(localStorage.getItem('registroExitoso')) || false;
+     /* if (!this.isRegistered) {
+        this.$router.push('/registrar');
+      }*/
+    },
+    async login() {
+     
+        const response = await fetch('http://localhost:8080/trivial/v1/users');
+        const users = await response.json();
+
+        const user = users.find(user => user.userEmail === this.email && user.userPasswd === this.password);
+
+        if (user) {
+          alert('Inicio de sesión correcto.');
+          localStorage.setItem('user', JSON.stringify(user)); 
+          localStorage.setItem('isLoggedIn', JSON.stringify(true)); 
+          this.$router.push('/seleccion-dificultad');
+        } else {
+          alert('Credenciales incorrectas.');
+        }
+     
+    }
+  }
+}
 </script>
 
-<style scoped></style>
+  
+  <style scoped>
+  body {
+    background-color: #F0F0F0;
+  }
+  
+  #containerLogIn {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .tituloRegister {
+    color: blue;
+  }
+  
+  .formularioRegister {
+    max-width: 400px;
+    width: 100%;
+  }
+  
+  .rounded {
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .register {
+    border-radius: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  
+  .mensaje {
+    margin-top: 20px;
+    color: green;
+  }
+  
+  .registrado {
+    margin-top: 20px;
+    color: rgb(61, 61, 61);
+  }
+  </style>
+  

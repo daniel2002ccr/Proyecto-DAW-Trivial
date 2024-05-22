@@ -3,9 +3,6 @@
     <form action="/admin">
       <input type="submit" class="botonInicioSesion" value="Acceso admin" to="/admin">
     </form>
-    <form action="/login">
-      <input type="submit" class="botonRegistro" value="Crear cuenta" to="/login">
-    </form>
     <img alt="Vue logo" src="../assets/logoTrivWorld.png" class="imagenLogo">
     <router-link to="/seleccion-dificultad" class="blinking-button">Iniciar partida</router-link>
   </div>

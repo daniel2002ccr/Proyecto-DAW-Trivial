@@ -114,7 +114,7 @@ CREATE TABLE `users` (
   `user_name` varchar(255) NOT NULL,
   `user_passwd` varchar(255) NOT NULL,
   `user_email` varchar(255) NOT NULL,
-  `user_image` longblob,
+  `user_image` longblob DEFAULT NULL,
   `cantidad` int DEFAULT NULL,
   `activo` int DEFAULT NULL,
   PRIMARY KEY (`user_id`),
@@ -143,3 +143,5 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2024-03-06 13:06:04
+
+select * from users;
