@@ -18,7 +18,7 @@
                             <th class="d-none d-md-table-cell"
                                 v-bind:class="{ 'd-none d-sm-table-cell': screenWidth < 425 }">Imagen</th>
                             <th class="d-none d-md-table-cell"
-                                v-bind:class="{ 'd-none d-sm-table-cell': screenWidth < 425 }">Cantidad</th>
+                                v-bind:class="{ 'd-none d-sm-table-cell': screenWidth < 425 }">Puntuación</th>
                             <th>Activo</th>
                             <th>Función a realizar</th>
                         </tr>
@@ -34,7 +34,7 @@
                                 v-bind:class="{ 'd-none d-sm-table-cell': screenWidth < 425 }"><img
                                     :src="'data:image/jpeg;base64,' + usuario.userImage" class="imagen-usuario" /></td>
                             <td class="d-none d-md-table-cell"
-                                v-bind:class="{ 'd-none d-sm-table-cell': screenWidth < 425 }">{{ usuario.cantidad }}
+                                v-bind:class="{ 'd-none d-sm-table-cell': screenWidth < 425 }">{{ usuario.puntuacion }}
                             </td>
                             <td>{{ usuario.activo }}</td>
                             <td>

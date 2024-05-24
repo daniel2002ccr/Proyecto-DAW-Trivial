@@ -1,118 +1,85 @@
 <template>
-    <div id="containerSignIn" class="container">
-      <h1 v-if="!registroExitoso" class="tituloRegister">¡¡Regístrate gratis ahora!!</h1>
-      <p v-if="registroExitoso" class="registrado">Registro Realizado Correctamente</p>
-      <form v-if="!registroExitoso" class="formularioRegister" @submit.prevent="register" :disabled="registroExitoso">
-        <div class="form-group">
-          <input type="email" v-model="email" class="form-control rounded" placeholder="Email" required>
-        </div>
-        <div class="form-group">
-          <input type="text" v-model="username" class="form-control rounded" placeholder="Nombre de usuario" required>
-        </div>
-        <div class="form-group">
-          <input type="password" v-model="password" class="form-control rounded" placeholder="Contraseña" required>
-        </div>
-        <button type="submit" class="btn btn-primary btn-block">Registrarse</button>
-      </form>
-    </div>
-  </template>
-  
-  <script>
-  export default {
-    data() {
+  <div class="container mt-5">
+      <div class="card">
+          <div class="card-header">
+              <h4>Regístrate gratis ahora</h4>
+          </div>
+          <div class="card-body">
+              <div class="mb-3">
+                  <label for="">Nombre de usuario:</label>
+                  <input type="text" v-model="model.usuario.userName" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                  <label for="">Email:</label>
+                  <input type="email" v-model="model.usuario.userEmail" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                  <label for="">Contraseña:</label>
+                  <input type="password" v-model="model.usuario.userPasswd" class="form-control" required>
+              </div>
+              <div class="mb-3">
+                  <label for="">Foto de perfil</label>
+                  <input type="file" @change="handleFileUpload" class="form-control">
+              </div>
+              <div class="mb-3">
+                  <button type="button" class="btn btn-primary" @click="guardarUsuario">Registrarse</button>
+              </div>
+              <p v-if="registroExitoso" class="mensaje">Registro realizado correctamente</p>
+          </div>
+      </div>
+  </div>
+</template>
+
+<script>
+import axios from 'axios';
+
+export default {
+  name: 'crearUsuario',
+  data() {
       return {
-        email: '',
-        username: '',
-        password: '',
-        imagen: '',
-        cantidad: 0,
-        registroExitoso: JSON.parse(localStorage.getItem('registroExitoso')) || false
+          model: {
+              usuario: {
+                  userName: '',
+                  userEmail: '',
+                  userPasswd: '',
+                  userImage: null,
+              }
+          },
+          registroExitoso: false
       }
-    },
-    methods: {
-        handleFileUpload(event) {
-            this.model.usuario.userImage = event.target.files[0];
-        },
-      async register() {
-        try {
-          const response = await fetch('http://localhost:8080/trivial/v1/users', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              userEmail: this.email,
-              userName: this.username,
-              userPasswd: this.password,
-              imagen: this.imagen,
-              cantidad: 0,
-              user_role: ["jugador"]
-            })
-          });
-  
-          if (response.ok) {
-            alert('Usuario registrado correctamente.');
-            this.email = '';
-            this.username = '';
-            this.password = '';
-            this.imagen = '',
-            this.cantidad = 0;
-            this.registroExitoso = true;
-            localStorage.setItem('registroExitoso', JSON.stringify(this.registroExitoso));
-            this.$router.push('/login'); 
-          } else {
-            alert('Este usuario ya existe');
-          }
-        } catch (error) {
-          alert(`Error: ${error.message || 'Error desconocido al intentar conectar con el servidor.'}`);
-        }
+  },
+  methods: {
+      handleFileUpload(event) {
+          this.model.usuario.userImage = event.target.files[0];
+      },
+      guardarUsuario() {
+          let formData = new FormData();
+          formData.append('userName', this.model.usuario.userName);
+          formData.append('userEmail', this.model.usuario.userEmail);
+          formData.append('userPasswd', this.model.usuario.userPasswd);
+          formData.append('userImage', this.model.usuario.userImage);
+          formData.append('puntuacion', 0);
+          formData.append('activo', 1);
+
+          axios.post('http://localhost:8080/trivial/v1/users', formData)
+              .then(response => {
+                  alert('Registro realizado con éxito.');
+                  this.registroExitoso = true;
+                  this.$router.push('/login')
+              })
+              .catch(error => {
+                  alert('Error al registrar el usuario.');
+              });
       }
-    }
+  },
+  beforeMount() {
+      this.registroExitoso = false;
   }
-  </script>
-  
-  <style scoped>
-  body {
-    background-color: #F0F0F0;
-  }
-  
-  #containerSignIn {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
-  
-  .tituloRegister {
-    color: blue;
-  }
-  
-  .formularioRegister {
-    max-width: 400px;
-    width: 100%;
-  }
-  
-  .rounded {
-    border-radius: 10px;
-    padding: 10px;
-    margin-bottom: 10px;
-  }
-  
-  .register {
-    border-radius: 10px;
-    padding: 10px 20px;
-    cursor: pointer;
-  }
-  
-  .mensaje {
-    margin-top: 20px;
-    color: green;
-  }
-  
-  .registrado {
-    margin-top: 20px;
-    color: rgb(61, 61, 61);
-  }
-  </style>
-  
+}
+</script>
+
+<style scoped>
+.mensaje {
+  color: green;
+}
+</style>

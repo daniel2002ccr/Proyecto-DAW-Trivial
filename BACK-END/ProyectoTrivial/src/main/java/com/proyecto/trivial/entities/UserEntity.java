@@ -30,8 +30,8 @@ public class UserEntity {
 	@Column(name = "user_image")
 	private byte[] userImage;
 
-	@Column(name = "cantidad")
-	private Integer cantidad;
+	@Column(name = "puntuacion")
+	private Integer puntuacion;
 
 	@Column(name = "activo")
 	private Integer activo;
@@ -41,14 +41,14 @@ public class UserEntity {
 	}
 
 	public UserEntity(Integer userId, String userName, String userPasswd, String userEmail, byte[] userImage,
-			Integer cantidad, Integer activo) {
+			Integer puntuacion, Integer activo) {
 		super();
 		this.userId = userId;
 		this.userName = userName;
 		this.userPasswd = userPasswd;
 		this.userEmail = userEmail;
 		this.userImage = userImage;
-		this.cantidad = cantidad;
+		this.puntuacion = puntuacion;
 		this.activo = activo;
 	}
 
@@ -92,12 +92,12 @@ public class UserEntity {
 		this.userImage = userImage;
 	}
 
-	public Integer getCantidad() {
-		return cantidad;
+	public Integer getPuntuacion() {
+		return puntuacion;
 	}
 
-	public void setCantidad(Integer cantidad) {
-		this.cantidad = cantidad;
+	public void setPuntuacion(Integer puntuacion) {
+		this.puntuacion = puntuacion;
 	}
 
 	public Integer getActivo() {

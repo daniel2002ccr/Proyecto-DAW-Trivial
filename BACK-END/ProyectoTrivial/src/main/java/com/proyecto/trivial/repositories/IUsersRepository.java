@@ -15,17 +15,17 @@ import com.proyecto.trivial.entities.UserEntity;
 public interface IUsersRepository extends CrudRepository<UserEntity, Integer> {
 //public interface IUsersRepository extends JpaRepository<UserEntity, Integer> {
 
-	@Query("SELECT new com.proyecto.trivial.dtos.UsersDTO(u.userId, u.userName, u.userPasswd, u.userEmail, u.userImage, u.cantidad, u.activo) "
+	@Query("SELECT new com.proyecto.trivial.dtos.UsersDTO(u.userId, u.userName, u.userPasswd, u.userEmail, u.userImage, u.puntuacion, u.activo) "
 			+ "FROM com.proyecto.trivial.entities.UserEntity u "
 			+ "WHERE (:userId is null OR CAST (u.userId AS String) LIKE CONCAT('%', :userId, '%')) "
 			+ "AND (:userName is null OR u.userName LIKE CONCAT('%', :userName, '%')) "
 			+ "AND (:userPasswd is null OR u.userPasswd LIKE CONCAT('%', :userPasswd, '%')) "
 			+ "AND (:userEmail is null OR u.userEmail LIKE CONCAT('%', :userEmail, '%')) "
 			+ "AND (:userImage is null OR u.userImage = :userImage) "
-			+ "AND (:cantidad is null OR u.cantidad >= :cantidad) " + "AND (:activo is null OR u.activo = :activo)")
+			+ "AND (:puntuacion is null OR u.puntuacion >= :puntuacion) " + "AND (:activo is null OR u.activo = :activo)")
 	public List<UsersDTO> buscaUsuarios(@Param("userId") String userId, @Param("userName") String userName,
 			@Param("userPasswd") String userPasswd, @Param("userEmail") String userEmail,
-			@Param("userImage") String userImage, @Param("cantidad") Integer cantidad, @Param("activo") Integer activo);
+			@Param("userImage") String userImage, @Param("puntuacion") Integer cantidad, @Param("activo") Integer activo);
 	
 	  UserEntity findByUserName(String userName);
 }

@@ -44,7 +44,7 @@ public class UsersRestController {
 		return usersRepository.findById(id);
 	}
 
-	@GetMapping(value = "/users", params = { "userId", "userName", "userPasswd", "userEmail", "userImage", "cantidad",
+	@GetMapping(value = "/users", params = { "userId", "userName", "userPasswd", "userEmail", "userImage", "puntuacion",
 			"activo" })
 	public List<UsersDTO> obtenerTodosUsuariosConFiltros(
 			@RequestParam(value = "userId", required = false) Integer userId,
@@ -52,12 +52,12 @@ public class UsersRestController {
 			@RequestParam(value = "userPasswd", required = false) String userPasswd,
 			@RequestParam(value = "userEmail", required = false) String userEmail,
 			@RequestParam(value = "userImage", required = false) String userImage,
-			@RequestParam(value = "cantidad", required = false) String cantidad,
+			@RequestParam(value = "puntuacion", required = false) String puntuacion,
 			@RequestParam(value = "activo", required = false) String activo) {
 
-		Integer cantidadInteger = null;
-		if (!cantidad.equals("")) {
-			cantidadInteger = Integer.parseInt(cantidad);
+		Integer puntuacionInteger = null;
+		if (!puntuacion.equals("")) {
+			puntuacionInteger = Integer.parseInt(puntuacion);
 		}
 
 		Integer activoInteger = null;
@@ -65,14 +65,14 @@ public class UsersRestController {
 			activoInteger = Integer.parseInt(activo);
 		}
 		List<UsersDTO> u = usersRepository.buscaUsuarios(userId.toString(), userName, userPasswd, userEmail, userImage,
-				cantidadInteger, activoInteger);
+				puntuacionInteger, activoInteger);
 		return u;
 	}
 
 	@PostMapping("/users")
 	public ResponseEntity<?> insertarUsuario(@RequestParam("userName") String userName,
 			@RequestParam("userEmail") String userEmail, @RequestParam("userPasswd") String userPasswd,
-			@RequestParam("userImage") MultipartFile userImage, @RequestParam("cantidad") Integer cantidad,
+			@RequestParam("userImage") MultipartFile userImage, @RequestParam("puntuacion") Integer puntuacion,
 			@RequestParam("activo") Integer activo) {
 		try {
 			UserEntity user = new UserEntity();
@@ -80,7 +80,7 @@ public class UsersRestController {
 			user.setUserEmail(userEmail);
 			user.setUserPasswd(userPasswd);
 			user.setUserImage(userImage.getBytes());
-			user.setCantidad(cantidad);
+			user.setPuntuacion(puntuacion);
 			user.setActivo(activo);
 
 			usersRepository.save(user);
@@ -104,7 +104,7 @@ public class UsersRestController {
 		existingUser.setUserName(user.getUserName());
 		existingUser.setUserEmail(user.getUserEmail());
 		existingUser.setUserImage(user.getUserImage());
-		existingUser.setCantidad(user.getCantidad());
+		existingUser.setPuntuacion(user.getPuntuacion());
 		existingUser.setActivo(user.getActivo());
 
 		usersRepository.save(existingUser);

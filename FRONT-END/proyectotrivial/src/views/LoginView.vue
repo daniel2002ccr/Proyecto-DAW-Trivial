@@ -28,27 +28,31 @@ export default {
   methods: {
     checkRegistrationStatus() {
       this.isRegistered = JSON.parse(localStorage.getItem('registroExitoso')) || false;
-     /* if (!this.isRegistered) {
+     if (!this.isRegistered) {
         this.$router.push('/registrar');
-      }*/
+      }
     },
     async login() {
-     
-        const response = await fetch('http://localhost:8080/trivial/v1/users');
-        const users = await response.json();
+    this.checkRegistrationStatus(); // Asegurarse de que isRegistered esté actualizado
 
-        const user = users.find(user => user.userEmail === this.email && user.userPasswd === this.password);
+    const response = await fetch('http://localhost:8080/trivial/v1/users');
+    const users = await response.json();
 
-        if (user) {
-          alert('Inicio de sesión correcto.');
-          localStorage.setItem('user', JSON.stringify(user)); 
-          localStorage.setItem('isLoggedIn', JSON.stringify(true)); 
-          this.$router.push('/seleccion-dificultad');
-        } else {
-          alert('Credenciales incorrectas.');
+    const user = users.find(user => user.userEmail === this.email && user.userPasswd === this.password);
+
+    if (user) {
+        alert('Inicio de sesión correcto.');
+        localStorage.setItem('user', JSON.stringify(user)); 
+        localStorage.setItem('isLoggedIn', JSON.stringify(true)); 
+        this.$router.push('/seleccion-dificultad');
+    } else {
+        alert('Credenciales incorrectas.');
+        // Redirigir solo si el usuario no está registrado
+        if (!this.isRegistered) {
+            this.$router.push('/registrar');
         }
-     
     }
+}
   }
 }
 </script>
