@@ -1,16 +1,12 @@
 <template>
   <div class="ranking">
     <h1>RANKING</h1>
-    <button @click="eliminarDatos" class="botonEliminarDatos" :disabled="players.length === 0">Eliminar Datos</button>
     <table>
       <thead>
         <tr>
           <th>Posición</th>
           <th>Nombre</th>
           <th>Puntuación</th>
-          <th>Dificultad</th>
-          <th>Descripción</th>
-          <th>Ajustes</th>
         </tr>
       </thead>
       <tbody>
@@ -18,14 +14,6 @@
           <td class="posicion">{{ index + 1 }}</td>
           <td class="fila">{{ getSourceName(player) }}</td>
           <td class="fila">{{ getSourceScore(player) }}</td>
-          <td class="fila">{{ player.difficulty }}</td>
-          <td class="fila">
-            <input type="text" v-model="player.descripcion">
-          </td>
-          <td>
-            <button class="botonActualizarDescripcion" @click="actualizarDescripcion(player)">Actualizar</button>
-            <button class="botonEliminarDescripcion" @click="eliminarDescripcion(player, index)">Eliminar</button>
-          </td>
         </tr>
       </tbody>
     </table>
@@ -39,73 +27,13 @@ export default {
 
   data() {
     return {
-      rankingData: [],
-      rankingId: 1,
-      userName: '',
-      puntuacion: "100",
-      descripcion: '',
       players: [],
-      model: {
-        usuario: {
-          userName: '',
-          userEmail: '',
-          userPasswd: '',
-          userImage: null,
-          cantidad: '',
-          activo: 0
-        }
-      }
     };
   },
   mounted() {
     this.getRanking();
-    this.insertarJugador();
-
-    const savedPlayers = JSON.parse(localStorage.getItem('players'));
-
-    if (savedPlayers) {
-      this.players = [...savedPlayers];
-    }
-
-    const params = new URLSearchParams(window.location.search);
-    const name = params.get('name');
-    const score = params.get('score');
-    const difficulty = params.get('difficulty');
-    const descripcion = params.get('descripcion');
-
-    if (name && score && difficulty) {
-      const descripcionValue = descripcion ? descripcion : "Pendiente";
-      this.players.push({ name, score, difficulty, descripcion: descripcionValue });
-    }
-
-    this.players.sort((a, b) => {
-      if (b.score !== a.score) {
-        return b.score - a.score;
-      } else {
-        const difficultyOrder = { "hard": 3, "medium": 2, "easy": 1 };
-        return difficultyOrder[b.difficulty] - difficultyOrder[a.difficulty];
-      }
-    });
-    this.players.forEach(player => {
-      player.difficulty = this.getReadableDifficulty(player.difficulty);
-    });
-    localStorage.setItem('players', JSON.stringify(this.players));
   },
   methods: {
-    insertarJugador() {
-      let formData = new FormData();
-      formData.append('rankingId', this.rankingId);
-      formData.append('userName', this.model.usuario.userName);
-      formData.append('puntuacion', this.puntuacion);
-      formData.append('descripcion', this.descripcion);
-
-      axios.post('http://localhost:8080/trivial/v1/ranking', formData)
-        .then(response => {
-          window.location.href = 'http://localhost:8081/ranking';
-        })
-        .catch(error => {
-        });
-    },
     getRanking() {
       axios.get('http://localhost:8080/trivial/v1/ranking')
         .then(response => {
@@ -113,117 +41,18 @@ export default {
             ...player,
             source: 'database'
           }))];
-          this.players.forEach(player => {
-            if (player.source === 'database') {
-              player.difficulty = 'Inicial';
-            } else {
-              player.difficulty = this.getReadableDifficulty(player.difficulty);
-            }
-          });
           this.players.sort((a, b) => {
             if (this.getSourceScore(b) !== this.getSourceScore(a)) {
               return this.getSourceScore(b) - this.getSourceScore(a);
-            } else {
-              const difficultyOrder = { "hard": 3, "medium": 2, "easy": 1 };
-              return difficultyOrder[b.difficulty] - difficultyOrder[a.difficulty];
-            }
-          });
+            }});
         });
-    },
-    async insertarJugador() {
-      let jugadorExistente = this.players.find(player => player.name === this.name);
-
-      if (jugadorExistente) {
-        if (parseInt(this.puntuacion) > parseInt(jugadorExistente.puntuacion)) {
-          jugadorExistente.puntuacion = parseInt(this.puntuacion);
-          jugadorExistente.descripcion = this.descripcion;
-          axios.put(`http://localhost:8080/trivial/v1/ranking/${jugadorExistente.rankingId}`, {
-            puntuacion: parseInt(this.puntuacion),
-            descripcion: this.descripcion
-          })
-            .then(response => {
-              alert('Datos del jugador actualizados con éxito');
-            })
-            .catch(error => {
-            });
-        } else {
-          alert('Ya existe un jugador con el mismo nombre en el ranking con una puntuación igual o mayor.');
-        }
-      } else {
-        let formData = new FormData();
-        formData.append('userName', this.name);
-        formData.append('puntuacion', this.puntuacion);
-        formData.append('descripcion', this.descripcion);
-
-        axios.post('http://localhost:8080/trivial/v1/ranking', formData)
-          .then(response => {
-            alert('Jugador insertado en el ranking con éxito');
-            window.location.href = 'http://localhost:8081/ranking';
-          })
-          .catch(error => {
-          });
-      }
     },
     getSourceName(player) {
-      return player.source === 'database' && player.userId ? player.userId.userName : player.name;
+        return player.source === 'database' && player.userId ? player.userId.userName : player.name;
     },
     getSourceScore(player) {
-      return player.source === 'database' ? player.puntuacion : player.score;
+      return player.puntuacion;
     },
-    actualizarDescripcion(player) {
-      axios.put(`http://localhost:8080/trivial/v1/ranking/${player.rankingId}`, { descripcion: player.descripcion })
-        .then(response => {
-          alert('Descripción actualizada con éxito');
-        })
-        .catch(error => {
-        });
-    },
-    eliminarDescripcion(player, index) {
-      axios.delete(`http://localhost:8080/trivial/v1/ranking/${player.rankingId}`)
-        .then(response => {
-          this.players[index].descripcion = '';
-          alert('Descripción eliminada con éxito');
-        })
-        .catch(error => {
-        });
-    },
-    getReadableDifficulty(difficulty) {
-      switch (difficulty) {
-        case "hard":
-          return "Difícil";
-        case "medium":
-          return "Medio";
-        case "easy":
-          return "Fácil";
-        default:
-          return difficulty;
-      }
-    },
-    eliminarDatos() {
-      this.players = [];
-      localStorage.removeItem('players');
-    },
-    verPerfil(player, index) {
-      let playerName = player.name;
-      let playerScore = player.score;
-      let playerDescripcion = player.descripcion;
-
-      if (player.source === 'database') {
-        playerName = player.userId.userName;
-        playerScore = player.puntuacion;
-        playerDescripcion = player.descripcion;
-      }
-      this.$router.push({
-        name: 'CuentaView',
-        params: {
-          name: playerName,
-          score: playerScore,
-          ranking: index + 1,
-          descripcion: playerDescripcion
-        }
-      });
-
-    }
   }
 };
 </script>

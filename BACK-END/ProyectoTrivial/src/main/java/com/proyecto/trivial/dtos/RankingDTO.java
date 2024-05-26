@@ -4,7 +4,7 @@ public class RankingDTO {
 
 	private Integer rankingId;
 	private Integer puntuacion;
-	private String descripcion;
+	
 
 	public RankingDTO() {
 		super();
@@ -16,12 +16,7 @@ public class RankingDTO {
 		this.puntuacion = puntuacion;
 	}
 
-	public RankingDTO(Integer rankingId, Integer puntuacion, String descripcion) {
-		super();
-		this.rankingId = rankingId;
-		this.puntuacion = puntuacion;
-		this.descripcion = descripcion;
-	}
+
 
 	public Integer getRankingId() {
 		return rankingId;
@@ -39,11 +34,5 @@ public class RankingDTO {
 		this.puntuacion = puntuacion;
 	}
 
-	public String getDescripcion() {
-		return descripcion;
-	}
-
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
+	
 }

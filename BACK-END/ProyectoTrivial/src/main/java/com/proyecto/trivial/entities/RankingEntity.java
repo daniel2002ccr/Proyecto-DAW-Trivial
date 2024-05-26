@@ -22,51 +22,20 @@ public class RankingEntity {
 	@JoinColumn(name = "user_id", referencedColumnName = "user_id")
 	private UserEntity userId;
 
-	@ManyToOne
-	@JoinColumn(name = "ID_Categoria", referencedColumnName = "ID_Categoria")
-	private CategoriaEntity id;
-
 	@Column(name = "puntuacion")
 	private Integer puntuacion;
-
-	@Column(name = "descripcion", nullable = false)
-	private String descripcion;
 
 	public RankingEntity() {
 		super();
 	}
 
-	public RankingEntity(Integer rankingId, UserEntity userId, CategoriaEntity id, Integer puntuacion) {
-		super();
-		this.rankingId = rankingId;
-		this.userId = userId;
-		this.id = id;
-		this.puntuacion = puntuacion;
-	}
 
-	public RankingEntity(Integer rankingId, UserEntity userId, CategoriaEntity id, Integer puntuacion,
-			String descripcion) {
-		super();
-		this.rankingId = rankingId;
-		this.userId = userId;
-		this.id = id;
-		this.puntuacion = puntuacion;
-		this.descripcion = descripcion;
-	}
-
-	public RankingEntity(Integer rankingId, UserEntity userId, Integer puntuacion, String descripcion) {
+	public RankingEntity(Integer rankingId, UserEntity userId, Integer puntuacion) {
 		super();
 		this.rankingId = rankingId;
 		this.userId = userId;
 		this.puntuacion = puntuacion;
-		this.descripcion = descripcion;
-	}
-
-	public RankingEntity(Integer rankingId, Integer puntuacion, String descripcion) {
-		super();
-		this.rankingId = rankingId;
-		this.puntuacion = puntuacion;
-		this.descripcion = descripcion;
+		
 	}
 
 	public Integer getRankingId() {
@@ -85,13 +54,6 @@ public class RankingEntity {
 		this.userId = userId;
 	}
 
-	public CategoriaEntity getId() {
-		return id;
-	}
-
-	public void setId(CategoriaEntity id) {
-		this.id = id;
-	}
 
 	public Integer getPuntuacion() {
 		return puntuacion;
@@ -101,11 +63,4 @@ public class RankingEntity {
 		this.puntuacion = puntuacion;
 	}
 
-	public String getDescripcion() {
-		return descripcion;
-	}
-
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
 }

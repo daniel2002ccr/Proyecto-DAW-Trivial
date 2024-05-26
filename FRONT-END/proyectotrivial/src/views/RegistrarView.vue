@@ -53,25 +53,44 @@ export default {
           this.model.usuario.userImage = event.target.files[0];
       },
       guardarUsuario() {
-          let formData = new FormData();
-          formData.append('userName', this.model.usuario.userName);
-          formData.append('userEmail', this.model.usuario.userEmail);
-          formData.append('userPasswd', this.model.usuario.userPasswd);
-          formData.append('userImage', this.model.usuario.userImage);
-          formData.append('puntuacion', 0);
-          formData.append('activo', 1);
+        let formData = new FormData();
+        formData.append('userName', this.model.usuario.userName);
+        formData.append('userEmail', this.model.usuario.userEmail);
+        formData.append('userPasswd', this.model.usuario.userPasswd);
+        formData.append('userImage', this.model.usuario.userImage);
+        formData.append('puntuacion', 0);
+        formData.append('activo', 1);
 
-          axios.post('http://localhost:8080/trivial/v1/users', formData)
-              .then(response => {
-                  alert('Registro realizado con éxito.');
-                  this.registroExitoso = true;
-                  this.$router.push('/login')
-              })
-              .catch(error => {
-                  alert('Error al registrar el usuario.');
-              });
-      }
-  },
+        axios.post('http://localhost:8080/trivial/v1/users', formData)
+            .then(response => {
+                alert('Registro realizado con éxito.');
+                this.registroExitoso = true;
+                this.$router.push('/login');
+                const userId = response.data.userId;
+
+                // Después de un registro exitoso, agregar al usuario al ranking
+                this.agregarAlRanking(userId); // Pasar el userId como argumento
+            })
+            .catch(error => {
+                alert('Error al registrar el usuario.');
+            });
+    },
+
+    agregarAlRanking(userId) {
+        const nuevoUsuarioEnRanking = {
+            userId: userId,
+            puntuacion: 0
+        };
+
+        axios.post('http://localhost:8080/trivial/v1/ranking', nuevoUsuarioEnRanking)
+            .then(response => {
+                console.log('Usuario agregado al ranking:', response.data);
+            })
+            .catch(error => {
+                console.error('Error al agregar usuario al ranking:', error);
+            });
+    }
+},
   beforeMount() {
       this.registroExitoso = false;
   }

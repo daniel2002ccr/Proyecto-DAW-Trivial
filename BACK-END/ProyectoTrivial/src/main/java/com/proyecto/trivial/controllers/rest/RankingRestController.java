@@ -43,13 +43,12 @@ public class RankingRestController {
 		return rankingRepository.findById(id);
 	}
 
-	@GetMapping(value = "/ranking", params = { "rankingId", "puntuacion", "descripcion" })
+	@GetMapping(value = "/ranking", params = { "rankingId", "puntuacion"})
 	public List<RankingDTO> obtenerTodosRankingConFiltros(
 			@RequestParam(value = "rankingId", required = false) Integer rankingId,
-			@RequestParam(value = "puntuacion", required = false) String puntuacion,
-			@RequestParam(value = "descripcion", required = false) String descripcion) {
+			@RequestParam(value = "puntuacion", required = false) String puntuacion) {
 
-		List<RankingDTO> ra = rankingRepository.buscaRanking(rankingId.toString(), puntuacion, descripcion);
+		List<RankingDTO> ra = rankingRepository.buscaRanking(rankingId.toString(), puntuacion);
 		return ra;
 	}
 
@@ -65,7 +64,7 @@ public class RankingRestController {
 		Optional<RankingEntity> rankingOptional = rankingRepository.findById(id);
 		if (rankingOptional.isPresent()) {
 			RankingEntity existingRanking = rankingOptional.get();
-			existingRanking.setDescripcion(ranking.getDescripcion());
+			//existingRanking.setDescripcion(ranking.getDescripcion());
 			rankingRepository.save(existingRanking);
 			return new ResponseEntity<>("Ranking actualizado con éxito.", HttpStatus.OK);
 		} else {
@@ -76,7 +75,7 @@ public class RankingRestController {
 	@DeleteMapping("/ranking/{id}")
 	public ResponseEntity borrarDescripcion(@PathVariable("id") Integer id) {
 		RankingEntity r = rankingRepository.findById(id).get();
-		r.setDescripcion("");
+		//r.setDescripcion("");
 		rankingRepository.save(r);
 		return new ResponseEntity<>("Descripción borrada con éxito", HttpStatus.OK);
 	}

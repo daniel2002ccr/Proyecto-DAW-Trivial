@@ -28,9 +28,9 @@ export default {
   methods: {
     checkRegistrationStatus() {
       this.isRegistered = JSON.parse(localStorage.getItem('registroExitoso')) || false;
-     if (!this.isRegistered) {
+    /* if (!this.isRegistered) {
         this.$router.push('/registrar');
-      }
+      } */
     },
     async login() {
     this.checkRegistrationStatus(); // Asegurarse de que isRegistered esté actualizado
@@ -46,7 +46,7 @@ export default {
         localStorage.setItem('isLoggedIn', JSON.stringify(true)); 
         this.$router.push('/seleccion-dificultad');
     } else {
-        alert('Credenciales incorrectas.');
+        alert('El email o la contraseña son incorrectas.');
         // Redirigir solo si el usuario no está registrado
         if (!this.isRegistered) {
             this.$router.push('/registrar');
