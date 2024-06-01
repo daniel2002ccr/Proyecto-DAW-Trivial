@@ -107,24 +107,6 @@ const router = createRouter({
   routes
 });
 
-router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-    const token = localStorage.getItem('token');
-    if (token) {
-      next();
-    } else {
-      next({ path: '/' });
-    }
-  } else {
-    next();
-  }
-  if (to.path === '/') {
-    document.body.classList.add('no-scroll');
-  } else {
-    document.body.classList.remove('no-scroll');
-  }
-  next();
-});
 
 
 export default router;

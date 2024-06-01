@@ -1,56 +1,56 @@
 <template>
-  <div class="container mt-5">
+    <div class="container mt-5">
       <div class="card">
-          <div class="card-header">
-              <h4>Regístrate gratis ahora</h4>
+        <div class="card-header">
+          <h4>Regístrate gratis ahora</h4>
+        </div>
+        <div class="card-body" v-if="!registroExitoso">
+          <div class="mb-3">
+            <label for="">Nombre de usuario:</label>
+            <input type="text" v-model="model.usuario.userName" class="form-control" required>
           </div>
-          <div class="card-body">
-              <div class="mb-3">
-                  <label for="">Nombre de usuario:</label>
-                  <input type="text" v-model="model.usuario.userName" class="form-control" required>
-              </div>
-              <div class="mb-3">
-                  <label for="">Email:</label>
-                  <input type="email" v-model="model.usuario.userEmail" class="form-control" required>
-              </div>
-              <div class="mb-3">
-                  <label for="">Contraseña:</label>
-                  <input type="password" v-model="model.usuario.userPasswd" class="form-control" required>
-              </div>
-              <div class="mb-3">
-                  <label for="">Foto de perfil</label>
-                  <input type="file" @change="handleFileUpload" class="form-control">
-              </div>
-              <div class="mb-3">
-                  <button type="button" class="btn btn-primary" @click="guardarUsuario">Registrarse</button>
-              </div>
-              <p v-if="registroExitoso" class="mensaje">Registro realizado correctamente</p>
+          <div class="mb-3">
+            <label for="">Email:</label>
+            <input type="email" v-model="model.usuario.userEmail" class="form-control" required>
           </div>
+          <div class="mb-3">
+            <label for="">Contraseña:</label>
+            <input type="password" v-model="model.usuario.userPasswd" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label for="">Foto de perfil</label>
+            <input type="file" @change="handleFileUpload" class="form-control">
+          </div>
+          <div class="mb-3">
+            <button type="button" class="btn btn-primary" @click="guardarUsuario">Registrarse</button>
+          </div>
+        </div>
+        <p v-else class="mensaje">Registro realizado correctamente</p>
       </div>
-  </div>
-</template>
-
-<script>
-import axios from 'axios';
-
-export default {
-  name: 'crearUsuario',
-  data() {
+    </div>
+  </template>
+  
+  <script>
+  import axios from 'axios';
+  
+  export default {
+    name: 'crearUsuario',
+    data() {
       return {
-          model: {
-              usuario: {
-                  userName: '',
-                  userEmail: '',
-                  userPasswd: '',
-                  userImage: null,
-              }
-          },
-          registroExitoso: false
+        model: {
+          usuario: {
+            userName: '',
+            userEmail: '',
+            userPasswd: '',
+            userImage: null,
+          }
+        },
+        registroExitoso: false
       }
-  },
-  methods: {
+    },
+    methods: {
       handleFileUpload(event) {
-          this.model.usuario.userImage = event.target.files[0];
+        this.model.usuario.userImage = event.target.files[0];
       },
       guardarUsuario() {
         let formData = new FormData();
@@ -60,45 +60,24 @@ export default {
         formData.append('userImage', this.model.usuario.userImage);
         formData.append('puntuacion', 0);
         formData.append('activo', 1);
-
+  
         axios.post('http://localhost:8080/trivial/v1/users', formData)
-            .then(response => {
-                alert('Registro realizado con éxito.');
-                this.registroExitoso = true;
-                this.$router.push('/login');
-                const userId = response.data.userId;
-
-                // Después de un registro exitoso, agregar al usuario al ranking
-                this.agregarAlRanking(userId); // Pasar el userId como argumento
-            })
-            .catch(error => {
-                alert('Error al registrar el usuario.');
-            });
+          .then(response => {
+            alert('Registro realizado con éxito.');
+            this.registroExitoso = true;
+            localStorage.setItem('registroExitoso', JSON.stringify(this.registroExitoso));
+            this.$router.push('/login'); 
+          })
+          .catch(error => {
+            alert('Error al registrar el usuario.');
+          });
+      },
     },
-
-    agregarAlRanking(userId) {
-        const nuevoUsuarioEnRanking = {
-            userId: userId,
-            puntuacion: 0
-        };
-
-        axios.post('http://localhost:8080/trivial/v1/ranking', nuevoUsuarioEnRanking)
-            .then(response => {
-                console.log('Usuario agregado al ranking:', response.data);
-            })
-            .catch(error => {
-                console.error('Error al agregar usuario al ranking:', error);
-            });
-    }
-},
-  beforeMount() {
-      this.registroExitoso = false;
   }
-}
-</script>
-
-<style scoped>
-.mensaje {
-  color: green;
-}
-</style>
+  </script>
+  
+  <style scoped>
+  .mensaje {
+    color: green;
+  }
+  </style>

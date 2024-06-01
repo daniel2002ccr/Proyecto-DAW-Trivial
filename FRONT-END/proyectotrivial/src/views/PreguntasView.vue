@@ -14,15 +14,15 @@
                     <p class="rounded-lg font-bold flex">Respuestas:</p>
                     <ul class="neumorph-1 bg-gray-100 p-2 rounded-lg mb-3">
                         <li v-for="(answer, index) in shuffledAnswers(index)" :key="index" :class="[
-            'rounded-lg',
-            'font-bold',
-            'flex',
-            'p-2',
-            isSelectedAnswer(question, answer) ? 'bg-green-700 text-white margin-bottom-1' : '',
-            !isSelectedAnswer(question, answer) && question.answered && !isCorrectAnswer(question, answer) ? 'bg-red-800 text-white margin-bottom-1' : '',
-            !isSelectedAnswer(question, answer) && question.answered && isCorrectAnswer(question, answer) ? 'bg-green-700 text-white margin-bottom-1' : '',
-            isSelectedAnswer(question, answer) || question.answered ? 'selected' : ''
-        ]" @click="selectAnswer(question, answer)" @mouseover="hoverEffect" @mouseout="resetHoverEffect"
+                            'rounded-lg',
+                            'font-bold',
+                            'flex',
+                            'p-2',
+                            isSelectedAnswer(question, answer) ? 'bg-green-700 text-white margin-bottom-1' : '',
+                            !isSelectedAnswer(question, answer) && question.answered && !isCorrectAnswer(question, answer) ? 'bg-red-800 text-white margin-bottom-1' : '',
+                            !isSelectedAnswer(question, answer) && question.answered && isCorrectAnswer(question, answer) ? 'bg-green-700 text-white margin-bottom-1' : '',
+                            isSelectedAnswer(question, answer) || question.answered ? 'selected' : ''
+                        ]" @click="selectAnswer(question, answer)" @mouseover="hoverEffect" @mouseout="resetHoverEffect"
                             :style="{ pointerEvents: question.answered ? 'none' : 'auto' }">
                             <span class="bg-gray-400 p-3 rounded-lg">{{ String.fromCharCode(65 + index) }}</span> <span
                                 class="flex items-center pl-6">{{ answer }}</span>
@@ -34,59 +34,24 @@
                 <p>No se encontraron preguntas.</p>
             </div>
         </div>
+        <div class="marcador">{{ score }}</div>
     </main>
-    <div class="nuevaCategoria">
-        <h3 class="nuevaCategoriaTitulo">Añadir nueva categoría:</h3>
-        <div class="flex flex-col space-y-2">
-            <label for="newCategory" class="nuevaCategoriaEstilos">Nombre:</label>
-            <input type="text" id="newCategory" v-model="newCategory" class="categoriaInput">
-            <button @click="addCategory"
-                :class="{ 'botonGuardarCategoria-disabled': newCategory.trim() === '', 'botonGuardarCategoria': newCategory.trim() !== '' }"
-                :disabled="newCategory.trim() === ''">Añadir</button>
-        </div>
-    </div>
-    <div class="marcador">
-        <p>Puntuación: {{ score }}</p>
-        <p v-if="allQuestionsAnswered" class="mensajeMarcador">{{ getMessage(score) }}</p>
-        <input type="text" v-model="nameInput" placeholder="Introduce tu nombre" v-if="showNameInput"
-            class="nombreInput">
-        <button @click="saveScoreAndName" :disabled="nameInput === ''" v-if="showNameInput"
-            :class="{ 'botonGuardarNombre-disabled': nameInput === '', 'botonGuardarNombre': nameInput !== '' }">Guardar</button>
-    </div>
-    <div v-if="questions && questions.length > 0">
-    </div>
 </template>
 
 <script>
 import axios from 'axios';
-import SeleccionDificultad from '../components/SeleccionDificultad.vue';
 
 export default {
-    props: ['difficulty'],
-    components: {
-        SeleccionDificultad
-    },
     data() {
         return {
             loading: true,
             questions: null,
-            selectedAnswer: null,
             score: 0,
-            nameInput: '',
-            showNameInput: false,
-            players: [],
-            answeredPlayers: [],
-            originalAnswersOrder: [],
-            newCategory: ''
+            originalAnswersOrder: []
         };
     },
     mounted() {
-        this.fetchQuestions(this.difficulty);
-    },
-    computed: {
-        allQuestionsAnswered() {
-            return this.questions && this.questions.every(question => question.answered);
-        }
+        this.fetchQuestions(this.$route.params.difficulty);
     },
     methods: {
         async fetchQuestions(difficulty) {
@@ -110,47 +75,24 @@ export default {
                 this.loading = false;
             }
         },
-        async addCategory() {
+        async saveScoreToUser() {
             try {
-                const response = await axios.post('http://localhost:8080/trivial/v1/categorias', {
-                    nombre: this.newCategory,
-                    activo: 0
+                const userId = JSON.parse(localStorage.getItem('user')).userId;
+                const user = JSON.parse(localStorage.getItem('user'));
+                const newScore = this.score + (user.puntuacion || 0);
+
+                const response = await axios.put(`http://localhost:8080/trivial/v1/users/${userId}`, {
+                    puntuacion: newScore
                 });
-                alert('Categoría agregada con éxito.');
-                this.newCategory = '';
+
+                console.log('Puntuación del usuario actualizada correctamente:', response.data);
             } catch (error) {
-                alert('Error al agregar la categoría. Por favor, inténtalo de nuevo.');
+                console.error('Error al actualizar la puntuación del usuario:', error);
             }
         },
-        showNamePrompt() {
-            if (this.allQuestionsAnswered) {
-                this.showNameInput = true;
-            }
-        },
-        saveScoreAndName() {
-            if (this.nameInput.trim() !== '') {
-                const data = {
-                    name: this.nameInput,
-                    score: this.score,
-                    difficulty: this.difficulty,
-                    answered: true
-                };
-                this.players.push(data);
-                this.$router.push({ path: '/ranking', query: { name: data.name, score: data.score, difficulty: data.difficulty } });
-            }
-        },
-        getMessage(score) {
-            if (score >= 90) {
-                return "¡Excelente trabajo! ¡Eres un experto!";
-            } else if (score >= 70) {
-                return "¡Muy bien hecho! ¡Estás en el camino correcto!";
-            } else if (score >= 50) {
-                return "¡Buen trabajo! ¡Sigue así!";
-            } else if (score >= 20) {
-                return "¡Puedes mejorar! ¡Sigue practicando!";
-            } else {
-                return "¡Necesitas practicar más! ¡No te rindas!";
-            }
+        async goToRanking() {
+            this.saveScoreToUser();
+            await this.$router.push('/ranking');
         },
         shuffledAnswers(index) {
             if (this.questions && this.questions.length > index) {
@@ -165,16 +107,6 @@ export default {
             }
             return array;
         },
-        answerClass(question, answer) {
-            if (question.answered) {
-                if (this.isCorrectAnswer(question, answer)) {
-                    return 'bg-green-700 text-white margin-bottom-1';
-                } else if (this.selectedAnswer === answer) {
-                    return 'bg-red-800 text-white margin-bottom-1';
-                }
-            }
-            return '';
-        },
         selectAnswer(question, answer) {
             if (!question.answered) {
                 if (this.isCorrectAnswer(question, answer)) {
@@ -187,8 +119,13 @@ export default {
                     }
                 }
                 question.answered = true;
-                this.showNamePrompt();
+                if (this.allQuestionsAnswered()) {
+                    this.goToRanking();
+                }
             }
+        },
+        allQuestionsAnswered() {
+            return this.questions && this.questions.every(question => question.answered);
         },
         isSelectedAnswer(question, answer) {
             return this.selectedAnswer === answer && this.isCorrectAnswer(question, answer);
@@ -204,7 +141,7 @@ export default {
         }
     }
 };
-</script>
+</script>    
 
 <style scoped>
 .nuevaCategoriaEstilos {

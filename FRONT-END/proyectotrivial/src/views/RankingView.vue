@@ -12,8 +12,8 @@
       <tbody>
         <tr v-for="(player, index) in players" :key="index">
           <td class="posicion">{{ index + 1 }}</td>
-          <td class="fila">{{ getSourceName(player) }}</td>
-          <td class="fila">{{ getSourceScore(player) }}</td>
+          <td class="fila">{{ player.name }}</td>
+          <td class="fila">{{ player.puntuacion }}</td>
         </tr>
       </tbody>
     </table>
@@ -24,7 +24,6 @@
 import axios from 'axios';
 
 export default {
-
   data() {
     return {
       players: [],
@@ -35,27 +34,23 @@ export default {
   },
   methods: {
     getRanking() {
-      axios.get('http://localhost:8080/trivial/v1/ranking')
-        .then(response => {
-          this.players = [...this.players, ...response.data.map(player => ({
-            ...player,
-            source: 'database'
-          }))];
-          this.players.sort((a, b) => {
-            if (this.getSourceScore(b) !== this.getSourceScore(a)) {
-              return this.getSourceScore(b) - this.getSourceScore(a);
-            }});
-        });
-    },
-    getSourceName(player) {
-        return player.source === 'database' && player.userId ? player.userId.userName : player.name;
-    },
-    getSourceScore(player) {
-      return player.puntuacion;
-    },
-  }
+    axios.get('http://localhost:8080/trivial/v1/users')
+      .then(response => {
+        this.players = response.data.map(player => ({
+          name: player.userName,
+          puntuacion: player.puntuacion,
+          source: 'database'
+        }));
+        this.players.sort((a, b) => b.puntuacion - a.puntuacion);
+      })
+      .catch(error => {
+        console.error('Error al obtener el ranking:', error);
+      });
+  },
+},
 };
 </script>
+
 
 <style scoped>
 .botonActualizarDescripcion {
