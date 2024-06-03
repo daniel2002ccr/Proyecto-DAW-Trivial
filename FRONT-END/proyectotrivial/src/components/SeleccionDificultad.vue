@@ -2,9 +2,10 @@
     <div class="seleccion-dificultad">
         <h1>Seleccione la dificultad:</h1>
         <ul>
-            <li><router-link to="/easy" class="link">Fácil</router-link></li>
-            <li><router-link to="/medium" class="link">Medio</router-link></li>
-            <li><router-link to="/hard" class="link">Difícil</router-link></li>
+            <li v-if="isLoggedIn"><router-link to="/easy" class="link">Fácil</router-link></li>
+            <li v-if="isLoggedIn"><router-link to="/medium" class="link">Medio</router-link></li>
+            <li v-if="isLoggedIn"><router-link to="/hard" class="link">Difícil</router-link></li>
+            <li v-else><router-link to="/login" class="link">Iniciar sesión para seleccionar dificultad</router-link></li>
         </ul>
     </div>
 </template>
@@ -12,10 +13,10 @@
 <script>
 export default {
     name: 'SeleccionDificultad',
-    methods: {
-        selectDifficulty(difficulty) {
-            this.$emit('select-difficulty', difficulty);
-        }
+    data() {
+        return {
+            isLoggedIn: JSON.parse(localStorage.getItem('isLoggedIn')) || false
+        };
     }
 };
 </script>

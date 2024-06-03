@@ -4,34 +4,40 @@
             Cargando...
         </div>
         <div v-else>
-            <div v-if="questions && questions.length > 0">
-                <div v-for="(question, index) in questions" :key="index"
-                    class="rounded-lg bg-gray-200 p-2 neumorph-1 text-center font-bold text-gray-800">
-                    <h2>Pregunta nº {{ index + 1 }}</h2>
-                    <p>Dificultad: {{ question.difficulty }}</p>
-                    <p>Categoría: {{ question.category }}</p>
-                    <p class="bg-white p-5">Pregunta: {{ question.question }}</p>
-                    <p class="rounded-lg font-bold flex">Respuestas:</p>
-                    <ul class="neumorph-1 bg-gray-100 p-2 rounded-lg mb-3">
-                        <li v-for="(answer, index) in shuffledAnswers(index)" :key="index" :class="[
-                            'rounded-lg',
-                            'font-bold',
-                            'flex',
-                            'p-2',
-                            isSelectedAnswer(question, answer) ? 'bg-green-700 text-white margin-bottom-1' : '',
-                            !isSelectedAnswer(question, answer) && question.answered && !isCorrectAnswer(question, answer) ? 'bg-red-800 text-white margin-bottom-1' : '',
-                            !isSelectedAnswer(question, answer) && question.answered && isCorrectAnswer(question, answer) ? 'bg-green-700 text-white margin-bottom-1' : '',
-                            isSelectedAnswer(question, answer) || question.answered ? 'selected' : ''
-                        ]" @click="selectAnswer(question, answer)" @mouseover="hoverEffect" @mouseout="resetHoverEffect"
-                            :style="{ pointerEvents: question.answered ? 'none' : 'auto' }">
-                            <span class="bg-gray-400 p-3 rounded-lg">{{ String.fromCharCode(65 + index) }}</span> <span
-                                class="flex items-center pl-6">{{ answer }}</span>
-                        </li>
-                    </ul>
+            <div v-if="isLoggedIn">
+                <div v-if="questions && questions.length > 0">
+                    <div v-for="(question, index) in questions" :key="index"
+                        class="rounded-lg bg-gray-200 p-2 neumorph-1 text-center font-bold text-gray-800">
+                        <h2>Pregunta nº {{ index + 1 }}</h2>
+                        <p>Dificultad: {{ question.difficulty }}</p>
+                        <p>Categoría: {{ unescapeHtml(question.category) }}</p>
+                        <p class="bg-white p-5">Pregunta: {{ unescapeHtml(question.question) }}</p>
+                        <p class="rounded-lg font-bold flex">Respuestas:</p>
+                        <ul class="neumorph-1 bg-gray-100 p-2 rounded-lg mb-3">
+                            <li v-for="(answer, index) in shuffledAnswers(index)" :key="index" :class="[
+                                'rounded-lg',
+                                'font-bold',
+                                'flex',
+                                'p-2',
+                                isSelectedAnswer(question, answer) ? 'bg-green-700 text-white margin-bottom-1' : '',
+                                !isSelectedAnswer(question, answer) && question.answered && !isCorrectAnswer(question, answer) ? 'bg-red-800 text-white margin-bottom-1' : '',
+                                !isSelectedAnswer(question, answer) && question.answered && isCorrectAnswer(question, answer) ? 'bg-green-700 text-white margin-bottom-1' : '',
+                                isSelectedAnswer(question, answer) || question.answered ? 'selected' : ''
+                            ]" @click="selectAnswer(question, answer)" @mouseover="hoverEffect" @mouseout="resetHoverEffect"
+                                :style="{ pointerEvents: question.answered ? 'none' : 'auto' }">
+                                <span class="bg-gray-400 p-3 rounded-lg">{{ String.fromCharCode(65 + index) }}</span> <span
+                                    class="flex items-center pl-6">{{ unescapeHtml(answer) }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div v-else>
+                    <p>No se encontraron preguntas.</p>
                 </div>
             </div>
             <div v-else>
-                <p>No se encontraron preguntas.</p>
+                <p>Debes iniciar sesión para acceder a las preguntas.</p>
+                <router-link to="/login">Iniciar sesión</router-link>
             </div>
         </div>
         <div class="marcador">{{ score }}</div>
@@ -47,30 +53,55 @@ export default {
             loading: true,
             questions: null,
             score: 0,
-            originalAnswersOrder: []
+            originalAnswersOrder: [],
+            isLoggedIn: JSON.parse(localStorage.getItem('isLoggedIn')) || false
         };
     },
     mounted() {
-        this.fetchQuestions(this.$route.params.difficulty);
+        if (this.isLoggedIn) {
+            this.fetchQuestions(this.$route.params.difficulty);
+        } else {
+            // Redirigir al usuario al login si no está logueado
+            this.$router.push('/login');
+        }
     },
     methods: {
+        unescapeHtml(data) {
+            return data.replace(/&amp;/g, '&')
+                .replace(/&lt;/g, '<')
+                .replace(/&gt;/g, '>')
+                .replace(/&quot;/g, '"')
+                .replace(/&#039;/g, "'")
+                .replace(/&amp;/g, '&');
+        },
         async fetchQuestions(difficulty) {
             this.loading = true;
             try {
                 const response = await fetch(`https://opentdb.com/api.php?amount=10&difficulty=${difficulty}&type=multiple`);
                 const data = await response.json();
                 if (data.results.length) {
-                    this.questions = data.results;
+                    this.questions = data.results.map(question => {
+                        const decodedQuestion = this.unescapeHtml(decodeURIComponent(question.question));
+                        const decodedIncorrectAnswers = question.incorrect_answers.map(answer => this.unescapeHtml(decodeURIComponent(answer)));
+                        const decodedCorrectAnswer = this.unescapeHtml(decodeURIComponent(question.correct_answer));
+                        
+                        return {
+                            ...question,
+                            question: decodedQuestion,
+                            incorrect_answers: decodedIncorrectAnswers,
+                            correct_answer: decodedCorrectAnswer
+                        };
+                    });
                     this.questions.forEach(question => {
                         const allAnswers = [...question.incorrect_answers, question.correct_answer];
                         this.shuffleArray(allAnswers);
                         this.originalAnswersOrder.push(allAnswers);
                     });
-                }
-                else {
+                } else {
                     this.questions = null;
                 }
             } catch (error) {
+                console.error('Error al obtener las preguntas:', error);
             } finally {
                 this.loading = false;
             }
@@ -96,7 +127,7 @@ export default {
         },
         shuffledAnswers(index) {
             if (this.questions && this.questions.length > index) {
-                return this.originalAnswersOrder[index];
+                return this.originalAnswersOrder[index].map(answer => this.unescapeHtml(decodeURIComponent(answer)));
             }
             return [];
         },
@@ -141,8 +172,7 @@ export default {
         }
     }
 };
-</script>    
-
+</script>
 <style scoped>
 .nuevaCategoriaEstilos {
     margin-top: 3px;

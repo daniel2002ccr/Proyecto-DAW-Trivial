@@ -19,7 +19,7 @@ export default {
     return {
       email: '',
       password: '',
-      isLoggedIn: false
+      isRegistered: false
     }
   },
   created() {
