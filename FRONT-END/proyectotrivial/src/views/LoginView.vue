@@ -27,7 +27,7 @@ export default {
   },
   methods: {
     checkRegistrationStatus() {
-      this.isRegistered = JSON.parse(localStorage.getItem('registroExitoso')) || false;
+      this.isRegistered = JSON.parse(localStorage.getItem('isRegistered')) || false;
       if (!this.isRegistered) {
         this.$router.push('/registrar');
       }

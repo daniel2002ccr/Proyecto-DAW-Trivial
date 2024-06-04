@@ -50,7 +50,16 @@ export default {
       registroExitoso: JSON.parse(localStorage.getItem('registroExitoso')) || false
     }
   },
+  created() {
+    this.checkRegistrationStatus();
+  },
   methods: {
+    checkRegistrationStatus() {
+      this.isRegistered = JSON.parse(localStorage.getItem('registroExitoso')) || false;
+      if (!this.isRegistered) {
+        this.$router.push('/registrar');
+      }
+    },
     handleFileUpload(event) {
       this.model.usuario.userImage = event.target.files[0];
     },
@@ -67,6 +76,7 @@ export default {
         .then(response => {
           alert('Registro realizado con éxito.');
           this.registroExitoso = true;
+          localStorage.setItem('isRegistered', JSON.stringify(true)); 
           localStorage.setItem('registroExitoso', JSON.stringify(this.registroExitoso));
           this.$router.push('/login'); 
         })

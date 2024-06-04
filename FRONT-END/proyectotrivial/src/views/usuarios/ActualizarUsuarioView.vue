@@ -15,7 +15,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="">Email</label>
-                    <input type="text" :value="userEmail" class="form-control" readonly>
+                    <input type="text" :value="userEmail" class="form-control">
                 </div>
                 <div class="mb-3">
                     <label for="">Foto de perfil</label>
@@ -74,14 +74,6 @@ export default {
     methods: {
         handleFileUpload(event) {
             this.model.usuario.userImage = event.target.files[0];
-        },
-        obtenerDatosUsuario() {
-            axios.get(`http://localhost:8080/trivial/v1/users/${this.userId}`, this.model.usuario)
-                .then(response => {
-                  datos =  response.data();
-                })
-                .catch(error => {
-                });
         },
         actualizarUsuario() {
             axios.put(`http://localhost:8080/trivial/v1/users/${this.userId}`, this.model.usuario)

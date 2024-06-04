@@ -1,12 +1,19 @@
 package com.proyecto.trivial.entities;
 
+import java.util.List;
+
+
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 
 @Entity
 @Table(name = "Users")
@@ -35,6 +42,12 @@ public class UserEntity {
 
 	@Column(name = "activo")
 	private Integer activo;
+	
+	@ElementCollection(fetch= FetchType.EAGER)
+	@CollectionTable(name="roles",joinColumns = @JoinColumn(name="user_id"))
+	@Column(name="user_role")
+	private List<String> user_role;
+
 
 	public UserEntity() {
 		super();

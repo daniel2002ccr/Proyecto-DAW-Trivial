@@ -110,9 +110,10 @@ export default {
             try {
                 const userId = JSON.parse(localStorage.getItem('user')).userId;
                 const user = JSON.parse(localStorage.getItem('user'));
+                console.log(`${user}`);
                 const newScore = this.score + (user.puntuacion || 0);
 
-                const response = await axios.put(`http://localhost:8080/trivial/v1/users/${userId}`, {
+                const response = await axios.put(`http://localhost:8080/trivial/v1/users/${user}`, {
                     puntuacion: newScore
                 });
 
