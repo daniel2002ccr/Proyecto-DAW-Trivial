@@ -72,7 +72,12 @@ export default {
                 .replace(/&gt;/g, '>')
                 .replace(/&quot;/g, '"')
                 .replace(/&#039;/g, "'")
-                .replace(/&amp;/g, '&');
+                .replace(/&amp;/g, '&')
+                .replace(/&eacute;/g, 'é')
+                .replace(/&euml;/g, 'ë')
+                .replace(/&deg;/g, '°')
+                .replace(/&ouml;/g, 'ö')
+                .replace(/&rsquo;/g, '’');
         },
         async fetchQuestions(difficulty) {
             this.loading = true;
@@ -107,21 +112,24 @@ export default {
             }
         },
         async saveScoreToUser() {
-            try {
-                const userId = JSON.parse(localStorage.getItem('user')).userId;
-                const user = JSON.parse(localStorage.getItem('user'));
-                console.log(`${user}`);
-                const newScore = this.score + (user.puntuacion || 0);
+    try {
+        const user = JSON.parse(localStorage.getItem('user'));
+        const userId = user.userId;
+        console.log(userId);
 
-                const response = await axios.put(`http://localhost:8080/trivial/v1/users/${user}`, {
-                    puntuacion: newScore
-                });
+        
+        const updatedUser = {
+            ...user, 
+            puntuacion: this.score + (user.puntuacion || 0) 
+        };
 
-                console.log('Puntuación del usuario actualizada correctamente:', response.data);
-            } catch (error) {
-                console.error('Error al actualizar la puntuación del usuario:', error);
-            }
-        },
+        const response = await axios.put(`http://localhost:8080/trivial/v1/users/${userId}`, updatedUser);
+
+        console.log('Puntuación del usuario actualizada correctamente:', response.data);
+    } catch (error) {
+        console.error('Error al actualizar la puntuación del usuario:', error);
+    }
+},
         async goToRanking() {
             this.saveScoreToUser();
             await this.$router.push('/ranking');

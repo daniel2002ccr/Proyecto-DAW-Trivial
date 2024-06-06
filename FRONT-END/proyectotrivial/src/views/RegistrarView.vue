@@ -89,6 +89,30 @@ export default {
 </script>
 
 <style scoped>
+.container {
+  color: orange;
+}
+
+.card-header {
+  color: orange;
+}
+
+.card-body {
+  color: orange;
+}
+
+.form-control {
+  color: orange;
+}
+
+.btn-primary {
+  background-color: black;
+}
+
+.btn-primary:hover {
+  background-color: darkorange;
+}
+
 .mensaje {
   color: green;
 }

@@ -1,14 +1,14 @@
 <template>
   <div v-if="isRegistered" id="containerLogIn" class="container">
-    <h1 class="tituloRegister">Log In</h1>
-    <form class="formularioRegister" @submit.prevent="login">
+    <h1 class="tituloLogIn">Iniciar Sesión</h1>
+    <form class="formularioLogin" @submit.prevent="login">
       <div class="form-group">
-        <input type="email" v-model="email" class="form-control rounded" placeholder="Email" required>
+        <input type="email" v-model="email" class="form-control" placeholder="Email" required>
       </div>
       <div class="form-group">
-        <input type="password" v-model="password" class="form-control rounded" placeholder="Password" required>
+        <input type="password" v-model="password" class="form-control" placeholder="Password" required>
       </div>
-      <button type="submit" class="btn btn-primary btn-block">Log In</button>
+      <button type="submit" class="btn btn-primary btn-block naranja">Log In</button>
     </form>
   </div>
 </template>
@@ -53,9 +53,7 @@ export default {
 </script>
 
 <style scoped>
-body {
-  background-color: #F0F0F0;
-}
+
 #containerLogIn {
   display: flex;
   flex-direction: column;
@@ -63,24 +61,25 @@ body {
   align-items: center;
   height: 100vh;
 }
-.tituloRegister {
-  color: blue;
+.tituloLogIn {
+  color: rgb(221, 118, 34);
 }
-.formularioRegister {
+.formularioLogin {
   max-width: 400px;
   width: 100%;
 }
-.rounded {
-  border-radius: 10px;
-  padding: 10px;
-  margin-bottom: 10px;
-}
+
 .mensaje {
   margin-top: 20px;
   color: green;
 }
-.registrado {
-  margin-top: 20px;
-  color: rgb(61, 61, 61);
+.naranja {
+  background-color: rgb(228, 228, 228);
+  border-color: black;
+  color: rgb(238, 155, 1);
+}
+.naranja:hover{
+  background-color: orange;
+  color: black;
 }
 </style>
