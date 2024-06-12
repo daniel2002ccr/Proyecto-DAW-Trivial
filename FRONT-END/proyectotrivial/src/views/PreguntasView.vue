@@ -77,7 +77,8 @@ export default {
                 .replace(/&euml;/g, 'ë')
                 .replace(/&deg;/g, '°')
                 .replace(/&ouml;/g, 'ö')
-                .replace(/&rsquo;/g, '’');
+                .replace(/&rsquo;/g, '’')
+                .replace(/&iuml;/g, 'ï');
         },
         async fetchQuestions(difficulty) {
             this.loading = true;
@@ -130,9 +131,9 @@ export default {
         console.error('Error al actualizar la puntuación del usuario:', error);
     }
 },
-        async goToRanking() {
+        async goToHome() {
             this.saveScoreToUser();
-            await this.$router.push('/ranking');
+            await this.$router.push('/');
         },
         shuffledAnswers(index) {
             if (this.questions && this.questions.length > index) {
@@ -160,7 +161,7 @@ export default {
                 }
                 question.answered = true;
                 if (this.allQuestionsAnswered()) {
-                    this.goToRanking();
+                    this.goToHome();
                 }
             }
         },
@@ -358,9 +359,6 @@ li {
         z-index: 1000;
     }
 
-    main {
-        height: 6891px;
-    }
 }
 
 .neumorph-1 {

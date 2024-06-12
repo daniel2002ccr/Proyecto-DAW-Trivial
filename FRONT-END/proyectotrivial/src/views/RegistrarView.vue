@@ -51,10 +51,10 @@ export default {
     }
   },
   created() {
-    this.checkRegistrationStatus();
+    this.seHaRegistrado();
   },
   methods: {
-    checkRegistrationStatus() {
+    seHaRegistrado() {
       this.isRegistered = JSON.parse(localStorage.getItem('registroExitoso')) || false;
       if (!this.isRegistered) {
         this.$router.push('/registrar');
