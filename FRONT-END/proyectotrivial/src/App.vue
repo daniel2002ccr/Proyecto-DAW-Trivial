@@ -70,11 +70,11 @@
   nav a.router-link-active.router-link-exact-active,
   nav a.router-link-active.router-link-exact-active:hover {
     color: white;
-    background-color: orange; /* Mantén el color de fondo del enlace activo */
+    background-color: orange; 
     border-radius: 5px;
   }
 
-  /* Estilos para el menú en dispositivos móviles */
+
   @media screen and (max-width: 425px) {
     nav {
       flex-direction: row;
@@ -84,8 +84,8 @@
     }
 
     nav a {
-      padding: 10px 5px; /* Ajusta el padding de los enlaces */
-      margin: 5px; /* Ajusta el margen entre los enlaces */
+      padding: 10px 5px; 
+      margin: 5px;
     }
   }
   </style>

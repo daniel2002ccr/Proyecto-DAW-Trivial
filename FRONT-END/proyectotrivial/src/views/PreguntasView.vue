@@ -61,7 +61,6 @@ export default {
         if (this.isLoggedIn) {
             this.fetchQuestions(this.$route.params.difficulty);
         } else {
-            // Redirigir al usuario al login si no está logueado
             this.$router.push('/login');
         }
     },
