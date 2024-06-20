@@ -1,11 +1,12 @@
 <template>
     <div class="seleccion-dificultad">
-        <h1>Seleccione la dificultad:</h1>
+        <h1 v-if="isLoggedIn">Seleccione la dificultad:</h1>
+        <h1 v-else>Debe iniciar sesión antes por favor</h1>
         <ul>
             <li v-if="isLoggedIn"><router-link to="/easy" class="link">Fácil</router-link></li>
             <li v-if="isLoggedIn"><router-link to="/medium" class="link">Medio</router-link></li>
             <li v-if="isLoggedIn"><router-link to="/hard" class="link">Difícil</router-link></li>
-            <li v-else><router-link to="/login" class="link">Iniciar sesión para seleccionar dificultad</router-link></li>
+            <li v-else><router-link to="/login" class="link">Login</router-link></li>
         </ul>
     </div>
 </template>
