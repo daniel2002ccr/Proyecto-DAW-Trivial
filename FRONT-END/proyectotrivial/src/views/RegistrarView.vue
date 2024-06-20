@@ -27,7 +27,7 @@
           </div>
         </form>
       </div>
-      <p v-else class="mensaje">Registro realizado correctamente</p>
+      <p v-else class="registroExitoso">Registro realizado correctamente</p>
     </div>
   </div>
 </template>
@@ -113,7 +113,9 @@ export default {
   background-color: darkorange;
 }
 
-.mensaje {
-  color: green;
+.registroExitoso {
+  color: rgb(21, 112, 1);
+  font-size: 20px;
+  font-style: oblique;
 }
 </style>

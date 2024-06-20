@@ -1,12 +1,14 @@
 <template>
   <div v-if="isRegistered" id="login-container" class="container">
     <h1 class="login-titulo">Iniciar Sesión</h1>
-    <form class="login-form" @submit.prevent="login">
+    <form class="login-form" @submit.prevent="iniciarSesion">
       <div class="form-group">
-        <input type="email" v-model="email" class="form-control" placeholder="Email" required>
+        <label for="email">Email</label>
+        <input type="email" id="email" v-model="email" class="form-control" required>
       </div>
       <div class="form-group">
-        <input type="password" v-model="password" class="form-control" placeholder="Password" required>
+        <label for="password">Password</label>
+        <input type="password" id="password" v-model="password" class="form-control" required>
       </div>
       <button type="submit" class="btn btn-primary btn-block btn-orange">Log In</button>
     </form>
@@ -14,6 +16,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
@@ -32,20 +36,31 @@ export default {
         this.$router.push('/registrar');
       }
     },
-    async login() {
-      const respuesta = await fetch('http://localhost:8080/trivial/v1/users');
-      const users = await respuesta.json();
+    iniciarSesion() {
+      axios.get('http://localhost:8080/trivial/v1/users')
+        .then(response => {
+          const usuarios = response.data;
+          let usuarioEncontrado = null;
 
-      const user = users.find(user => user.userEmail === this.email && user.userPasswd === this.password);
+          usuarios.forEach(usr => {
+            if (usr.userEmail === this.email && usr.userPasswd === this.password) {
+              usuarioEncontrado = usr;
+            }
+          });
 
-      if (user) {
-        alert('Se ha iniciado sesión correctamente');
-        localStorage.setItem('user', JSON.stringify(user)); 
-        localStorage.setItem('isLoggedIn', JSON.stringify(true)); 
-        this.$router.push('/seleccion-dificultad');
-      } else {
-        alert('El email o la contraseña son incorrectas.');
-      }
+          if (usuarioEncontrado) {
+            alert('Se ha iniciado sesión correctamente');
+            localStorage.setItem('user', JSON.stringify(usuarioEncontrado));
+            localStorage.setItem('isLoggedIn', JSON.stringify(true));
+            this.$router.push('/seleccion-dificultad');
+          } else {
+            alert('El email o la contraseña son incorrectas.');
+          }
+        })
+        .catch(error => {
+          console.error('Error al obtener los usuarios:', error);
+          alert('Hubo un problema al iniciar sesión. Por favor, inténtelo de nuevo más tarde.');
+        });
     }
   }
 }
